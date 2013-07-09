@@ -25,13 +25,13 @@ void CompassLabel::render() {
     glDisable(GL_CULL_FACE);
 
     // Calculate coordinates of axes tips in normalized device coordinates.
-    const auto cM = m_compass->modelMatrix();
-    const auto cV = m_compass->camera()->viewMatrix();
-    const auto cP = (*m_compass->projectionMatrix());
-    const auto cMVP = cP * cV * cM;
-    const auto xd = cMVP * vec4(1.3f,0,   0,   1);
-    const auto yd = cMVP * vec4(0,   1.3f,0,   1);
-    const auto zd = cMVP * vec4(0,   0,   1.3f,1);
+    const auto& cM = m_compass->modelMatrix();
+    const auto& cV = m_compass->camera()->viewMatrix();
+    const auto& cP = (*m_compass->projectionMatrix());
+    const auto& cMVP = cP * cV * cM;
+    const auto& xd = cMVP * vec4(1.3f,0,   0,   1);
+    const auto& yd = cMVP * vec4(0,   1.3f,0,   1);
+    const auto& zd = cMVP * vec4(0,   0,   1.3f,1);
 
     m_program->activate();
     viewport()->activate();
