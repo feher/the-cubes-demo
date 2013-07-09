@@ -1,40 +1,3 @@
-Hi,
-
-Here you can find my solution of the assignment for the SW Engineer position
-at Rightware.
-
-This assignment was a lot of fun to work on. I could go on adding features
-forever :) but I have to stop at some point. So, I consider it done for now.
-I hope you will like it as much as I liked working on it.
-
-As requested, this is a small demo according to the following description:
-
-[QUOTE]
-
-Create a 3D user interface with the following features:
-- Use OpenGL or OpenGL ES 2.0 for rendering
-- Per pixel shading
-- Dynamic number of 3D objects in a scene
-- 3D objects can be simple generated models (e.g. box or sphere)
-- 3D picking to recognize if user has clicked a 3D object
-- 3D button to add objects: Clicking it adds a new 3D object to the scene
-- Clicking any other 3D object deletes it from the scene
-- Third party libraries can be used, but picking and rendering should be
-own code
-
-[END QUOTE]
-
-All the required features are implemented and functional.
-I also added a few extra animations, decorations and controls.
-The source code is in C++. I've put the empasis on clarity of code.
-It is written and organized in a way that supports maintainability, modularity
-and extensibility.
-
-I am looking forward to hearing from you!
-
-Thank you,
-Gabor Fekete
-
 
 Usage
 ---------------------
@@ -42,7 +5,7 @@ Usage
 Run the executable under "...thecubes\src\thecubes.exe".
 
 In case it does not start up, try one of these:
-- Watch the included video (video.mp4)
+- Watch the included video (video*.mp4)
 - Compile it according to the instructions given in the "Compilation" section.
 - Install the Visual C++ Redistributable for Visual Studio 2012 from here
   http://www.microsoft.com/en-au/download/details.aspx?id=30679
@@ -78,7 +41,7 @@ Directory structure
  - main.cpp      : Main entry point.
  - thecubes.cpp  : Main program class.
 - screenshot.jpg : A screenshot.
-- video.mp4      : A video.
+- video*.mp4     : Video recording.
 
 The rest of the source files are explained in the "Class hierarchy" section below...
 
