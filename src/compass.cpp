@@ -30,9 +30,9 @@ mat4 Compass::modelMatrix() {
 void Compass::render() {
     m_program->activate();
 
-    const auto M = modelMatrix();
-    const auto V = camera()->viewMatrix();
-    const auto P = *projectionMatrix();
+    const auto& M = modelMatrix();
+    const auto& V = camera()->viewMatrix();
+    const auto& P = *projectionMatrix();
     auto MVP = P * V * M;
     glUniformMatrix4fv(m_program->u_mvpId, 1, GL_FALSE, &MVP[0][0]);
 
