@@ -45,12 +45,12 @@ void Compass::render() {
     glEnableVertexAttribArray(m_program->am_vertexPositionId);
     glVertexAttribPointer(m_program->am_vertexPositionId, 3, GL_FLOAT, GL_FALSE,
                           sizeof(CompassData::VertexData),
-                          (void*)offsetof(CompassData::VertexData, position));
+                          reinterpret_cast<void*>(offsetof(CompassData::VertexData, position)));
 
     glEnableVertexAttribArray(m_program->a_vertexColorId);
     glVertexAttribPointer(m_program->a_vertexColorId, 3, GL_FLOAT, GL_FALSE,
                           sizeof(CompassData::VertexData),
-                          (void*)offsetof(CompassData::VertexData, color));
+                          reinterpret_cast<void*>(offsetof(CompassData::VertexData, color)));
 
     glDrawArrays(GL_LINES, 0, 6);
 
