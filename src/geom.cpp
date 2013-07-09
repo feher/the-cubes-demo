@@ -12,10 +12,17 @@ Geom::Ray Geom::World::ray(
         const mat4& projectionMatrix) {
     assert(windowSize.x > 0 && windowSize.y > 0);
     assert(windowPoint.x >= 0 && windowPoint.y >= 0);
+
+    // Convert from window to [-1, 1] normalized device coodrinates (NDC).
     const auto& ad2 = 2.0f * vec2(windowPoint.x / windowSize.x, windowPoint.y / windowSize.y) - vec2(1, 1);
-    // The NDC is left-handed. So, Z is [-1, 1].
+
+    // Create two points on the ray at opposite ends (Z axis) of the NDC cube.
+    // ad = First point on the ray in NDC.
+    // bd = Second point on the ray in NDC.
     const auto& ad = vec4(ad2.x, ad2.y, -1, 1);
     const auto& bd = vec4(ad2.x, ad2.y,  1, 1);
+
+    // Convert the two NDC points into world space.
     const auto& I = inverse(projectionMatrix * viewMatrix);
     const auto& aw = I * ad;
     const auto& bw = I * bd;
