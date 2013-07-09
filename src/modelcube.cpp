@@ -89,10 +89,6 @@ void ModelCube::update(double deltaTime) {
     }
 }
 
-GLuint ModelCube::uvBufferId() const {
-    return data()->uvBufferId;
-}
-
 GLuint ModelCube::textureId() const {
     return data()->cubeTextureId;
 }

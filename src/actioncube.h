@@ -13,7 +13,6 @@ public:
     virtual void render() override;
 
 private:
-    virtual GLuint uvBufferId() const override;
     virtual GLuint textureId() const override;
 
     GLfloat m_originalScale;

@@ -12,11 +12,6 @@ public:
     CompassLabelData();
     virtual ~CompassLabelData();
 
-    static const std::string textureFile;
-    static const GLfloat vertices[4 * 3];
-    static const GLfloat uvs[4 * 2 * 3];
-    static const GLubyte triangles[6];
-
     GLuint vertexBufferId;
     GLuint uvBufferId;
     GLuint elementBufferId;
@@ -24,6 +19,11 @@ public:
 
 private:
     void cleanup();
+
+    static const std::string textureFile;
+    static const GLfloat vertices[4 * 3];
+    static const GLfloat uvs[4 * 2 * 3];
+    static const GLubyte triangles[6];
 };
 
 #endif

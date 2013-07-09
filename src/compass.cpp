@@ -2,6 +2,8 @@
 
 #include <glm/gtc/matrix_transform.hpp> // lookAt
 
+#include <cstddef> // offsetof
+
 using namespace std;
 using namespace glm;
 
@@ -12,7 +14,7 @@ Compass::Compass(shared_ptr<Camera> modelingCamera)
 void Compass::setData(shared_ptr<CompassData> data) {
     m_data = data;
 }
-void Compass::setProgram(shared_ptr<GridProgram> program) {
+void Compass::setProgram(shared_ptr<CompassProgram> program) {
     m_program = program;
 }
 
@@ -20,7 +22,7 @@ shared_ptr<CompassData> Compass::data() const {
     return m_data;
 }
 
-shared_ptr<GridProgram> Compass::program() const {
+shared_ptr<CompassProgram> Compass::program() const {
     return m_program;
 }
 
@@ -39,30 +41,27 @@ void Compass::render() {
     auto MVP = P * V * M;
     glUniformMatrix4fv(m_program->u_mvpId, 1, GL_FALSE, &MVP[0][0]);
 
-    glEnableVertexAttribArray(m_program->am_vertexPositionId);
-    glBindBuffer(GL_ARRAY_BUFFER, m_data->vertexBufferId);
-
     viewport()->activate();
 
     glLineWidth(m_data->lineWidth);
 
-    // X
-    glUniform4fv(m_program->u_colorId, 1, &m_data->colorX[0]);
-    glVertexAttribPointer(m_program->am_vertexPositionId, 3, GL_FLOAT, GL_FALSE, 0, nullptr);
-    glDrawArrays(GL_LINES, 0, 2);
+    glBindBuffer(GL_ARRAY_BUFFER, m_data->vertexBufferId);
 
-    // Y
-    glUniform4fv(m_program->u_colorId, 1, &m_data->colorY[0]);
-    glVertexAttribPointer(m_program->am_vertexPositionId, 3, GL_FLOAT, GL_FALSE, 0, (void*)(6 * sizeof(GLfloat)));
-    glDrawArrays(GL_LINES, 0, 2);
+    glEnableVertexAttribArray(m_program->am_vertexPositionId);
+    glVertexAttribPointer(m_program->am_vertexPositionId, 3, GL_FLOAT, GL_FALSE,
+                          sizeof(CompassData::VertexData),
+                          (void*)offsetof(CompassData::VertexData, position));
 
-    // Z
-    glUniform4fv(m_program->u_colorId, 1, &m_data->colorZ[0]);
-    glVertexAttribPointer(m_program->am_vertexPositionId, 3, GL_FLOAT, GL_FALSE, 0, (void*)(12 * sizeof(GLfloat)));
-    glDrawArrays(GL_LINES, 0, 2);
+    glEnableVertexAttribArray(m_program->a_vertexColorId);
+    glVertexAttribPointer(m_program->a_vertexColorId, 3, GL_FLOAT, GL_FALSE,
+                          sizeof(CompassData::VertexData),
+                          (void*)offsetof(CompassData::VertexData, color));
+
+    glDrawArrays(GL_LINES, 0, 6);
 
     // Done
     glDisableVertexAttribArray(m_program->am_vertexPositionId);
+    glDisableVertexAttribArray(m_program->a_vertexColorId);
 
     glLineWidth(1.0f);
 }

@@ -39,6 +39,7 @@ add_executable(thecubes
 	src/compasslabel.cpp
 	src/compasslabeldata.cpp
 	src/compasslabelprogram.cpp
+	src/compassprogram.cpp
 	src/cube.cpp
 	src/cubedata.cpp
 	src/cubeprogram.cpp

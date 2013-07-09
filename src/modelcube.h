@@ -12,7 +12,6 @@ public:
     virtual void update(double deltaTime) override;
 
 private:
-    virtual GLuint uvBufferId() const override;
     virtual GLuint textureId() const override;
 
     GLfloat m_pulse;

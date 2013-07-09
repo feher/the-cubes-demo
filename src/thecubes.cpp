@@ -6,6 +6,12 @@
 #include "grid.h"
 #include "compass.h"
 #include "compasslabel.h"
+#include "griddata.h"
+#include "gridprogram.h"
+#include "compassdata.h"
+#include "compassprogram.h"
+#include "compasslabeldata.h"
+#include "compasslabelprogram.h"
 
 #include <glm/glm.hpp> // vec*, mat*
 #include <glm/gtc/matrix_transform.hpp>
@@ -166,7 +172,7 @@ TheCubes::TheCubes(unsigned int screenWidth, unsigned int screenHeight)
         auto light = make_shared<PointLight>(camera->position(), vec3(1, 1, 1), 0.0f);
         auto compass = make_shared<Compass>(m_modelingCamera);
         compass->setData(make_shared<CompassData>());
-        compass->setProgram(gridProgram);
+        compass->setProgram(make_shared<CompassProgram>());
         compass->setViewport(viewport);
         compass->setProjection(projection);
         compass->setCamera(camera);

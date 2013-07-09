@@ -8,11 +8,6 @@
 #include "viewport.h"
 #include "cubedata.h"
 #include "cubeprogram.h"
-#include "griddata.h"
-#include "gridprogram.h"
-#include "compassdata.h"
-#include "compasslabeldata.h"
-#include "compasslabelprogram.h"
 
 #include <glm/glm.hpp> // vec2, mat4
 

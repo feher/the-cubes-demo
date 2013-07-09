@@ -15,7 +15,7 @@ const string CompassLabelData::textureFile  = "./data/xyz.tga";
 //
 
 // X0Y1   X1Y1  X2Y1  X3Y1
-// X0Y0   X1Y0   X2Y0   X3Y0
+// X0Y0   X1Y0  X2Y0  X3Y0
 #define X0 (0.0f  /384.0f)
 #define X1 (128.0f/384.0f)
 #define X2 (256.0f/384.0f)
@@ -39,8 +39,8 @@ const GLubyte CompassLabelData::triangles[] = {
 CompassLabelData::CompassLabelData() {
 
     glGenBuffers(1, &vertexBufferId);
-	glBindBuffer(GL_ARRAY_BUFFER, vertexBufferId);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+    glBindBuffer(GL_ARRAY_BUFFER, vertexBufferId);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 
     glGenBuffers(1, &uvBufferId);
     glBindBuffer(GL_ARRAY_BUFFER, uvBufferId);

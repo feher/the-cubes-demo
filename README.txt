@@ -30,18 +30,20 @@ Directory structure
 
 - 3rdparty : Third party libraries and components
  - raplavik-cmake-modules : Build system helpers.
- - glfw    : For creating OpenGL context, input and window handling.
- - glm     : For vector and matrix operations.
+ - glfw :    For creating OpenGL context, input and window handling.
+ - glm :     For vector and matrix operations.
  - and glew
-- src            : All code in this directory was written/created from scratch for this
-                   assignment from empty files.
- - data          : Textures and other resources.
- - shaders       : Shader source files.
- - thecubes.exe  : Compiled binary.
- - main.cpp      : Main entry point.
- - thecubes.cpp  : Main program class.
+
+- src : All code in this directory was written/created from scratch for this
+        assignment from empty files.
+ - data :          Textures and other resources.
+ - shaders :       Shader source files.
+ - thecubes.exe :  Compiled binary.
+ - main.cpp :      Main entry point.
+ - thecubes.cpp :  Main program class.
+
 - screenshot.jpg : A screenshot.
-- video*.mp4     : Video recording.
+- video*.mp4 :     Video recording.
 
 The rest of the source files are explained in the "Class hierarchy" section below...
 
@@ -107,6 +109,7 @@ Class hierarchy
 
 - ObjectProgram : Base class for shader programs used by object instances.
  - CompassLabelProgram : Shader program used by CompassLabel objects.
+ - CompassProgram :      Shader program used by Compass objects.
  - CubeProgram :         Shader program used by Cube objects.
  - GridProgram :         Shader program used by Grid objects.
 

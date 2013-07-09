@@ -19,7 +19,6 @@ public:
     virtual void render() override;
 
 private:
-    virtual GLuint uvBufferId() const = 0;
     virtual GLuint textureId() const = 0;
 
     std::shared_ptr<CubeData> m_data;

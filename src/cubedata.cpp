@@ -19,31 +19,32 @@ const string CubeData::actionTextureFile  = "./data/actioncube.tga";
 //    1------3        9------13         21-----23
 //
 
-const GLfloat CubeData::uvs[] = {
-    0, 1,  0, 0,  1, 1,  1, 0,
-    1, 1,  1, 0,  0, 1,  0, 0,
-    1, 1,  1, 0,  0, 1,  0, 0,
-    0, 1,  0, 0,  1, 1,  1, 0,
-    0, 1,  0, 0,  1, 1,  1, 0,
-    1, 1,  1, 0,  0, 1,  0, 0
-};
-
-const GLfloat CubeData::vertices[] = {
-    -1, +1, +1,  -1, -1, +1,  +1, +1, +1,  +1, -1, +1, // front 0-3
-    -1, +1, -1,  -1, -1, -1,  +1, +1, -1,  +1, -1, -1, // back 4-7
-    -1, +1, +1,  -1, -1, +1,  -1, +1, -1,  -1, -1, -1, // left 8-11
-    +1, +1, +1,  +1, -1, +1,  +1, +1, -1,  +1, -1, -1, // right 12-15
-    -1, +1, -1,  -1, +1, +1,  +1, +1, -1,  +1, +1, +1, // top 16-19
-    -1, -1, -1,  -1, -1, +1,  +1, -1, -1,  +1, -1, +1  // bottom 20-23
-};
-
-const GLfloat CubeData::normals[] = {
-    0, 0, +1, 0, 0, +1, 0, 0, +1, 0, 0, +1,
-    0, 0, -1, 0, 0, -1, 0, 0, -1, 0, 0, -1,
-    -1, 0, 0, -1, 0, 0, -1, 0, 0, -1, 0, 0,
-    +1, 0, 0, +1, 0, 0, +1, 0, 0, +1, 0, 0,
-    0, +1, 0, 0, +1, 0, 0, +1, 0, 0, +1, 0,
-    0, -1, 0, 0, -1, 0, 0, -1, 0, 0, -1, 0
+const CubeData::VertexData CubeData::data[] = {
+    //  position        normal        uv
+    { { -1, +1, +1 }, { 0, 0, +1 }, { 0, 1 } },
+    { { -1, -1, +1 }, { 0, 0, +1 }, { 0, 0 } },
+    { { +1, +1, +1 }, { 0, 0, +1 }, { 1, 1 } },
+    { { +1, -1, +1 }, { 0, 0, +1 }, { 1, 0 } }, // front 0-3
+    { { -1, +1, -1 }, { 0, 0, -1 }, { 1, 1 } },
+    { { -1, -1, -1 }, { 0, 0, -1 }, { 1, 0 } },
+    { { +1, +1, -1 }, { 0, 0, -1 }, { 0, 1 } },
+    { { +1, -1, -1 }, { 0, 0, -1 }, { 0, 0 } }, // back 4-7
+    { { -1, +1, +1 }, { -1, 0, 0 }, { 1, 1 } },
+    { { -1, -1, +1 }, { -1, 0, 0 }, { 1, 0 } },
+    { { -1, +1, -1 }, { -1, 0, 0 }, { 0, 1 } },
+    { { -1, -1, -1 }, { -1, 0, 0 }, { 0, 0 } }, // left 8-11
+    { { +1, +1, +1 }, { +1, 0, 0 }, { 0, 1 } },
+    { { +1, -1, +1 }, { +1, 0, 0 }, { 0, 0 } },
+    { { +1, +1, -1 }, { +1, 0, 0 }, { 1, 1 } },
+    { { +1, -1, -1 }, { +1, 0, 0 }, { 1, 0 } }, // right 12-15
+    { { -1, +1, -1 }, { 0, +1, 0 }, { 0, 1 } },
+    { { -1, +1, +1 }, { 0, +1, 0 }, { 0, 0 } },
+    { { +1, +1, -1 }, { 0, +1, 0 }, { 1, 1 } },
+    { { +1, +1, +1 }, { 0, +1, 0 }, { 1, 0 } }, // top 16-19
+    { { -1, -1, -1 }, { 0, -1, 0 }, { 1, 1 } },
+    { { -1, -1, +1 }, { 0, -1, 0 }, { 1, 0 } },
+    { { +1, -1, -1 }, { 0, -1, 0 }, { 0, 1 } },
+    { { +1, -1, +1 }, { 0, -1, 0 }, { 0, 0 } }, // bottom 20-23
 };
 
 const GLubyte CubeData::triangles[] = {
@@ -59,15 +60,7 @@ CubeData::CubeData() {
 
     glGenBuffers(1, &vertexBufferId);
     glBindBuffer(GL_ARRAY_BUFFER, vertexBufferId);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-
-    glGenBuffers(1, &normalBufferId);
-    glBindBuffer(GL_ARRAY_BUFFER, normalBufferId);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(normals), normals, GL_STATIC_DRAW);
-
-    glGenBuffers(1, &uvBufferId);
-    glBindBuffer(GL_ARRAY_BUFFER, uvBufferId);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(uvs), uvs, GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(data), data, GL_STATIC_DRAW);
 
     glGenBuffers(1, &elementBufferId);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, elementBufferId);
@@ -106,14 +99,6 @@ void CubeData::cleanup() {
     if (vertexBufferId) {
         glDeleteBuffers(1, &vertexBufferId);
         vertexBufferId = 0;
-    }
-    if (normalBufferId) {
-        glDeleteBuffers(1, &normalBufferId);
-        normalBufferId = 0;
-    }
-    if (uvBufferId) {
-        glDeleteBuffers(1, &uvBufferId);
-        uvBufferId = 0;
     }
     if (elementBufferId) {
         glDeleteBuffers(1, &elementBufferId);

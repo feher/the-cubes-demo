@@ -8,15 +8,18 @@
 
 class CompassData : public ObjectData {
 public:
+    struct VertexData {
+        GLfloat position[3];
+        GLfloat color[3];
+    };
+
     explicit CompassData();
     
     static const float lineWidth;
-    static const glm::vec4 colorX;
-    static const glm::vec4 colorY;
-    static const glm::vec4 colorZ;
-
-    GLfloat vertices[6 * 3];
     GLuint vertexBufferId;
+
+private:
+    static const VertexData data[6];
 };
 
 #endif

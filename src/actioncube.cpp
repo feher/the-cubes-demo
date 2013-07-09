@@ -8,10 +8,6 @@ ActionCube::ActionCube(GLfloat scale)
     setScale(scale);
 }
 
-GLuint ActionCube::uvBufferId() const {
-    return data()->uvBufferId;
-}
-
 GLuint ActionCube::textureId() const {
     return data()->actionCubeTextureId;
 }
