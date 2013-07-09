@@ -208,8 +208,8 @@ TheCubes::TheCubes(unsigned int screenWidth, unsigned int screenHeight)
 }
 
 void TheCubes::updateAndRender() {
-    double currentTime = glfwGetTime();
-    float deltaTime = float(currentTime - m_lastTime);
+    const double currentTime = glfwGetTime();
+    const float deltaTime = float(currentTime - m_lastTime);
     m_lastTime = currentTime;
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     for (auto& object : m_modelingObjects) {
@@ -234,9 +234,9 @@ void TheCubes::createNewObject() {
     object->setRotation(vec3(10, 30, 40));
     object->setScale(1.0f);
 
-    auto cameraBase = m_modelingCamera->base();
-    auto pc = vec3(0, 0, 10);
-    auto pw = (cameraBase * pc) + m_modelingCamera->position();
+    const auto& cameraBase = m_modelingCamera->base();
+    const auto& pc = vec3(0, 0, 10);
+    const auto& pw = (cameraBase * pc) + m_modelingCamera->position();
     object->setPosition(pw);
     object->setColor(vec4(0, 1, 0, 1));
     object->setState(Object::APPEARING);
@@ -254,7 +254,6 @@ shared_ptr<Object> TheCubes::selectedObject(const vec2& mousePos) const {
     const Camera* camera = nullptr;
     const mat4* projectionMatrix = nullptr;
     auto ray = Geom::Ray(vec4(0.0f), vec4(0.0f));
-    auto last = end(m_interactiveObjects);
 
     for (auto& object : m_interactiveObjects) {
         if (!object->isInteractive()
@@ -273,7 +272,7 @@ shared_ptr<Object> TheCubes::selectedObject(const vec2& mousePos) const {
             // The mouse position's Y axis points down, but the viewport's Y axis
             // points up. So we must invert it.
             // vpp = mouse poistion in the viewport coordinate system.
-            auto vpp = vec2(mousePos.x - vpx, m_screenHeight - mousePos.y - vpy);
+            const auto& vpp = vec2(mousePos.x - vpx, m_screenHeight - mousePos.y - vpy);
             if (vpp.x < 0 || vpp.x >= vpw || vpp.y < 0 || vpp.y >= vph) {
                 // The vpp (viewport position) falls outside of the viewport.
                 continue;

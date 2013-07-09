@@ -39,11 +39,11 @@ vector<Geom::Intersection> Geom::World::intersect(
     // We do the calculations in the model space of the sphere.
     // I.e. The sphere sits at (0, 0, 0). The axes directions of the
     // model space does not matter.
-    auto rayOrigin = ray.origin - sphere.origin;
-    auto A = dot(ray.direction, ray.direction);
-    auto B = 2.0f * dot(ray.direction, rayOrigin);
-    auto C = dot(rayOrigin, rayOrigin) - (sphere.radius * sphere.radius);
-    auto discriminant = B*B - 4*A*C;
+    const auto& rayOrigin = ray.origin - sphere.origin;
+    const auto A = dot(ray.direction, ray.direction);
+    const auto B = 2.0f * dot(ray.direction, rayOrigin);
+    const auto C = dot(rayOrigin, rayOrigin) - (sphere.radius * sphere.radius);
+    const auto discriminant = B*B - 4*A*C;
     if (discriminant < 0) {
         return intersections;
     }

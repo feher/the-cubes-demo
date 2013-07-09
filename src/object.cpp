@@ -79,13 +79,13 @@ bool Object::isInteractive() const {
 }
 
 void Object::updatePosition(const vec3& delta) {
-    auto p = vec4(m_position.x, m_position.y, m_position.z, 1);
+    const auto& p = vec4(m_position.x, m_position.y, m_position.z, 1);
     auto pc = m_camera->viewMatrix() * p;
     pc.x = pc.x + delta.x;
     pc.y = pc.y + delta.y;
     pc.z = pc.z + delta.z;
-    auto I = inverse(m_camera->viewMatrix());
-    auto pw = I * pc;
+    const auto& I = inverse(m_camera->viewMatrix());
+    const auto& pw = I * pc;
     m_position = vec3(pw.x, pw.y, pw.z);
     m_isModelMatrixValid = false;
     m_isUnscaledModelMatrixValid = false;

@@ -18,14 +18,14 @@ shared_ptr<const CubeData> Cube::data() const {
 }
 
 void Cube::updatePosition(const vec3& delta) {
-    auto p3 = position();
-    auto p = vec4(p3.x, p3.y, p3.z, 1);
+    const auto& p3 = position();
+    const auto& p = vec4(p3.x, p3.y, p3.z, 1);
     auto pc = camera()->viewMatrix() * p;
     pc.x = pc.x + delta.x;
     pc.y = pc.y + delta.y;
     pc.z = pc.z + delta.z;
-    auto I = inverse(camera()->viewMatrix());
-    auto pw = I * pc;
+    const auto& I = inverse(camera()->viewMatrix());
+    const auto& pw = I * pc;
     setPosition(vec3(pw.x, pw.y, pw.z));
 }
 
@@ -34,7 +34,7 @@ void Cube::render() {
     const auto& M = modelMatrix();
     const auto& V = camera()->viewMatrix();
     const auto& P = *projectionMatrix();
-    auto MVP = P * V * M;
+    const auto& MVP = P * V * M;
 
     m_program->activate();
 

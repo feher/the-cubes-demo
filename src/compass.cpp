@@ -20,7 +20,7 @@ void Compass::setProgram(shared_ptr<CompassProgram> program) {
 
 mat4 Compass::modelMatrix() {
     // Our model matrix is calculated from the camera's base.
-    const auto CB = m_modelingCamera->base();
+    const auto& CB = m_modelingCamera->base();
     // CB[2] : Orientation of Z axis of camera's base in world space.
     // CB[1] : Orientation of Y axis of camera's base in world space.
     // The compass looks in the opposite direction of the camera.
@@ -33,7 +33,7 @@ void Compass::render() {
     const auto& M = modelMatrix();
     const auto& V = camera()->viewMatrix();
     const auto& P = *projectionMatrix();
-    auto MVP = P * V * M;
+    const auto& MVP = P * V * M;
     glUniformMatrix4fv(m_program->u_mvpId, 1, GL_FALSE, &MVP[0][0]);
 
     viewport()->activate();

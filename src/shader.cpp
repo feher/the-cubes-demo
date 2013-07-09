@@ -25,7 +25,7 @@ void Shader::cleanup() {
 void Shader::compile(const string& fileName) {
     cleanup();
 
-    string src = File::loadTextFile(fileName);
+    const string& src = File::loadTextFile(fileName);
     if (src.empty()) {
         return;
     }
