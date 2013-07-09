@@ -4,7 +4,7 @@ Here you can find my solution of the assignment for the SW Engineer position
 at Rightware.
 
 This assignment was a lot of fun to work on. I could go on adding features
-forever :) but I have to stop at some point. So, I consider it done for now.
+forever :)
 I hope you will like it as much as I liked working on it.
 
 As requested, this is a small demo according to the following description:
@@ -26,11 +26,11 @@ own code
 
 All the required features are implemented and functional.
 I also added a few extra animations, decorations and controls.
-The source code is in C++. I've put the empasis on clarity of code.
+The source code is in C++ and GLSL. I've put the emphasis on clarity of code.
 It is written and organized in a way that supports maintainability, modularity
 and extensibility.
 
-You can find more details information in the README.txt file.
+You can find more detailed information in the README.txt file.
 
 I am looking forward to hearing from you!
 

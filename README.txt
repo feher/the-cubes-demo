@@ -1,4 +1,3 @@
-
 Usage
 ---------------------
 
@@ -45,14 +44,13 @@ Directory structure
 - screenshot.jpg : A screenshot.
 - video*.mp4 :     Video recording.
 
-The rest of the source files are explained in the "Class hierarchy" section below...
+The rest of the source files are explained in the "Class hierarchy" section below.
 
-
-Build environemnt
+Build environment
 ---------------------
 
 - Windows 7
-- CMake 2.8
+- CMake 2.8.*
 - Visual Studio 2012 Express
 
 Compilation
@@ -65,12 +63,12 @@ Compilation
  - Press "Configure"
   - Select Generator: Visual Studio 11
   - Specify native compilers
- - Keep pressing "Configure" until red lines disappear.
+ - Keep pressing "Configure" until the red lines disappear from the "Name/Value" list.
  - Press "Generate"
  - Close CMake GUI
 - Run Visual Studio
  - Open the solution file "...\thecubes.build\TheCubes.sln"
- - Build "thecubes"
+ - Build the "thecubes" project
  - Run "...\thecubes\src\thecubes.exe"
 
 Class hierarchy
