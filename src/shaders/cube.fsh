@@ -49,7 +49,7 @@ void main() {
 
   const float ZERO = float(1.0);
   if (u_lightPower < ZERO) {
-    gl_FragColor = noLight(color);
+    gl_FragColor = noLight(color); // For debugging.
   } else {
     gl_FragColor = light(color);
   }

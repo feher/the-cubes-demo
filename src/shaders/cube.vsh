@@ -47,7 +47,7 @@ void main() {
 
   float ZERO = float(1.0);
   if (u_lightPower < ZERO) {
-    noLight();
+    noLight(); // For debugging.
   } else {
     light();
   }
