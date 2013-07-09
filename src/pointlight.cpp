@@ -7,21 +7,15 @@ PointLight::PointLight(vec3 pos, vec3 col, float pow)
     : m_position(pos), m_color(col), m_power(pow) {
 }
 
-void PointLight::linkToCamera(shared_ptr<Camera> camera) {
+void PointLight::linkToCamera(shared_ptr<const Camera> camera) {
     m_camera = camera;
 }
 
-vec3 PointLight::position() const {
-    vec3 pos;
-    if (m_camera) {
-        pos = m_camera->position();
-    } else {
-        pos = m_position;
-    }
-    return pos;
+const vec3& PointLight::position() const {
+    return m_camera ? m_camera->position() : m_position;
 }
 
-vec3 PointLight::color() const {
+const vec3& PointLight::color() const {
     return m_color;
 }
 

@@ -250,9 +250,9 @@ void TheCubes::createNewObject() {
 shared_ptr<Object> TheCubes::selectedObject(const vec2& mousePos) const {
     auto selection = shared_ptr<Object>();
     auto closestDistance = numeric_limits<float>::max();
-    Viewport* viewport = nullptr;
-    Camera* camera = nullptr;
-    mat4* projectionMatrix = nullptr;
+    const Viewport* viewport = nullptr;
+    const Camera* camera = nullptr;
+    const mat4* projectionMatrix = nullptr;
     auto ray = Geom::Ray(vec4(0.0f), vec4(0.0f));
     auto last = end(m_interactiveObjects);
 
@@ -269,6 +269,10 @@ shared_ptr<Object> TheCubes::selectedObject(const vec2& mousePos) const {
             auto vpy = object->viewport()->y;
             auto vpw = object->viewport()->width;
             auto vph = object->viewport()->height;
+            // The mouse position is in physical screen dimensions.
+            // The mouse position's Y axis points down, but the viewport's Y axis
+            // points up. So we must invert it.
+            // vpp = mouse poistion in the viewport coordinate system.
             auto vpp = vec2(mousePos.x - vpx, m_screenHeight - mousePos.y - vpy);
             if (vpp.x < 0 || vpp.x >= vpw || vpp.y < 0 || vpp.y >= vph) {
                 // The vpp (viewport position) falls outside of the viewport.

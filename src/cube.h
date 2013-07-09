@@ -12,8 +12,7 @@ public:
     void setData(std::shared_ptr<CubeData> data);
     void setProgram(std::shared_ptr<CubeProgram> program);
 
-    std::shared_ptr<CubeData> data() const;
-    std::shared_ptr<CubeProgram> program() const;
+    std::shared_ptr<const CubeData> data() const;
 
     virtual void updatePosition(const glm::vec3& delta) override;
     virtual void render() override;

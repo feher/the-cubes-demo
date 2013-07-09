@@ -30,14 +30,14 @@ void Camera::updateAngles(const vec3& delta) {
     const auto& rotPitch = rotate(rotRoll, delta[PITCH], vec3(1, 0, 0));
     const auto& rotYaw = rotate(rotPitch, delta[YAW], vec3(0, 1, 0));
     const auto& B4 = rotYaw;
-    auto B3 = mat3(
-        vec3(B4[0][0], B4[0][1], B4[0][2]),
-        vec3(B4[1][0], B4[1][1], B4[1][2]),
-        vec3(B4[2][0], B4[2][1], B4[2][2]));
-    B3 = m_base * B3;
-    m_base[0] = normalize(B3[0]);
-    m_base[1] = normalize(B3[1]);
-    m_base[2] = normalize(B3[2]);
+    auto B3 = mat3( // The new axes relative to camera space (m_base).
+        vec3(B4[0][0], B4[0][1], B4[0][2]),  // X axis relative to m_base.
+        vec3(B4[1][0], B4[1][1], B4[1][2]),  // Y axis relative to m_base.
+        vec3(B4[2][0], B4[2][1], B4[2][2])); // Z axis relative to m_base.
+    B3 = m_base * B3; // The new axes relative to world space (3x3 identity matrix).
+    m_base[0] = normalize(B3[0]); // New X axis.
+    m_base[1] = normalize(B3[1]); // New Y axis.
+    m_base[2] = normalize(B3[2]); // New Z axis.
     updateViewMatrix();
 }
 

@@ -19,7 +19,7 @@ public:
     GLuint vertexBufferId;
 
 private:
-    static const VertexData data[6];
+    static const VertexData vertexData[6];
 };
 
 #endif

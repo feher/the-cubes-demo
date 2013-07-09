@@ -11,14 +11,14 @@ class PointLight {
 public:
     explicit PointLight(glm::vec3 pos, glm::vec3 col, float pow);
 
-    void linkToCamera(std::shared_ptr<Camera> camera);
+    void linkToCamera(std::shared_ptr<const Camera> camera);
 
-    glm::vec3 position() const;
-    glm::vec3 color() const;
+    const glm::vec3& position() const;
+    const glm::vec3& color() const;
     float power() const;
 
 private:
-    std::shared_ptr<Camera> m_camera;
+    std::shared_ptr<const Camera> m_camera;
     glm::vec3 m_position;
     glm::vec3 m_color;
     float m_power;

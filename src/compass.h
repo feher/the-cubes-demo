@@ -17,10 +17,7 @@ public:
     void setData(std::shared_ptr<CompassData> data);
     void setProgram(std::shared_ptr<CompassProgram> program);
 
-    std::shared_ptr<CompassData> data() const;
-    std::shared_ptr<CompassProgram> program() const;
-
-    virtual glm::mat4 modelMatrix();
+    virtual glm::mat4 modelMatrix() override;
     virtual void render() override;
 
 private:

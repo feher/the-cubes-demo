@@ -5,7 +5,7 @@ class Viewport {
 public:
     explicit Viewport(int lx, int ly, int w, int h);
 
-    void activate();
+    void activate() const;
 
     const int x;
     const int y;
@@ -13,7 +13,7 @@ public:
     const int height;
 
 private:
-    static Viewport* m_activeViewport;
+    static const Viewport* m_activeViewport;
 };
 
 #endif

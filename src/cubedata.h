@@ -30,7 +30,7 @@ private:
 
     static const std::string modelTextureFile;
     static const std::string actionTextureFile;
-    static const VertexData data[6 * 4];
+    static const VertexData vertexData[6 * 4];
     static const GLubyte triangles[6 * 2 * 3];
 };
 

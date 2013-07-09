@@ -11,13 +11,13 @@ public:
 
     void link(const Shader& vsh, const Shader& fsh);
     GLuint id() const;
-    void activate();
+    void activate() const;
 
 private:
     void cleanup();
 
     GLuint m_id;
-    static ShaderProgram* m_activeShaderProgram;
+    static const ShaderProgram* m_activeShaderProgram;
 };
 
 #endif

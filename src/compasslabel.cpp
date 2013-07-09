@@ -13,16 +13,9 @@ CompassLabel::CompassLabel(std::shared_ptr<Object> compass)
 void CompassLabel::setData(shared_ptr<CompassLabelData> data) {
     m_data = data;
 }
+
 void CompassLabel::setProgram(shared_ptr<CompassLabelProgram> program) {
     m_program = program;
-}
-
-shared_ptr<CompassLabelData> CompassLabel::data() const {
-    return m_data;
-}
-
-shared_ptr<CompassLabelProgram> CompassLabel::program() const {
-    return m_program;
 }
 
 void CompassLabel::render() {

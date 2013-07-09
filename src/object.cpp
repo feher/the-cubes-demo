@@ -91,23 +91,23 @@ void Object::updatePosition(const vec3& delta) {
     m_isUnscaledModelMatrixValid = false;
 }
 
-std::shared_ptr<Viewport> Object::viewport() const {
+std::shared_ptr<const Viewport> Object::viewport() const {
     return m_viewport;
 }
 
-shared_ptr<mat4> Object::projectionMatrix() const {
+shared_ptr<const mat4> Object::projectionMatrix() const {
     return m_projectionMatrix;
 }
 
-shared_ptr<Camera> Object::camera() const {
+shared_ptr<const Camera> Object::camera() const {
     return m_camera;
 }
 
-shared_ptr<PointLight> Object::light() const {
+shared_ptr<const PointLight> Object::light() const {
     return m_light;
 }
 
-glm::vec3 Object::angle() const {
+const glm::vec3& Object::angle() const {
     return m_angle;
 }
 
@@ -115,11 +115,11 @@ GLfloat Object::scale() const {
     return m_scale;
 }
 
-glm::vec3 Object::position() const {
+const glm::vec3& Object::position() const {
     return m_position;
 }
 
-glm::vec4 Object::color() const {
+const glm::vec4& Object::color() const {
     return m_color;
 }
 
@@ -136,7 +136,7 @@ mat4 Object::modelMatrix() {
     return m_modelMatrix;
 }
 
-mat4 Object::unscaledModelMatrix() {
+const mat4& Object::unscaledModelMatrix() {
     if (!m_isUnscaledModelMatrixValid) {
         m_unscaledModelMatrix = calculateModelMatrix(false);
         m_isUnscaledModelMatrixValid = true;

@@ -40,19 +40,19 @@ public:
 
     virtual void updatePosition(const glm::vec3& delta);
 
-    std::shared_ptr<Viewport> viewport() const;
-    std::shared_ptr<glm::mat4> projectionMatrix() const;
-    std::shared_ptr<Camera> camera() const;
-    std::shared_ptr<PointLight> light() const;
+    std::shared_ptr<const Viewport> viewport() const;
+    std::shared_ptr<const glm::mat4> projectionMatrix() const;
+    std::shared_ptr<const Camera> camera() const;
+    std::shared_ptr<const PointLight> light() const;
 
     virtual glm::mat4 modelMatrix();
-    glm::mat4 unscaledModelMatrix();
+    const glm::mat4& unscaledModelMatrix();
 
     bool isInteractive() const;
-    glm::vec3 angle() const;
+    const glm::vec3& angle() const;
     GLfloat scale() const;
-    glm::vec3 position() const;
-    glm::vec4 color() const;
+    const glm::vec3& position() const;
+    const glm::vec4& color() const;
     unsigned int state() const;
     Geom::Sphere boundingSphere() const;
 

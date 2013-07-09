@@ -10,9 +10,6 @@ public:
     void setData(std::shared_ptr<GridData> data);
     void setProgram(std::shared_ptr<GridProgram> program);
 
-    std::shared_ptr<GridData> data() const;
-    std::shared_ptr<GridProgram> program() const;
-
     virtual void render() override;
 
 private:

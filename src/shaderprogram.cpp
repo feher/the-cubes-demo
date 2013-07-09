@@ -8,7 +8,7 @@
 
 using namespace std;
 
-ShaderProgram* ShaderProgram::m_activeShaderProgram = nullptr;
+const ShaderProgram* ShaderProgram::m_activeShaderProgram = nullptr;
 
 ShaderProgram::~ShaderProgram() {
     cleanup();
@@ -52,7 +52,7 @@ void ShaderProgram::cleanup() {
     }
 }
 
-void ShaderProgram::activate() {
+void ShaderProgram::activate() const {
     if (m_activeShaderProgram != this) {
         glUseProgram(m_id);
         m_activeShaderProgram = this;

@@ -14,9 +14,6 @@ public:
     void setData(std::shared_ptr<CompassLabelData> data);
     void setProgram(std::shared_ptr<CompassLabelProgram> program);
 
-    std::shared_ptr<CompassLabelData> data() const;
-    std::shared_ptr<CompassLabelProgram> program() const;
-
     virtual void render() override;
 
 private:

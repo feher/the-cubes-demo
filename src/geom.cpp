@@ -5,22 +5,6 @@
 using namespace std;
 using namespace glm;
 
-vec4 Geom::World::point(
-        const vec2& windowSize,
-        const vec2& windowPoint,
-        const mat4& viewMatrix,
-        const mat4& projectionMatrix,
-        GLfloat ndcz) {
-    assert(windowSize.x > 0 && windowSize.y > 0);
-    assert(windowPoint.x >= 0 && windowPoint.y >= 0);
-    const auto& pndc2 = 2.0f * vec2(windowPoint.x / windowSize.x, windowPoint.y / windowSize.y) - vec2(1, 1);
-    // The NDC is left-handed. Z is [-1, 1].
-    const auto& pndc = vec4(pndc2.x, pndc2.y, ndcz, 1);
-    const auto& I = inverse(projectionMatrix * viewMatrix);
-    const auto& aw = I * pndc;
-    return aw / aw.w;
-}
-
 Geom::Ray Geom::World::ray(
         const vec2& windowSize,
         const vec2& windowPoint,

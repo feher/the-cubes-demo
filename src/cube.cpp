@@ -13,12 +13,8 @@ void Cube::setProgram(shared_ptr<CubeProgram> program) {
     m_program = program;
 }
 
-shared_ptr<CubeData> Cube::data() const {
+shared_ptr<const CubeData> Cube::data() const {
     return m_data;
-}
-
-shared_ptr<CubeProgram> Cube::program() const {
-    return m_program;
 }
 
 void Cube::updatePosition(const vec3& delta) {
@@ -34,22 +30,22 @@ void Cube::updatePosition(const vec3& delta) {
 }
 
 void Cube::render() {
-    const auto Mnoscale = unscaledModelMatrix();
-    const auto M = modelMatrix();
-    const auto V = camera()->viewMatrix();
-    const auto P = *projectionMatrix();
+    const auto& Mnoscale = unscaledModelMatrix();
+    const auto& M = modelMatrix();
+    const auto& V = camera()->viewMatrix();
+    const auto& P = *projectionMatrix();
     auto MVP = P * V * M;
 
     m_program->activate();
 
-    auto c = color();
+    const auto& c = color();
     glUniform4fv(m_program->u_colorId, 1, &c[0]);
     glUniformMatrix4fv(m_program->u_mvpId, 1, GL_FALSE, &MVP[0][0]);
     glUniformMatrix4fv(m_program->u_mId, 1, GL_FALSE, &M[0][0]);
     glUniformMatrix4fv(m_program->u_vId, 1, GL_FALSE, &V[0][0]);
     glUniformMatrix4fv(m_program->u_mnsId, 1, GL_FALSE, &Mnoscale[0][0]);
-    auto lightPos = light()->position();
-    auto lightColor = light()->color();
+    const auto& lightPos = light()->position();
+    const auto& lightColor = light()->color();
     glUniform3fv(m_program->uw_lightPositionId, 1, &(lightPos[0]));
     glUniform3fv(m_program->u_lightColorId, 1, &(lightColor[0]));
     glUniform1f(m_program->u_lightPowerId, light()->power());

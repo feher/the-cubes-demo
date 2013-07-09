@@ -9,14 +9,6 @@ void Grid::setProgram(shared_ptr<GridProgram> program) {
     m_program = program;
 }
 
-shared_ptr<GridData> Grid::data() const {
-    return m_data;
-}
-
-shared_ptr<GridProgram> Grid::program() const {
-    return m_program;
-}
-
 void Grid::render() {
     // Set up the program
     m_program->activate();

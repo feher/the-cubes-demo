@@ -19,7 +19,7 @@ const string CubeData::actionTextureFile  = "./data/actioncube.tga";
 //    1------3        9------13         21-----23
 //
 
-const CubeData::VertexData CubeData::data[] = {
+const CubeData::VertexData CubeData::vertexData[] = {
     //  position        normal        uv
     { { -1, +1, +1 }, { 0, 0, +1 }, { 0, 1 } },
     { { -1, -1, +1 }, { 0, 0, +1 }, { 0, 0 } },
@@ -60,7 +60,7 @@ CubeData::CubeData() {
 
     glGenBuffers(1, &vertexBufferId);
     glBindBuffer(GL_ARRAY_BUFFER, vertexBufferId);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(data), data, GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(vertexData), vertexData, GL_STATIC_DRAW);
 
     glGenBuffers(1, &elementBufferId);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, elementBufferId);
