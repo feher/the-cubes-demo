@@ -16,7 +16,7 @@ void Grid::render() {
     const auto& M = modelMatrix();
     const auto& V = camera()->viewMatrix();
     const auto& P = *projectionMatrix();
-    auto MVP = P * V * M;
+    const auto& MVP = P * V * M;
     auto c = color();
 
     glUniform4fv(m_program->u_colorId, 1, &c[0]);
