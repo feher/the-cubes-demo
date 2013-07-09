@@ -39,10 +39,13 @@ Gabor Fekete
 Usage
 ---------------------
 
-Run the executable under "...thecubes\src\thecubes.exe" (Windows, 32bit, debug binary).
+Run the executable under "...thecubes\src\thecubes.exe".
 
-In case it does not start up, try to compile it according to the instructions
-given in the "Compilation" section.
+In case it does not start up, try one of these:
+- Watch the included video (video.mp4)
+- Compile it according to the instructions given in the "Compilation" section.
+- Install the Visual C++ Redistributable for Visual Studio 2012 from here
+  http://www.microsoft.com/en-au/download/details.aspx?id=30679
 
 The scene can be controlled with the mouse and keyboard.
 
@@ -69,12 +72,13 @@ Directory structure
  - and glew
 - src            : All code in this directory was written/created from scratch for this
                    assignment from empty files.
- - data          : Textures and other resources
- - shaders       : Shader source files
- - thecubes.exe  : Compiled binary (Windows, 32bit, debug binary).
- - main.cpp      : Main entry point
- - thecubes.cpp  : Main program class
+ - data          : Textures and other resources.
+ - shaders       : Shader source files.
+ - thecubes.exe  : Compiled binary.
+ - main.cpp      : Main entry point.
+ - thecubes.cpp  : Main program class.
 - screenshot.jpg : A screenshot.
+- video.mp4      : A video.
 
 The rest of the source files are explained in the "Class hierarchy" section below...
 
