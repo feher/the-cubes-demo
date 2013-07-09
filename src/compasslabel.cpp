@@ -52,9 +52,7 @@ void CompassLabel::render() {
     glBindBuffer(GL_ARRAY_BUFFER, m_data->uvBufferId);
     glVertexAttribPointer(m_program->a_vertexUvId, 2, GL_FLOAT, GL_FALSE, 0, nullptr);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_data->elementBufferId);
-    glDrawElements(GL_TRIANGLES,
-                   6, // 1 face, 6 vertices per face.
-                   GL_UNSIGNED_BYTE, nullptr);
+    glDrawElements(GL_TRIANGLE_STRIP, 4, GL_UNSIGNED_BYTE, nullptr);
 
     // Y label
     setPosition(vec3(yd.x / yd.w, yd.y / yd.w, 0));
@@ -63,9 +61,7 @@ void CompassLabel::render() {
     glBindBuffer(GL_ARRAY_BUFFER, m_data->uvBufferId);
     glVertexAttribPointer(m_program->a_vertexUvId, 2, GL_FLOAT, GL_FALSE, 0, (void*)(sizeof(GLfloat) * 8));
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_data->elementBufferId);
-    glDrawElements(GL_TRIANGLES,
-                   6, // 1 face, 6 vertices per face.
-                   GL_UNSIGNED_BYTE, nullptr);
+    glDrawElements(GL_TRIANGLE_STRIP, 4, GL_UNSIGNED_BYTE, nullptr);
 
     // Z label
     setPosition(vec3(zd.x / zd.w, zd.y / zd.w, 0));
@@ -74,9 +70,7 @@ void CompassLabel::render() {
     glBindBuffer(GL_ARRAY_BUFFER, m_data->uvBufferId);
     glVertexAttribPointer(m_program->a_vertexUvId, 2, GL_FLOAT, GL_FALSE, 0, (void*)(sizeof(GLfloat) * 16));
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_data->elementBufferId);
-    glDrawElements(GL_TRIANGLES,
-                   6, // 1 face, 6 vertices per face.
-                   GL_UNSIGNED_BYTE, nullptr);
+    glDrawElements(GL_TRIANGLE_STRIP, 4, GL_UNSIGNED_BYTE, nullptr);
 
     glDisableVertexAttribArray(m_program->am_vertexPositionId);
     glDisableVertexAttribArray(m_program->a_vertexUvId);

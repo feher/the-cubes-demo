@@ -32,8 +32,8 @@ const GLfloat CompassLabelData::vertices[] = {
     -1, +1, 0,  -1, -1, 0,  +1, +1, 0,  +1, -1, 0 // front 0-3
 };
 
-const GLubyte CompassLabelData::triangles[] = {
-    0, 1, 2, 1, 3, 2
+const GLubyte CompassLabelData::elements[] = {
+    0, 1, 2, 3
 };
 
 CompassLabelData::CompassLabelData() {
@@ -48,7 +48,7 @@ CompassLabelData::CompassLabelData() {
 
     glGenBuffers(1, &elementBufferId);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, elementBufferId);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(triangles), triangles, GL_STATIC_DRAW);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(elements), elements, GL_STATIC_DRAW);
 
     glGenTextures(1, &textureId);
     glBindTexture(GL_TEXTURE_2D, textureId);

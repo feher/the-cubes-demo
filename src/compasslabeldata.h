@@ -23,7 +23,7 @@ private:
     static const std::string textureFile;
     static const GLfloat vertices[4 * 3];
     static const GLfloat uvs[4 * 2 * 3];
-    static const GLubyte triangles[6];
+    static const GLubyte elements[6];
 };
 
 #endif
