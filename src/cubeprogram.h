@@ -20,6 +20,8 @@ public:
     GLuint u_lightPowerId;
     GLuint u_highlightFactorId;
     GLuint u_textureSamplerId;
+    GLuint u_materialAmbientFactorId;
+    GLuint u_materialSpecularFactorId;
 
 private:
     static const std::string vertexShaderFile;

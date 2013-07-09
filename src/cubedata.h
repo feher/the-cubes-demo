@@ -3,6 +3,7 @@
 
 #include "objectdata.h"
 
+#include <glm/glm.hpp> // vec*, mat*
 #include <GL/glew.h> // GLuint, GLfloat, GLubyte
 
 #include <string>
@@ -19,6 +20,8 @@ public:
     virtual ~CubeData();
 
     static const GLfloat hoverHighlightFactor;
+    static const glm::vec3 materialAmbientFactor;
+    static const glm::vec3 materialSpecularFactor;
 
     GLuint vertexBufferId;
     GLuint elementBufferId;

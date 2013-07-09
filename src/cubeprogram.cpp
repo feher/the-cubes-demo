@@ -21,5 +21,7 @@ CubeProgram::CubeProgram()
     u_lightColorId = glGetUniformLocation(m_program.id(), "u_lightColor");
     u_lightPowerId = glGetUniformLocation(m_program.id(), "u_lightPower");
     u_highlightFactorId = glGetUniformLocation(m_program.id(), "u_highlightFactor");
-    u_textureSamplerId  = glGetUniformLocation(m_program.id(), "u_textureSampler");
+    u_textureSamplerId = glGetUniformLocation(m_program.id(), "u_textureSampler");
+    u_materialAmbientFactorId = glGetUniformLocation(m_program.id(), "u_materialAmbientFactor");
+    u_materialSpecularFactorId = glGetUniformLocation(m_program.id(), "u_materialSpecularFactor");
 }

@@ -10,6 +10,8 @@ const GLfloat CubeData::hoverHighlightFactor = 2.0f;
 
 const string CubeData::modelTextureFile  = "./data/marble512.tga";
 const string CubeData::actionTextureFile  = "./data/actioncube.tga";
+const vec3 CubeData::materialAmbientFactor = vec3(0.1f, 0.1f, 0.1f);
+const vec3 CubeData::materialSpecularFactor = vec3(0.3f, 0.3f, 0.3f);
 
 //        4------6       10------14        16------18
 //      / |    / |      / |    / |        / |    / |

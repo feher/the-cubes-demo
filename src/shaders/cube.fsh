@@ -12,11 +12,11 @@ uniform vec3 u_lightColor;
 uniform float u_lightPower;
 uniform float u_highlightFactor;
 uniform sampler2D u_textureSampler;
+uniform vec3 u_materialAmbientFactor;
+uniform vec3 u_materialSpecularFactor;
 
 vec4 light(vec4 color) {
-  vec3 materialDiffuseColor = clamp(color * u_highlightFactor, 0, 255).rgb;
-  vec3 materialAmbientColor = vec3(0.1, 0.1, 0.1) * materialDiffuseColor;
-  vec3 materialSpecularColor = vec3(0.3, 0.3, 0.3);
+  vec3 materialDiffuseFactor = clamp(color * u_highlightFactor, 0, 255).rgb;
 
   float lightDistance = length(uw_lightPosition - vw_vertexPosition);
 
@@ -30,10 +30,10 @@ vec4 light(vec4 color) {
 
   vec4 outColor;
   outColor.rgb = 
-      materialAmbientColor
-      + materialDiffuseColor * u_lightColor * u_lightPower
+      u_materialAmbientFactor * materialDiffuseFactor
+      + materialDiffuseFactor * u_lightColor * u_lightPower
         * cosDiffuse / (lightDistance * lightDistance) +
-      + materialSpecularColor * u_lightColor * u_lightPower
+      + u_materialSpecularFactor * u_lightColor * u_lightPower
         * pow(cosSpecular, 5) / (lightDistance * lightDistance);
 
   outColor.a = color.a;
@@ -47,7 +47,7 @@ vec4 noLight(vec4 color) {
 void main() {
   vec4 color = texture2D(u_textureSampler, v_vertexUv);
 
-  float ZERO = float(1.0);
+  const float ZERO = float(1.0);
   if (u_lightPower < ZERO) {
     gl_FragColor = noLight(color);
   } else {

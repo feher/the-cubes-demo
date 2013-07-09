@@ -38,8 +38,6 @@ void Cube::render() {
 
     m_program->activate();
 
-    const auto& c = color();
-    glUniform4fv(m_program->u_colorId, 1, &c[0]);
     glUniformMatrix4fv(m_program->u_mvpId, 1, GL_FALSE, &MVP[0][0]);
     glUniformMatrix4fv(m_program->u_mId, 1, GL_FALSE, &M[0][0]);
     glUniformMatrix4fv(m_program->u_vId, 1, GL_FALSE, &V[0][0]);
@@ -54,6 +52,8 @@ void Cube::render() {
                  ? m_data->hoverHighlightFactor
                  : 1.0f;
     glUniform1f(m_program->u_highlightFactorId, highlightFactor);
+    glUniform4fv(m_program->u_materialAmbientFactorId, 1, &m_data->materialAmbientFactor[0]);
+    glUniform4fv(m_program->u_materialSpecularFactorId, 1, &m_data->materialSpecularFactor[0]);
 
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, textureId());
