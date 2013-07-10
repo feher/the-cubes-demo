@@ -4,7 +4,8 @@ Usage
 Run the executable under "...thecubes\src\thecubes.exe".
 
 In case it does not start up, try one of these:
-- Watch the included video (video*.mp4)
+- Watch the included video and the screenshot. You can get them
+  from https://bitbucket.org/feheren-fekete/the-cubes-demo/downloads
 - Compile it according to the instructions given in the "Compilation" section.
 - Install the Visual C++ Redistributable for Visual Studio 2012 from here
   http://www.microsoft.com/en-au/download/details.aspx?id=30679
@@ -42,10 +43,10 @@ Directory structure
  - main.cpp :      Main entry point.
  - thecubes.cpp :  Main program class.
 
-- screenshot.jpg : A screenshot.
-- video*.mp4 :     Video recording.
-
 The rest of the source files are explained in the "Class hierarchy" section below.
+
+Screenshots and videos are available separately at
+https://bitbucket.org/feheren-fekete/the-cubes-demo/downloads.
 
 Build environment
 ---------------------
