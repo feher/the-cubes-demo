@@ -54,8 +54,8 @@ public:
     const glm::vec3& position() const;
     const glm::vec4& color() const;
     unsigned int state() const;
-    Geom::Sphere boundingSphere() const;
-
+    
+    virtual Geom::Sphere boundingSphere() const;
     virtual void update(double deltaTime);
     virtual void render();
 

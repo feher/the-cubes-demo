@@ -1,13 +1,13 @@
-#include "cubeprogram.h"
+#include "lighttextureprogram.h"
 
 #include <string>
 
 using namespace std;
 
-const string CubeProgram::vertexShaderFile = "./shaders/cube.vsh";
-const string CubeProgram::fragmentShaderFile = "./shaders/cube.fsh";
+const string LightTextureProgram::vertexShaderFile = "./shaders/lighttexture.vsh";
+const string LightTextureProgram::fragmentShaderFile = "./shaders/lighttexture.fsh";
 
-CubeProgram::CubeProgram()
+LightTextureProgram::LightTextureProgram()
     : ObjectProgram(vertexShaderFile, fragmentShaderFile) {
     am_vertexPositionId = glGetAttribLocation(m_program.id(), "am_vertexPosition");
     am_vertexNormalId = glGetAttribLocation(m_program.id(), "am_vertexNormal");

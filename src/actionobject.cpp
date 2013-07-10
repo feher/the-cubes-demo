@@ -1,19 +1,15 @@
-#include "actioncube.h"
+#include "actionobject.h"
 
 using namespace std;
 using namespace glm;
 
-ActionCube::ActionCube(GLfloat scale)
-    : m_originalScale(scale) {
+ActionObject::ActionObject(GLfloat scale)
+    : m_originalScale(scale),
+      m_pulse(-1.0f) {
     setScale(scale);
 }
 
-GLuint ActionCube::textureId() const {
-    return data()->actionCubeTextureId;
-}
-
-void ActionCube::update(double deltaTime) {
-    static GLfloat m_pulse = -1.0f;
+void ActionObject::update(double deltaTime) {
     const auto rotationSpeed = 45;
     const auto pulseSpeed = 700.0f;
     switch (state()) {
@@ -46,8 +42,8 @@ void ActionCube::update(double deltaTime) {
     }
 }
 
-void ActionCube::render() {
+void ActionObject::render() {
     glDisable(GL_DEPTH_TEST);
-    Cube::render();
+    TriangleMeshObject::render();
     glEnable(GL_DEPTH_TEST);
 }

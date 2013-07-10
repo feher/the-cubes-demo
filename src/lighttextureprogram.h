@@ -1,11 +1,11 @@
-#ifndef CUBEP_ROGRAM_H
-#define CUBEP_ROGRAM_H
+#ifndef LIGHT_TEXTURE_PROGRAM_H
+#define LIGHT_TEXTURE_PROGRAM_H
 
 #include "objectprogram.h"
 
-class CubeProgram : public ObjectProgram {
+class LightTextureProgram : public ObjectProgram {
 public:
-    explicit CubeProgram();
+    explicit LightTextureProgram();
 
     GLuint am_vertexPositionId;
     GLuint am_vertexNormalId;

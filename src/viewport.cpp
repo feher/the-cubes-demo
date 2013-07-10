@@ -17,3 +17,6 @@ void Viewport::activate() const {
     }
 }
 
+void Viewport::scissor() const {
+    glScissor(x, y, width, width);
+}

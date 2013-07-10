@@ -37,6 +37,12 @@ void Compass::render() {
     glUniformMatrix4fv(m_program->u_mvpId, 1, GL_FALSE, &MVP[0][0]);
 
     viewport()->activate();
+    // Make sure that we render on top of everything.
+    // We need the depth test for the compass axes.
+    viewport()->scissor();
+    glEnable(GL_SCISSOR_TEST);
+    glClear(GL_DEPTH_BUFFER_BIT);
+    glDisable(GL_SCISSOR_TEST);
 
     glLineWidth(m_data->lineWidth);
 

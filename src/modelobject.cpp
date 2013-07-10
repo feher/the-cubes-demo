@@ -1,4 +1,4 @@
-#include "modelcube.h"
+#include "modelobject.h"
 
 #include "geom.h" // PI
 
@@ -7,14 +7,14 @@
 using namespace std;
 using namespace glm;
 
-ModelCube::ModelCube(GLfloat scale)
+ModelObject::ModelObject(GLfloat scale)
     : m_pulse(0.0f),
       m_originalScale(scale),
       m_rotationSpeedOffset(0.0f) {
     setScale(scale);
 }
 
-void ModelCube::update(double deltaTime) {
+void ModelObject::update(double deltaTime) {
     const auto rotationSpeed = 35; // degrees/time
     const auto appearingSpeed = 30;
     const auto pulseSpeed = 450;
@@ -88,8 +88,3 @@ void ModelCube::update(double deltaTime) {
             break;
     }
 }
-
-GLuint ModelCube::textureId() const {
-    return data()->cubeTextureId;
-}
-

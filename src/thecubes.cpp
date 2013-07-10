@@ -1,8 +1,8 @@
 
 #include "thecubes.h"
 
-#include "actioncube.h"
-#include "modelcube.h"
+#include "actionobject.h"
+#include "modelobject.h"
 #include "grid.h"
 #include "compass.h"
 #include "compasslabel.h"
@@ -12,6 +12,8 @@
 #include "compassprogram.h"
 #include "compasslabeldata.h"
 #include "compasslabelprogram.h"
+#include "cubedata.h"
+#include "spheredata.h"
 
 #include <glm/glm.hpp> // vec*, mat*
 #include <glm/gtc/matrix_transform.hpp>
@@ -28,6 +30,7 @@ TheCubes::TheCubes(unsigned int screenWidth, unsigned int screenHeight)
     : m_screenWidth(screenWidth),
       m_screenHeight(screenHeight),
       m_lastTime(0),
+      m_exitting(false),
       m_isMouseButtonPressed(false),
       m_isMouseMoved(false),
       m_lastMousePos(0, 0),
@@ -60,9 +63,11 @@ TheCubes::TheCubes(unsigned int screenWidth, unsigned int screenHeight)
     std::random_device rd;
     m_randEngine.seed(rd());
 
-    m_cubeData = make_shared<CubeData>();
-    m_cubeProgram = make_shared<CubeProgram>();
+    m_lightTextureProgram = make_shared<LightTextureProgram>();
     auto gridProgram = make_shared<GridProgram>();
+
+    m_modelCubeData = make_shared<CubeData>(CubeData::modelTextureFile);
+    m_modelSphereData = make_shared<SphereData>(SphereData::modelTextureFile);
 
     // Set up the modeling scene
     {
@@ -72,9 +77,9 @@ TheCubes::TheCubes(unsigned int screenWidth, unsigned int screenHeight)
         auto light = make_shared<PointLight>(camera->position(), vec3(1, 1, 1), 100.0f);
         light->linkToCamera(camera);
 
-        auto object = make_shared<ModelCube>(1.0f);
-        object->setData(m_cubeData);
-        object->setProgram(m_cubeProgram);
+        auto object = make_shared<ModelObject>(1.0f);
+        object->setData(m_modelCubeData);
+        object->setProgram(m_lightTextureProgram);
         object->setViewport(viewport);
         object->setProjection(projection);
         object->setCamera(camera);
@@ -86,9 +91,9 @@ TheCubes::TheCubes(unsigned int screenWidth, unsigned int screenHeight)
         object->setState(Object::APPEARING);
         object->setInteractive(true);
 
-        auto object2 = make_shared<ModelCube>(1.0f);
-        object2->setData(m_cubeData);
-        object2->setProgram(m_cubeProgram);
+        auto object2 = make_shared<ModelObject>(1.0f);
+        object2->setData(m_modelSphereData);
+        object2->setProgram(m_lightTextureProgram);
         object2->setViewport(viewport);
         object2->setProjection(projection);
         object2->setCamera(camera);
@@ -132,34 +137,65 @@ TheCubes::TheCubes(unsigned int screenWidth, unsigned int screenHeight)
         m_modelingLight = light;
     }
 
-    // Set up the add-button scene
+    // Set up the action cube scene
     {
         auto viewport = make_shared<Viewport>(0, 0, m_screenWidth / 5, m_screenHeight / 5);
         auto projection = make_shared<mat4>(perspective(45.0f, 4.0f / 3.0f,  0.1f,  100.0f));
         auto camera = make_shared<Camera>(vec3(0, 2, 5), vec3(180, -30, -5));
         auto light = make_shared<PointLight>(vec3(0, 1, 10), vec3(1, 1, 1), 100.0f);
-        auto object = make_shared<ActionCube>(1.0f);
-        object->setData(m_cubeData);
-        object->setProgram(m_cubeProgram);
-        object->setViewport(viewport);
-        object->setProjection(projection);
-        object->setCamera(camera);
-        object->setLight(light);
-        object->setRotation(vec3(0, 0, 0));
-        object->setScale(1.0f);
-        object->setPosition(vec3(0, 0, 0));
-        object->setColor(vec4(0, 0, 1, 1));
-        object->setState(Object::NONE);
-        object->setInteractive(true);
+        auto cube = make_shared<ActionObject>(1.0f);
+        cube->setData(make_shared<CubeData>(CubeData::actionTextureFile));
+        cube->setProgram(m_lightTextureProgram);
+        cube->setViewport(viewport);
+        cube->setProjection(projection);
+        cube->setCamera(camera);
+        cube->setLight(light);
+        cube->setRotation(vec3(0, 0, 0));
+        cube->setScale(1.0f);
+        cube->setPosition(vec3(0, 0, 0));
+        cube->setColor(vec4(0, 0, 1, 1));
+        cube->setState(Object::NONE);
+        cube->setInteractive(true);
 
         m_viewports.push_back(viewport);
         m_projections.push_back(projection);
         m_cameras.push_back(camera);
         m_lights.push_back(light);
-        m_hudObjects.push_back(object);
-        m_interactiveObjects.push_back(object);
+        m_hudObjects.push_back(cube);
+        m_interactiveObjects.push_back(cube);
 
-        m_actionCube = object;
+        m_actionCube = cube;
+    }
+
+    // Set up the action sphere scene
+    {
+        auto viewport = make_shared<Viewport>(0, m_screenHeight - (m_screenHeight / 4),
+                                              m_screenWidth / 5, m_screenHeight / 5);
+        auto projection = make_shared<mat4>(perspective(45.0f, 4.0f / 3.0f,  0.1f,  100.0f));
+        auto camera = make_shared<Camera>(vec3(0.2f, 1.7, 3.5), vec3(180, -25, -5));
+        auto light = make_shared<PointLight>(vec3(0, 1, 9), vec3(1, 1, 1), 80.0f);
+        auto sphere = make_shared<ActionObject>(1.0f);
+        sphere->setData(make_shared<SphereData>(SphereData::actionTextureFile));
+        sphere->setProgram(m_lightTextureProgram);
+        sphere->setViewport(viewport);
+        sphere->setProjection(projection);
+        sphere->setCamera(camera);
+        sphere->setLight(light);
+        sphere->setRotation(vec3(0, 0, 0));
+        sphere->setScale(1.0f);
+        sphere->setPosition(vec3(0, 0, 0));
+        sphere->setColor(vec4(0, 0, 1, 1));
+        sphere->setState(Object::NONE);
+        sphere->setInteractive(true);
+
+        m_viewports.push_back(viewport);
+        m_projections.push_back(projection);
+        m_cameras.push_back(camera);
+        m_lights.push_back(light);
+        m_hudObjects.push_back(sphere);
+        m_interactiveObjects.push_back(sphere);
+
+        m_actionSphere = sphere;
     }
 
     // Set up the compass scene
@@ -223,15 +259,21 @@ void TheCubes::updateAndRender() {
     glfwSwapBuffers();
 }
 
-void TheCubes::createNewObject() {
-    auto object = make_shared<ModelCube>(1.0f);
-    object->setData(m_cubeData);
-    object->setProgram(m_cubeProgram);
+void TheCubes::createNewObject(const shared_ptr<const Object>& actionObject) {
+    bool isCube = (actionObject == m_actionCube);
+
+    auto object = make_shared<ModelObject>(1.0f);
+    if (isCube) {
+        object->setData(m_modelCubeData);
+    } else {
+        object->setData(m_modelSphereData);
+    }
+    object->setProgram(m_lightTextureProgram);
     object->setViewport(m_modelingViewport);
     object->setProjection(m_modelingProjection);
     object->setCamera(m_modelingCamera);
     object->setLight(m_modelingLight);
-    object->setRotation(vec3(10, 30, 40));
+    object->setRotation(vec3(0, 0, 0));
     object->setScale(1.0f);
 
     const auto& cameraBase = m_modelingCamera->base();
@@ -245,6 +287,12 @@ void TheCubes::createNewObject() {
     m_modelObjects.push_back(object);
     m_modelingObjects.push_back(object);
     m_interactiveObjects.push_back(object);
+
+    m_exitting = false;
+}
+
+bool TheCubes::isActionObject(const shared_ptr<const Object>& object) const {
+    return object == m_actionCube || object == m_actionSphere;
 }
 
 shared_ptr<Object> TheCubes::selectedObject(const vec2& mousePos) const {
@@ -288,7 +336,7 @@ shared_ptr<Object> TheCubes::selectedObject(const vec2& mousePos) const {
         const auto& sphere = object->boundingSphere();
         const auto& intersections = Geom::World::intersect(ray, sphere);
         if (!intersections.empty()) {
-            if (object == m_actionCube) {
+            if (isActionObject(object)) {
                 // These objects are on top of everything.
                 selection = object;
                 break;
@@ -366,14 +414,14 @@ void TheCubes::handleInput() {
             if (!isShiftPressed && !isControlPressed && isMouseClicked && isMousePosValid) {
                 // Clicked on object (press + release, not just press)
                 auto object = selectedObject(m_lastMousePos);
-                if (object && object != m_actionCube
+                if (object && !isActionObject(object)
                     && (object->state() == Object::HOVERED || object->state() == Object::NONE)) {
                     object->setState(Object::DISAPPEARING);
                 }
             } else if (!isShiftPressed && !isControlPressed && !isAltPressed && isMouseMoved) {
                 if (m_isMouseButtonPressed) {
                     auto object = selectedObject(m_lastMousePos);
-                    if (object && object != m_actionCube) {
+                    if (object && !isActionObject(object)) {
                         // Move object
                         m_movingObject = object;
                         m_inputState = MOVING_OBJECT;
@@ -391,10 +439,10 @@ void TheCubes::handleInput() {
                 }
             } else if (!isShiftPressed && !isControlPressed && !isAltPressed && isMouseButtonPressStarted) {
                 auto object = selectedObject(m_lastMousePos);
-                if (object == m_actionCube
+                if (isActionObject(object)
                     && (object->state() == Object::NONE || object->state() == Object::HOVERED)) {
-                    m_actionCube->setState(Object::PRESSED);
-                    createNewObject();
+                    object->setState(Object::PRESSED);
+                    createNewObject(object);
                 }
             } else if (isMouseMoved) {
                 const auto f = 0.1f;
@@ -454,17 +502,16 @@ void TheCubes::cleanupDeadModelObjects() {
 }
 
 void TheCubes::run() {
-    bool exitting = false;
+    m_exitting = false;
     m_lastTime = glfwGetTime();
     do {
         updateAndRender();
         handleInput();
         cleanupDeadModelObjects();
-        if (!exitting &&
-            (glfwGetKey(GLFW_KEY_ESC) == GLFW_PRESS
-             || (!glfwGetWindowParam(GLFW_OPENED)))) {
+        if (glfwGetKey(GLFW_KEY_ESC) == GLFW_PRESS
+             || (!glfwGetWindowParam(GLFW_OPENED))) {
             killModelObjects();
-            exitting = true;
+            m_exitting = true;
         } 
-    } while (!exitting || !m_modelObjects.empty());
+    } while (!m_exitting || !m_modelObjects.empty());
 }

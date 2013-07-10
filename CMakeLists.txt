@@ -32,32 +32,36 @@ add_definitions(
 )
 
 add_executable(thecubes
-	src/actioncube.cpp
-	src/camera.cpp
-	src/compass.cpp
-	src/compassdata.cpp
-	src/compasslabel.cpp
-	src/compasslabeldata.cpp
-	src/compasslabelprogram.cpp
-	src/compassprogram.cpp
-	src/cube.cpp
-	src/cubedata.cpp
-	src/cubeprogram.cpp
-	src/file.cpp
-	src/geom.cpp
-	src/grid.cpp
-	src/griddata.cpp
-	src/gridprogram.cpp
-	src/main.cpp
-	src/modelcube.cpp
-	src/object.cpp
-	src/objectprogram.cpp
-	src/pointlight.cpp
-	src/rglfw.cpp
-	src/shader.cpp
-	src/shaderprogram.cpp
-	src/thecubes.cpp
-	src/viewport.cpp
+ src/actionobject.cpp
+ src/camera.cpp
+ src/compass.cpp
+ src/compassdata.cpp
+ src/compasslabel.cpp
+ src/compasslabeldata.cpp
+ src/compasslabelprogram.cpp
+ src/compassprogram.cpp
+ src/cubedata.cpp
+ src/file.cpp
+ src/geom.cpp
+ src/grid.cpp
+ src/griddata.cpp
+ src/gridprogram.cpp
+ src/lighttextureprogram.cpp
+ src/main.cpp
+ src/modelobject.cpp
+ src/object.cpp
+ src/objectprogram.cpp
+ src/pointlight.cpp
+ src/rglfw.cpp
+ src/shader.cpp
+ src/shaderprogram.cpp
+ src/shaders
+ src/spheredata.cpp
+ src/thecubes.cpp
+ src/thecubes.exe
+ src/trianglemeshdata.cpp
+ src/trianglemeshobject.cpp
+ src/viewport.cpp
 )
 target_link_libraries(thecubes
 	${ALL_LIBS}

@@ -6,8 +6,9 @@
 #include "object.h"
 #include "pointlight.h"
 #include "viewport.h"
+#include "lighttextureprogram.h"
 #include "cubedata.h"
-#include "cubeprogram.h"
+#include "spheredata.h"
 
 #include <glm/glm.hpp> // vec2, mat4
 
@@ -26,7 +27,8 @@ private:
         MOVING_OBJECT, MOVING_CAMERA, NONE
     };
 
-    void createNewObject();
+    void createNewObject(const std::shared_ptr<const Object>& actionObject);
+    bool isActionObject(const std::shared_ptr<const Object>& object) const;
     std::shared_ptr<Object> selectedObject(const glm::vec2& mousePos) const;
     void clearHoveredState();
     void handleInput();
@@ -38,6 +40,7 @@ private:
     unsigned int m_screenHeight;
     RGlfw m_glfw;
     double m_lastTime;
+    bool m_exitting;
     bool m_isMouseButtonPressed;
     bool m_isMouseMoved;
     glm::vec2 m_lastMousePos;
@@ -49,10 +52,11 @@ private:
     std::shared_ptr<Camera> m_modelingCamera;
     std::shared_ptr<PointLight> m_modelingLight;
     std::shared_ptr<Object> m_actionCube;
+    std::shared_ptr<Object> m_actionSphere;
     std::shared_ptr<Object> m_movingObject;
-    std::shared_ptr<CubeData> m_cubeData;
-    std::shared_ptr<CubeProgram> m_cubeProgram;
-    std::vector<std::shared_ptr<CubeData>> m_cubeDatas;
+    std::shared_ptr<LightTextureProgram> m_lightTextureProgram;
+    std::shared_ptr<CubeData> m_modelCubeData;
+    std::shared_ptr<SphereData> m_modelSphereData;
     std::vector<std::shared_ptr<Viewport>> m_viewports;
     std::vector<std::shared_ptr<glm::mat4>> m_projections;
     std::vector<std::shared_ptr<Camera>> m_cameras;

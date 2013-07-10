@@ -1,19 +1,17 @@
-#ifndef MODELCUBE_H
-#define MODELCUBE_H
+#ifndef MODEL_OBJECT_H
+#define MODEL_OBJECT_H
 
-#include "cube.h"
+#include "trianglemeshobject.h"
 
 #include <GL/glew.h> // GL*
 
-class ModelCube : public Cube {
+class ModelObject : public TriangleMeshObject {
 public:
-    explicit ModelCube(GLfloat scale);
+    explicit ModelObject(GLfloat scale);
 
     virtual void update(double deltaTime) override;
 
 private:
-    virtual GLuint textureId() const override;
-
     GLfloat m_pulse;
     GLfloat m_originalScale;
     GLfloat m_rotationSpeedOffset;

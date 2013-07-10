@@ -1,18 +1,18 @@
-#ifndef CUBE_DATA_H
-#define CUBE_DATA_H
+#ifndef SPHERE_DATA_H
+#define SPHERE_DATA_H
 
 #include "trianglemeshdata.h"
 #include "glbuffer.h"
-#include "geom.h"
 
 #include <glm/glm.hpp> // vec*, mat*
 #include <GL/glew.h> // GLuint, GLfloat, GLubyte
 
+#include <vector>
 #include <string>
 
-class CubeData : public TriangleMeshData {
+class SphereData : public TriangleMeshData {
 public:
-    explicit CubeData(const std::string& textureFile);
+    explicit SphereData(const std::string& textureFile);
 
     virtual GLuint vertexBufferId() override;
     virtual GLuint elementBufferId() override;
@@ -24,11 +24,13 @@ public:
     static const std::string actionTextureFile;
 
 private:
-    static const VertexData m_vertexData[6 * 4];
-    static const TriangleElement m_triangles[6 * 4];
-
     static GlBuffer m_vertexBufferId;
     static GlBuffer m_elementBufferId;
+
+    static const unsigned int m_segments;
+    static const unsigned int m_rings;
+    static std::vector<VertexData> m_vertexData;
+    static std::vector<TriangleElement> m_triangles;
 };
 
 #endif

@@ -6,6 +6,7 @@ public:
     explicit Viewport(int lx, int ly, int w, int h);
 
     void activate() const;
+    void scissor() const;
 
     const int x;
     const int y;

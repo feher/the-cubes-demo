@@ -1,4 +1,4 @@
-#include "cube.h"
+#include "trianglemeshobject.h"
 
 #include <glm/glm.hpp> // vec*, mat*
 #include <glm/gtc/matrix_transform.hpp> // translate, rotate, scale
@@ -6,18 +6,18 @@
 using namespace std;
 using namespace glm;
 
-void Cube::setData(shared_ptr<CubeData> data) {
+void TriangleMeshObject::setData(shared_ptr<TriangleMeshData> data) {
     m_data = data;
 }
-void Cube::setProgram(shared_ptr<CubeProgram> program) {
+void TriangleMeshObject::setProgram(shared_ptr<LightTextureProgram> program) {
     m_program = program;
 }
 
-shared_ptr<const CubeData> Cube::data() const {
-    return m_data;
+Geom::Sphere TriangleMeshObject::boundingSphere() const {
+    return m_data->boundingSphere(position(), scale());
 }
 
-void Cube::updatePosition(const vec3& delta) {
+void TriangleMeshObject::updatePosition(const vec3& delta) {
     const auto& p3 = position();
     const auto& p = vec4(p3.x, p3.y, p3.z, 1);
     auto pc = camera()->viewMatrix() * p;
@@ -29,7 +29,7 @@ void Cube::updatePosition(const vec3& delta) {
     setPosition(vec3(pw.x, pw.y, pw.z));
 }
 
-void Cube::render() {
+void TriangleMeshObject::render() {
     const auto& Mnoscale = unscaledModelMatrix();
     const auto& M = modelMatrix();
     const auto& V = camera()->viewMatrix();
@@ -49,36 +49,38 @@ void Cube::render() {
     glUniform1f(m_program->u_lightPowerId, light()->power());
     auto highlightFactor =
                  (state() == HOVERED)
-                 ? m_data->hoverHighlightFactor
+                 ? m_data->hoverHighlightFactor()
                  : 1.0f;
     glUniform1f(m_program->u_highlightFactorId, highlightFactor);
-    glUniform4fv(m_program->u_materialAmbientFactorId, 1, &m_data->materialAmbientFactor[0]);
-    glUniform4fv(m_program->u_materialSpecularFactorId, 1, &m_data->materialSpecularFactor[0]);
+    const auto& ambient = m_data->materialAmbientFactor();
+    const auto& specular = m_data->materialSpecularFactor();
+    glUniform4fv(m_program->u_materialAmbientFactorId, 1, &ambient[0]);
+    glUniform4fv(m_program->u_materialSpecularFactorId, 1, &specular[0]);
 
     glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D, textureId());
+    glBindTexture(GL_TEXTURE_2D, m_data->textureId());
     glUniform1i(m_program->u_textureSamplerId, 0);
 
-    glBindBuffer(GL_ARRAY_BUFFER, m_data->vertexBufferId);
+    glBindBuffer(GL_ARRAY_BUFFER, m_data->vertexBufferId());
     glEnableVertexAttribArray(m_program->am_vertexPositionId);
     glVertexAttribPointer(m_program->am_vertexPositionId, 3, GL_FLOAT, GL_FALSE,
-                          sizeof(CubeData::VertexData),
-                          reinterpret_cast<void*>(offsetof(CubeData::VertexData, position)));
+                          sizeof(TriangleMeshData::VertexData),
+                          reinterpret_cast<void*>(offsetof(TriangleMeshData::VertexData, position)));
     glEnableVertexAttribArray(m_program->am_vertexNormalId);
     glVertexAttribPointer(m_program->am_vertexNormalId, 3, GL_FLOAT, GL_FALSE,
-                          sizeof(CubeData::VertexData),
-                          reinterpret_cast<void*>(offsetof(CubeData::VertexData, normal)));
+                          sizeof(TriangleMeshData::VertexData),
+                          reinterpret_cast<void*>(offsetof(TriangleMeshData::VertexData, normal)));
     glEnableVertexAttribArray(m_program->a_vertexUvId);
     glVertexAttribPointer(m_program->a_vertexUvId, 2, GL_FLOAT, GL_FALSE,
-                          sizeof(CubeData::VertexData),
-                          reinterpret_cast<void*>(offsetof(CubeData::VertexData, uv)));
+                          sizeof(TriangleMeshData::VertexData),
+                          reinterpret_cast<void*>(offsetof(TriangleMeshData::VertexData, uv)));
 
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_data->elementBufferId);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_data->elementBufferId());
 
     viewport()->activate();
 
     glDrawElements(GL_TRIANGLES,
-                   6 * 6, // 6 faces, 6 vertices per face.
+                   m_data->elementCount(),
                    GL_UNSIGNED_BYTE, nullptr);
 
     glDisableVertexAttribArray(m_program->am_vertexPositionId);
