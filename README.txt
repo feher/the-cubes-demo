@@ -13,15 +13,16 @@ The scene can be controlled with the mouse and keyboard.
 
 Controls:
 - Create marble cube             : Left mouse button on "Try me" cube
-- Remove marble cube             : Left mouse button on marble cube
+- Create marble sphere           : Left mouse button on "Try me" sphere
+- Remove marble object           : Left mouse button on marble object
 - Move camera up/down/left/right : Hold left mouse button + drag on empty area
 - Move camera forward/back       : Hold left control + move mouse up/down
 - Pitch/yaw camera               : Hold left shift + move mouse
 - Roll camera                    : Hold left alt + move mouse
-- Move object                    : Hold left mouse button + drag on marbe cube
+- Move object                    : Hold left mouse button + drag on marble object
 - Exit                           : Escape key or close the window.
 
-There is an exit animation (all cubes disappear) and the window closes only when the
+There is an exit animation (all marbles disappear) and the window closes only when the
 animation has finished.
 
 Directory structure
@@ -79,6 +80,8 @@ Class hierarchy
 - RGlfw : Resource class wrapping around glfw in order to provide automatic cleanup
           when going out of scope or when exceptions occur.
 
+- GlBuffer : Resource class wrapping around OpenGL buffer objects.
+
 - File : Basic utility functions for file handling.
 
 - Geom : Geometry functions used for object picking. E.g. line-sphere intersection.
@@ -90,24 +93,27 @@ Class hierarchy
 
 - PointLight : Class representing a point light.
 
-- Object :       Base class for any kind of visible on-screen object.
- - Compass :     The small orientation indicator in the lower right corner.
-                 Shows the direction of the world's X (red) Y (green) Z (blue) coordinates.
- - CompassLabel: Represents the labes of the axes on the compass.
- - Cube :        Base class for cube objects. Represents a textured and lit cube.
-  - ActionCube : The pressable action cube at the lower left corner that creates marble cubes.
-  - ModelCube :  Represents the marble cubes that can be created/deleted/moved.
- - Grid :        Object representing the modeling grid.
+- Object :              Base class for any kind of visible on-screen object.
+ - Compass :            The small orientation indicator in the lower right corner.
+ - CompassLabel:        Represents the labes (Y, Y and Z) of the axes on the compass.
+ - TriangleMeshObject : Base class for cube objects. Represents a textured and lit cube.
+  - ActionObject :      The pressable action objects at the lower/upper left corner that create marbles.
+  - ModelObject :       Represents the marble objects that can be created/deleted/moved.
+ - Grid :               Object representing the modeling grid.
 
 - ObjectData :        Base class for data used by object instances.
  - CompassData :      Data used by Compass objects.
  - CompassLabelData : Data used by the axes labels of the compass.
- - CubeData :         Data used by Cube objects.
- - GridData :         Data used by Grid objects.
+ - GridData :       Data used by Grid objects.
+ - TriangleMeshData : Data that describes triangle based meshes.
+   - CubeData :       Data used by cube objects.
+   - SphereData :     Data used by sphere objects.
 
 - ObjectProgram : Base class for shader programs used by object instances.
  - CompassLabelProgram : Shader program used by CompassLabel objects.
  - CompassProgram :      Shader program used by Compass objects.
+ - LightTextureProgram : Shader program that does texturing and lighting.
+                         Used by ActionObject and ModelObject.
  - CubeProgram :         Shader program used by Cube objects.
  - GridProgram :         Shader program used by Grid objects.
 
@@ -118,3 +124,4 @@ Class hierarchy
 
 END OF README
 ####################
+
