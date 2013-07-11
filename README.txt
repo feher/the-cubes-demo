@@ -101,7 +101,7 @@ Class hierarchy
 - Object :              Base class for any kind of visible on-screen object.
  - Compass :            The small orientation indicator in the lower right corner.
  - CompassLabel:        Represents the labes (Y, Y and Z) of the axes on the compass.
- - TriangleMeshObject : Base class for cube objects. Represents a textured and lit cube.
+ - TriangleMeshObject : Base class for triangle mesh objects.
   - ActionObject :      The pressable action objects at the lower/upper left corner that create marbles.
   - ModelObject :       Represents the marble objects that can be created/deleted/moved.
  - Grid :               Object representing the modeling grid.
@@ -118,8 +118,6 @@ Class hierarchy
  - CompassLabelProgram : Shader program used by CompassLabel objects.
  - CompassProgram :      Shader program used by Compass objects.
  - LightTextureProgram : Shader program that does texturing and lighting.
-                         Used by ActionObject and ModelObject.
- - CubeProgram :         Shader program used by Cube objects.
  - GridProgram :         Shader program used by Grid objects.
 
 - Shader : Loads and compiles a vertex or fragment shader.
