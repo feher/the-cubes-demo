@@ -2,6 +2,12 @@ NOTE: Bitbucket may display the wrong "Size" for the repository (next to the "(d
       Just start the download and hopefully your web browser will show the correct
       size (should be less than 5 MiB).
 
+What's this?
+---------------------
+This application demonstrates a user interface for manipulating 3D objects.
+The master branch is kept stable and compilable. New features may be added
+any time so, don’t forget to check back here for updates! ;)
+
 Usage
 ---------------------
 
