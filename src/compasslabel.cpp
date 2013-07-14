@@ -7,14 +7,14 @@ using namespace std;
 using namespace glm;
 
 CompassLabel::CompassLabel(std::shared_ptr<Object> compass)
-    : m_compass(compass) {
+    : m_compass(compass), m_drawState(X_LABEL) {
 }
 
 void CompassLabel::setData(shared_ptr<CompassLabelData> data) {
     m_data = data;
 }
 
-void CompassLabel::setProgram(shared_ptr<CompassLabelProgram> program) {
+void CompassLabel::setProgram(shared_ptr<ObjectProgram<CompassLabel>> program) {
     m_program = program;
 }
 
@@ -36,44 +36,25 @@ void CompassLabel::render() {
     m_program->activate();
     viewport()->activate();
 
-    glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D, m_data->textureId);
-    glUniform1i(m_program->u_textureSamplerId, 0);
-
-    glEnableVertexAttribArray(m_program->am_vertexPositionId);
-    glEnableVertexAttribArray(m_program->a_vertexUvId);
-
-    // X label
+    m_drawState = X_LABEL;
     setPosition(vec3(xd.x / xd.w, xd.y / xd.w, 0));
-    auto MVP = modelMatrix();
-    glUniformMatrix4fv(m_program->u_mvpId, 1, GL_FALSE, &MVP[0][0]);
-    glBindBuffer(GL_ARRAY_BUFFER, m_data->vertexBufferId);
-    glVertexAttribPointer(m_program->am_vertexPositionId, 3, GL_FLOAT, GL_FALSE, 0, nullptr);
-    glBindBuffer(GL_ARRAY_BUFFER, m_data->uvBufferId);
-    glVertexAttribPointer(m_program->a_vertexUvId, 2, GL_FLOAT, GL_FALSE, 0, nullptr);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_data->elementBufferId);
+    m_program->configure(*this);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_data->elementBufferId());
     glDrawElements(GL_TRIANGLE_STRIP, 4, GL_UNSIGNED_BYTE, nullptr);
 
-    // Y label
+    m_drawState = Y_LABEL;
     setPosition(vec3(yd.x / yd.w, yd.y / yd.w, 0));
-    MVP = modelMatrix();
-    glUniformMatrix4fv(m_program->u_mvpId, 1, GL_FALSE, &MVP[0][0]);
-    glBindBuffer(GL_ARRAY_BUFFER, m_data->uvBufferId);
-    glVertexAttribPointer(m_program->a_vertexUvId, 2, GL_FLOAT, GL_FALSE, 0, (void*)(sizeof(GLfloat) * 8));
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_data->elementBufferId);
+    m_program->configure(*this);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_data->elementBufferId());
     glDrawElements(GL_TRIANGLE_STRIP, 4, GL_UNSIGNED_BYTE, nullptr);
 
-    // Z label
+    m_drawState = Z_LABEL;
     setPosition(vec3(zd.x / zd.w, zd.y / zd.w, 0));
-    MVP = modelMatrix();
-    glUniformMatrix4fv(m_program->u_mvpId, 1, GL_FALSE, &MVP[0][0]);
-    glBindBuffer(GL_ARRAY_BUFFER, m_data->uvBufferId);
-    glVertexAttribPointer(m_program->a_vertexUvId, 2, GL_FLOAT, GL_FALSE, 0, (void*)(sizeof(GLfloat) * 16));
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_data->elementBufferId);
+    m_program->configure(*this);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_data->elementBufferId());
     glDrawElements(GL_TRIANGLE_STRIP, 4, GL_UNSIGNED_BYTE, nullptr);
 
-    glDisableVertexAttribArray(m_program->am_vertexPositionId);
-    glDisableVertexAttribArray(m_program->a_vertexUvId);
+    m_program->cleanup();
 
     glDisable(GL_BLEND);
     glEnable(GL_DEPTH_TEST);

@@ -2,6 +2,7 @@
 #define GRID_DATA_H
 
 #include "objectdata.h"
+#include "glbuffer.h"
 
 #include <GL/glew.h> // GL*
 
@@ -13,8 +14,15 @@ public:
     static const float unitSize;
     static const float lineWidth;
 
-    GLfloat vertices[vertexCount * 3];
-    GLuint vertexBufferId;
+    inline GLuint vertexBufferId() const;
+
+private:
+    GLfloat m_vertices[vertexCount * 3];
+    GlBuffer m_vertexBufferId;
 };
+
+GLuint GridData::vertexBufferId() const {
+    return m_vertexBufferId.id();
+}
 
 #endif

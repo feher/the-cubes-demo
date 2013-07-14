@@ -4,15 +4,18 @@
 #include "rglfw.h"
 #include "camera.h"
 #include "object.h"
+#include "trianglemeshobject.h"
+#include "modelobject.h"
 #include "pointlight.h"
 #include "viewport.h"
 #include "lighttextureprogram.h"
 #include "cubedata.h"
 #include "spheredata.h"
+#include "glbuffer.h"
 
 #include <glm/glm.hpp> // vec2, mat4
 
-#include <memory>    // shared_ptr
+#include <memory>    // shared_ptr, unique_ptr
 #include <vector>
 #include <random> // mt19937, uniform_int_distribution
 
@@ -27,7 +30,8 @@ private:
         MOVING_OBJECT, MOVING_CAMERA, NONE
     };
 
-    void createNewObject(const std::shared_ptr<const Object>& actionObject);
+    void createNewObject(const std::shared_ptr<const Object>& actionObject,
+                         const glm::vec3& positionInCamera);
     bool isActionObject(const std::shared_ptr<const Object>& object) const;
     std::shared_ptr<Object> selectedObject(const glm::vec2& mousePos) const;
     void clearHoveredState();
@@ -45,6 +49,7 @@ private:
     bool m_isMouseMoved;
     glm::vec2 m_lastMousePos;
     unsigned int m_inputState;
+    GlBuffer m_vaoId;
     std::default_random_engine m_randEngine;
     std::uniform_int_distribution<int> m_uniformDist;
     std::shared_ptr<Viewport> m_modelingViewport;
@@ -54,7 +59,7 @@ private:
     std::shared_ptr<Object> m_actionCube;
     std::shared_ptr<Object> m_actionSphere;
     std::shared_ptr<Object> m_movingObject;
-    std::shared_ptr<LightTextureProgram> m_lightTextureProgram;
+    std::shared_ptr<ObjectProgram<TriangleMeshObject>> m_modelProgram;
     std::shared_ptr<CubeData> m_modelCubeData;
     std::shared_ptr<SphereData> m_modelSphereData;
     std::vector<std::shared_ptr<Viewport>> m_viewports;
@@ -63,7 +68,7 @@ private:
     std::vector<std::shared_ptr<PointLight>> m_lights;
     std::vector<std::shared_ptr<Object>> m_hudObjects;
     std::vector<std::shared_ptr<Object>> m_modelingObjects;
-    std::vector<std::shared_ptr<Object>> m_modelObjects;
+    std::vector<std::shared_ptr<ModelObject>> m_modelObjects;
     std::vector<std::shared_ptr<Object>> m_interactiveObjects;
 };
 

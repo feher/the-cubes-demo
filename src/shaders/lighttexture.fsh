@@ -1,11 +1,3 @@
-#version 120
-
-varying vec3 vw_vertexPosition;
-varying vec3 vc_vertexNormal;
-varying vec2 v_vertexUv;
-varying vec3 vc_eyeDirection;
-varying vec3 vc_lightDirection;
-
 uniform vec4 u_color;
 uniform vec3 uw_lightPosition;
 uniform vec3 u_lightColor;
@@ -14,6 +6,14 @@ uniform float u_highlightFactor;
 uniform sampler2D u_textureSampler;
 uniform vec3 u_materialAmbientFactor;
 uniform vec3 u_materialSpecularFactor;
+
+varying vec3 vw_vertexPosition;
+varying vec3 vc_vertexNormal;
+varying vec2 v_vertexUv;
+varying vec3 vc_eyeDirection;
+varying vec3 vc_lightDirection;
+
+const float ZERO = 0.0;
 
 vec4 light(vec4 color) {
   vec3 materialDiffuseFactor = clamp(color * u_highlightFactor, 0, 255).rgb;
@@ -40,17 +40,11 @@ vec4 light(vec4 color) {
   return outColor;
 }
 
-vec4 noLight(vec4 color) {
-  return color;
-}
-
 void main() {
   vec4 color = texture2D(u_textureSampler, v_vertexUv);
-
-  const float ZERO = float(1.0);
-  if (u_lightPower < ZERO) {
-    gl_FragColor = noLight(color); // For debugging.
-  } else {
+  if (u_lightPower >= ZERO) {
     gl_FragColor = light(color);
+  } else {
+    gl_FragColor = color; // For debugging.
   }
 }

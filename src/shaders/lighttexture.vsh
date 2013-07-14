@@ -1,5 +1,3 @@
-#version 120
-
 // Variable name prefixes:
 // a: attribute
 // u: uniform
@@ -28,6 +26,8 @@ varying vec3 vc_lightDirection;
 varying vec3 vc_vertexNormal;
 varying vec2 v_vertexUv;
 
+const float ZERO = 0.0;
+
 void light() {
   vw_vertexPosition = (u_m * vec4(am_vertexPosition, 1)).xyz;
 
@@ -40,15 +40,8 @@ void light() {
   vc_vertexNormal = (u_v * u_mns * vec4(am_vertexNormal, 0)).xyz;
 }
 
-void noLight() {
-}
-
 void main() {
-
-  float ZERO = float(1.0);
-  if (u_lightPower < ZERO) {
-    noLight(); // For debugging.
-  } else {
+  if (u_lightPower >= ZERO) {
     light();
   }
   

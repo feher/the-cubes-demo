@@ -17,13 +17,13 @@ GridData::GridData() {
         x = -(dimension * unitSize / 2.0f);
         z = (i * unitSize) - (dimension * unitSize / 2.0f);
         y = 0;
-        vertices[o + 0] = x;
-        vertices[o + 1] = y;
-        vertices[o + 2] = z;
+        m_vertices[o + 0] = x;
+        m_vertices[o + 1] = y;
+        m_vertices[o + 2] = z;
         x = +(dimension * unitSize / 2.0f);
-        vertices[o + 3] = x;
-        vertices[o + 4] = y;
-        vertices[o + 5] = z;
+        m_vertices[o + 3] = x;
+        m_vertices[o + 4] = y;
+        m_vertices[o + 5] = z;
     }
 
     // Columns
@@ -31,17 +31,17 @@ GridData::GridData() {
         x = (i * unitSize) - (dimension * unitSize / 2.0f);
         z = -(dimension * unitSize / 2.0f);
         y = 0;
-        vertices[o + 0] = x;
-        vertices[o + 1] = y;
-        vertices[o + 2] = z;
+        m_vertices[o + 0] = x;
+        m_vertices[o + 1] = y;
+        m_vertices[o + 2] = z;
         z = +(dimension * unitSize / 2.0f);
-        vertices[o + 3] = x;
-        vertices[o + 4] = y;
-        vertices[o + 5] = z;
+        m_vertices[o + 3] = x;
+        m_vertices[o + 4] = y;
+        m_vertices[o + 5] = z;
     }
     assert(o == vertexCount * 3);
 
-    glGenBuffers(1, &vertexBufferId);
-    glBindBuffer(GL_ARRAY_BUFFER, vertexBufferId);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+    m_vertexBufferId.generate(GlBuffer::BUFFER);
+    glBindBuffer(GL_ARRAY_BUFFER, m_vertexBufferId.id());
+    glBufferData(GL_ARRAY_BUFFER, sizeof(m_vertices), m_vertices, GL_STATIC_DRAW);
 }

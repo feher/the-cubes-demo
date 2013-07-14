@@ -22,19 +22,27 @@ void Shader::cleanup() {
     }
 }
 
-void Shader::compile(const string& fileName) {
+void Shader::compile(const vector<string>& fileNames) {
     cleanup();
 
-    const string& src = File::loadTextFile(fileName);
-    if (src.empty()) {
+    // Load from files.
+    string source;
+    for (const auto& f : fileNames) {
+        const string& src = File::loadTextFile(f);
+        if (!src.empty()) {
+            source += src + "\n";
+        }
+    }
+    if (source.empty()) {
         return;
     }
 
+    // Create
     m_id = glCreateShader(m_type);
 	    
     // Compile
-    char const* psrc = src.c_str();
-    glShaderSource(m_id, 1, &psrc, nullptr);
+    const char* sp = source.c_str();
+    glShaderSource(m_id, 1, &sp, nullptr);
     glCompileShader(m_id);
 
     // Check
@@ -46,7 +54,10 @@ void Shader::compile(const string& fileName) {
 	if (infoLogLength > 0) {
             vector<char> msg(infoLogLength + 1);
             glGetShaderInfoLog(m_id, infoLogLength, nullptr, &msg[0]);
-            cerr << "Shader compilation error: " << fileName << endl << string(&msg[0]) << endl;
+            cerr << "Shader source: " << endl
+                 << source << endl
+                 << "Shader compilation error: " << endl
+                 << string(&msg[0]) << endl;
     	}
         cleanup();
     }

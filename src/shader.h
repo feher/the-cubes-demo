@@ -4,13 +4,14 @@
 #include <GL/glew.h>
 
 #include <string>
+#include <vector>
 
 class Shader {
 public:
     explicit Shader(GLenum type);
     ~Shader();
 
-    void compile(const std::string& fileName);
+    void compile(const std::vector<std::string>& fileNames);
     GLuint id() const;
 
 private:

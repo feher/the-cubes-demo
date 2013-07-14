@@ -15,11 +15,13 @@ void ActionObject::update(double deltaTime) {
     switch (state()) {
     case PRESSED:
         {
-            auto ang = angle();
-            ang.y = float((ang.y > 360) ? 0 : (ang.y + deltaTime * rotationSpeed));
+            auto ang = angle() + vec3(0, deltaTime * rotationSpeed, 0);
+            ang.y = (ang.y > 360.0f) ? fmod(ang.y, 360.0f) : ang.y;
             setRotation(ang);
 
             if (m_pulse == -1.0f) {
+                // We are entering this state after being in a different state.
+                // Let's start pulsating.
                 m_pulse = 0;
             }
             m_pulse += float(deltaTime * pulseSpeed);
@@ -34,8 +36,8 @@ void ActionObject::update(double deltaTime) {
         break;
     default:
         {
-            auto ang = angle();
-            ang.y = float((ang.y > 360) ? 0 : (ang.y + deltaTime * rotationSpeed));
+            auto ang = angle() + vec3(0, deltaTime * rotationSpeed, 0);
+            ang.y = (ang.y > 360.0f) ? fmod(ang.y, 360.0f) : ang.y;
             setRotation(ang);
         }
         break;
@@ -43,7 +45,11 @@ void ActionObject::update(double deltaTime) {
 }
 
 void ActionObject::render() {
-    glDisable(GL_DEPTH_TEST);
+    // Make sure that we render on top of everything.
+    viewport()->activate();
+    viewport()->scissor();
+    glEnable(GL_SCISSOR_TEST);
+    glClear(GL_DEPTH_BUFFER_BIT);
+    glDisable(GL_SCISSOR_TEST);
     TriangleMeshObject::render();
-    glEnable(GL_DEPTH_TEST);
 }

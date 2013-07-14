@@ -1,20 +1,16 @@
-#ifndef OBJECTPROGRAM_H
-#define OBJECTPROGRAM_H
+#ifndef OBJECT_PROGRAM_H
+#define OBJECT_PROGRAM_H
 
-#include "shaderprogram.h"
-
-#include <string>
-
-class ObjectProgram {
+// This template is used to tag an ObjectProgram to indicate the kind
+// of Object it can be applied to. Thanks to multiple inheritance,
+// an ObjectProgram can apply to multiple Object types.
+template <typename O>
+class ObjectProgram
+{
 public:
-    explicit ObjectProgram(const std::string& vertexShaderFile,
-                           const std::string& fragmentShaderFile);
-    virtual ~ObjectProgram();
-
-    void activate();
-
-protected:
-    ShaderProgram m_program;
+    virtual void activate() = 0;
+    virtual void configure(O& object) = 0;
+    virtual void cleanup() = 0;
 };
 
 #endif

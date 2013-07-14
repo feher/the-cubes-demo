@@ -14,9 +14,9 @@ class CubeData : public TriangleMeshData {
 public:
     explicit CubeData(const std::string& textureFile);
 
-    virtual GLuint vertexBufferId() override;
-    virtual GLuint elementBufferId() override;
-    virtual GLuint elementCount() override;
+    virtual GLuint vertexBufferId() const override;
+    virtual GLuint elementBufferId() const override;
+    virtual GLuint elementCount() const override;
     virtual Geom::Sphere boundingSphere(const glm::vec3& position,
                                         GLfloat scale) const override;
 

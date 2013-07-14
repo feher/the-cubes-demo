@@ -1,5 +1,3 @@
-#version 120
-
 // Variable name prefixes:
 // a: attribute
 // u: uniform

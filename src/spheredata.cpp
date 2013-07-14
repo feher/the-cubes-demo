@@ -90,15 +90,15 @@ SphereData::SphereData(const string& textureFile)
     }
 }
 
-GLuint SphereData::vertexBufferId() {
+GLuint SphereData::vertexBufferId() const {
     return m_vertexBufferId.id();
 }
 
-GLuint SphereData::elementBufferId() {
+GLuint SphereData::elementBufferId() const {
     return m_elementBufferId.id();
 }
 
-GLuint SphereData::elementCount() {
+GLuint SphereData::elementCount() const {
     // 3 vertices per triangle.
     return m_triangles.size() * 3;
 }

@@ -1,5 +1,3 @@
-#version 120
-
 uniform vec4 u_color; // For debugging purposes.
 uniform sampler2D u_textureSampler;
 

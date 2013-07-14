@@ -5,9 +5,9 @@ using namespace glm;
 
 const float CompassData::lineWidth = 4.0f;
 
-const CompassData::VertexData CompassData::vertexData[] = {
+const CompassData::VertexData CompassData::m_vertexData[] = {
     { { 0, 0, 0 }, { 1, 0, 0 }, }, // X axis
-    { { 1, 0, 0 }, { 1, 0, 0  },},
+    { { 1, 0, 0 }, { 1, 0, 0 }, },
     { { 0, 0, 0 }, { 0, 1, 0 }, }, // Y axis
     { { 0, 1, 0 }, { 0, 1, 0 }, },
     { { 0, 0, 0 }, { 0, 0, 1 }, }, // Z axis
@@ -15,7 +15,7 @@ const CompassData::VertexData CompassData::vertexData[] = {
 };
 
 CompassData::CompassData() {
-    glGenBuffers(1, &vertexBufferId);
-    glBindBuffer(GL_ARRAY_BUFFER, vertexBufferId);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(vertexData), vertexData, GL_STATIC_DRAW);
+    m_vertexBufferId.generate(GlBuffer::BUFFER);
+    glBindBuffer(GL_ARRAY_BUFFER, m_vertexBufferId.id());
+    glBufferData(GL_ARRAY_BUFFER, sizeof(m_vertexData), m_vertexData, GL_STATIC_DRAW);
 }

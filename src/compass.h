@@ -4,7 +4,7 @@
 #include "camera.h"
 #include "object.h"
 #include "compassdata.h"
-#include "compassprogram.h"
+#include "objectprogram.h"
 
 #include <glm/glm.hpp> // vec*, mat*
 
@@ -15,15 +15,29 @@ public:
     Compass(std::shared_ptr<Camera> modelingCamera);
 
     void setData(std::shared_ptr<CompassData> data);
-    void setProgram(std::shared_ptr<CompassProgram> program);
+    void setProgram(std::shared_ptr<ObjectProgram<Compass>> program);
 
     virtual glm::mat4 modelMatrix() override;
     virtual void render() override;
 
+    inline glm::mat4 programMvp();
+    inline GLuint programVertexBufferId() const;
+
 private:
     std::shared_ptr<Camera> m_modelingCamera;
     std::shared_ptr<CompassData> m_data;
-    std::shared_ptr<CompassProgram> m_program;
+    std::shared_ptr<ObjectProgram<Compass>> m_program;
 };
+
+glm::mat4 Compass::programMvp() {
+    const auto& M = modelMatrix();
+    const auto& V = camera()->viewMatrix();
+    const auto& P = *projectionMatrix();
+    return (P * V * M);
+}
+
+GLuint Compass::programVertexBufferId() const {
+    return m_data->vertexBufferId();
+}
 
 #endif

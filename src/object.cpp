@@ -7,7 +7,8 @@ using namespace std;
 using namespace glm;
 
 Object::Object()
-    : m_viewport(nullptr),
+    : m_id(-1),
+      m_viewport(nullptr),
       m_projectionMatrix(nullptr),
       m_camera(nullptr),
       m_light(nullptr),
@@ -22,6 +23,10 @@ Object::Object()
 }
 
 Object::~Object() {
+}
+
+void Object::setId(int id) {
+    m_id = id;
 }
 
 void Object::setViewport(std::shared_ptr<Viewport> viewport) {
@@ -89,6 +94,10 @@ void Object::updatePosition(const vec3& delta) {
     m_position = vec3(pw.x, pw.y, pw.z);
     m_isModelMatrixValid = false;
     m_isUnscaledModelMatrixValid = false;
+}
+
+int Object::id() const {
+    return m_id;
 }
 
 std::shared_ptr<const Viewport> Object::viewport() const {

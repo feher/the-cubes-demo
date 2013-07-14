@@ -5,32 +5,17 @@ using namespace std;
 void Grid::setData(shared_ptr<GridData> data) {
     m_data = data;
 }
-void Grid::setProgram(shared_ptr<GridProgram> program) {
+void Grid::setProgram(shared_ptr<ObjectProgram<Grid>> program) {
     m_program = program;
 }
 
 void Grid::render() {
-    // Set up the program
     m_program->activate();
+    m_program->configure(*this);
 
-    const auto& M = modelMatrix();
-    const auto& V = camera()->viewMatrix();
-    const auto& P = *projectionMatrix();
-    const auto& MVP = P * V * M;
-    const auto& c = color();
-
-    glUniform4fv(m_program->u_colorId, 1, &c[0]);
-    glUniformMatrix4fv(m_program->u_mvpId, 1, GL_FALSE, &MVP[0][0]);
-
-    glEnableVertexAttribArray(m_program->am_vertexPositionId);
-    glBindBuffer(GL_ARRAY_BUFFER, m_data->vertexBufferId);
-    glVertexAttribPointer(m_program->am_vertexPositionId, 3, GL_FLOAT, GL_FALSE, 0, nullptr);
-
-    // Draw
     viewport()->activate();
     glLineWidth(m_data->lineWidth);
     glDrawArrays(GL_LINES, 0, m_data->vertexCount);
 
-    // Done
-    glDisableVertexAttribArray(m_program->am_vertexPositionId);
+    m_program->cleanup();
 }

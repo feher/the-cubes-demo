@@ -69,15 +69,15 @@ CubeData::CubeData(const string& textureFile)
     }
 }
 
-GLuint CubeData::vertexBufferId() {
+GLuint CubeData::vertexBufferId() const {
     return m_vertexBufferId.id();
 }
 
-GLuint CubeData::elementBufferId() {
+GLuint CubeData::elementBufferId() const {
     return m_elementBufferId.id();
 }
 
-GLuint CubeData::elementCount() {
+GLuint CubeData::elementCount() const {
     // 6 faces, 2 triangles per face, 3 vertex per triangle.
     return 6 * 2 * 3;
 }

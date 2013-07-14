@@ -12,6 +12,7 @@
 #include "compassprogram.h"
 #include "compasslabeldata.h"
 #include "compasslabelprogram.h"
+#include "lighttextureprogram.h"
 #include "cubedata.h"
 #include "spheredata.h"
 
@@ -60,10 +61,13 @@ TheCubes::TheCubes(unsigned int screenWidth, unsigned int screenHeight)
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_CULL_FACE);
 
+    m_vaoId.generate(GlBuffer::VAO);
+    glBindVertexArray(m_vaoId.id());
+
     std::random_device rd;
     m_randEngine.seed(rd());
 
-    m_lightTextureProgram = make_shared<LightTextureProgram>();
+    m_modelProgram = make_shared<LightTextureProgram>();
     auto gridProgram = make_shared<GridProgram>();
 
     m_modelCubeData = make_shared<CubeData>(CubeData::modelTextureFile);
@@ -76,34 +80,6 @@ TheCubes::TheCubes(unsigned int screenWidth, unsigned int screenHeight)
         auto camera = make_shared<Camera>(vec3(0, 15, 15), vec3(180, -50, 0));
         auto light = make_shared<PointLight>(camera->position(), vec3(1, 1, 1), 100.0f);
         light->linkToCamera(camera);
-
-        auto object = make_shared<ModelObject>(1.0f);
-        object->setData(m_modelCubeData);
-        object->setProgram(m_lightTextureProgram);
-        object->setViewport(viewport);
-        object->setProjection(projection);
-        object->setCamera(camera);
-        object->setLight(light);
-        object->setRotation(vec3(10, 30, 40));
-        object->setScale(1.0f);
-        object->setPosition(vec3(-2, 8, 9));
-        object->setColor(vec4(0, 1, 0, 1));
-        object->setState(Object::APPEARING);
-        object->setInteractive(true);
-
-        auto object2 = make_shared<ModelObject>(1.0f);
-        object2->setData(m_modelSphereData);
-        object2->setProgram(m_lightTextureProgram);
-        object2->setViewport(viewport);
-        object2->setProjection(projection);
-        object2->setCamera(camera);
-        object2->setLight(light);
-        object2->setRotation(vec3(45, -45, 45));
-        object2->setScale(1.0f);
-        object2->setPosition(vec3(3, 7, 7));
-        object2->setColor(vec4(1, 0, 0, 1));
-        object2->setState(Object::APPEARING);
-        object2->setInteractive(true);
 
         auto grid = make_shared<Grid>();
         grid->setData(make_shared<GridData>());
@@ -123,12 +99,6 @@ TheCubes::TheCubes(unsigned int screenWidth, unsigned int screenHeight)
         m_projections.push_back(projection);
         m_cameras.push_back(camera);
         m_lights.push_back(light);
-        m_modelObjects.push_back(object);
-        m_modelingObjects.push_back(object);
-        m_interactiveObjects.push_back(object);
-        m_modelObjects.push_back(object2);
-        m_modelingObjects.push_back(object2);
-        m_interactiveObjects.push_back(object2);
         m_modelingObjects.push_back(grid);
 
         m_modelingViewport = viewport;
@@ -145,7 +115,7 @@ TheCubes::TheCubes(unsigned int screenWidth, unsigned int screenHeight)
         auto light = make_shared<PointLight>(vec3(0, 1, 10), vec3(1, 1, 1), 100.0f);
         auto cube = make_shared<ActionObject>(1.0f);
         cube->setData(make_shared<CubeData>(CubeData::actionTextureFile));
-        cube->setProgram(m_lightTextureProgram);
+        cube->setProgram(m_modelProgram);
         cube->setViewport(viewport);
         cube->setProjection(projection);
         cube->setCamera(camera);
@@ -176,7 +146,7 @@ TheCubes::TheCubes(unsigned int screenWidth, unsigned int screenHeight)
         auto light = make_shared<PointLight>(vec3(0, 1, 9), vec3(1, 1, 1), 80.0f);
         auto sphere = make_shared<ActionObject>(1.0f);
         sphere->setData(make_shared<SphereData>(SphereData::actionTextureFile));
-        sphere->setProgram(m_lightTextureProgram);
+        sphere->setProgram(m_modelProgram);
         sphere->setViewport(viewport);
         sphere->setProjection(projection);
         sphere->setCamera(camera);
@@ -203,8 +173,8 @@ TheCubes::TheCubes(unsigned int screenWidth, unsigned int screenHeight)
         auto viewport = make_shared<Viewport>(
             m_screenWidth - (m_screenWidth / 6), 0,
             m_screenWidth / 6, m_screenHeight / 6);
-        auto projection = make_shared<mat4>(perspective(45.0f, 4.0f / 3.0f,  0.1f,  100.0f));
-        auto camera = make_shared<Camera>(vec3(0, 0, 5), vec3(180, 0, 0));
+        auto projection = make_shared<mat4>(ortho(-2.0, 2.0, -2.0, 2.0, -2.0, 2.0));
+        auto camera = make_shared<Camera>(vec3(0, 0, 0), vec3(180, 0, 0));
         auto light = make_shared<PointLight>(camera->position(), vec3(1, 1, 1), 0.0f);
         auto compass = make_shared<Compass>(m_modelingCamera);
         compass->setData(make_shared<CompassData>());
@@ -214,7 +184,7 @@ TheCubes::TheCubes(unsigned int screenWidth, unsigned int screenHeight)
         compass->setCamera(camera);
         compass->setLight(light);
         compass->setRotation(vec3(0, 0, 0));
-        compass->setScale(2.0f);
+        compass->setScale(2.3f);
         compass->setPosition(vec3(0, 0, 0));
         compass->setColor(vec4(0, 0, 1, 1));
         compass->setState(Object::NONE);
@@ -241,6 +211,12 @@ TheCubes::TheCubes(unsigned int screenWidth, unsigned int screenHeight)
         m_hudObjects.push_back(compass);
         m_hudObjects.push_back(label);
     }
+
+    // Add a few initial models.
+    createNewObject(m_actionCube, vec3(+2, 1.5, 10));
+    createNewObject(m_actionSphere, vec3(-2, 2, 10));
+    createNewObject(m_actionSphere, vec3(+1.2, -2.0, 10));
+    createNewObject(m_actionCube, vec3(-2.3, -1.5, 10));
 }
 
 void TheCubes::updateAndRender() {
@@ -259,7 +235,8 @@ void TheCubes::updateAndRender() {
     glfwSwapBuffers();
 }
 
-void TheCubes::createNewObject(const shared_ptr<const Object>& actionObject) {
+void TheCubes::createNewObject(const shared_ptr<const Object>& actionObject,
+                               const vec3& positionInCamera) {
     bool isCube = (actionObject == m_actionCube);
 
     auto object = make_shared<ModelObject>(1.0f);
@@ -268,18 +245,20 @@ void TheCubes::createNewObject(const shared_ptr<const Object>& actionObject) {
     } else {
         object->setData(m_modelSphereData);
     }
-    object->setProgram(m_lightTextureProgram);
+
+    object->setId(m_modelingObjects.size());
+    object->setProgram(m_modelProgram);
     object->setViewport(m_modelingViewport);
     object->setProjection(m_modelingProjection);
     object->setCamera(m_modelingCamera);
     object->setLight(m_modelingLight);
-    object->setRotation(vec3(0, 0, 0));
+    object->setRotation(positionInCamera * 40.0f);
     object->setScale(1.0f);
 
     const auto& cameraBase = m_modelingCamera->base();
-    const auto& pc = vec3(0, 0, 10);
-    const auto& pw = (cameraBase * pc) + m_modelingCamera->position();
+    const auto& pw = (cameraBase * positionInCamera) + m_modelingCamera->position();
     object->setPosition(pw);
+
     object->setColor(vec4(0, 1, 0, 1));
     object->setState(Object::APPEARING);
     object->setInteractive(true);
@@ -442,7 +421,7 @@ void TheCubes::handleInput() {
                 if (isActionObject(object)
                     && (object->state() == Object::NONE || object->state() == Object::HOVERED)) {
                     object->setState(Object::PRESSED);
-                    createNewObject(object);
+                    createNewObject(object, vec3(0, 0, 10));
                 }
             } else if (isMouseMoved) {
                 const auto f = 0.1f;
@@ -492,7 +471,7 @@ void TheCubes::killModelObjects() {
 }
 
 void TheCubes::cleanupDeadModelObjects() {
-    vector<shared_ptr<Object>> clean;
+    vector<shared_ptr<ModelObject>> clean;
     for (auto& object : m_modelObjects) {
         if (object->state() != Object::DEAD) {
             clean.push_back(object);
@@ -504,7 +483,7 @@ void TheCubes::cleanupDeadModelObjects() {
 void TheCubes::run() {
     m_exitting = false;
     m_lastTime = glfwGetTime();
-    do {
+    do {        
         updateAndRender();
         handleInput();
         cleanupDeadModelObjects();

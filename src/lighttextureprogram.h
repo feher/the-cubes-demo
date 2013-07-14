@@ -1,11 +1,25 @@
 #ifndef LIGHT_TEXTURE_PROGRAM_H
 #define LIGHT_TEXTURE_PROGRAM_H
 
+#include "program.h"
 #include "objectprogram.h"
+#include "trianglemeshobject.h"
 
-class LightTextureProgram : public ObjectProgram {
+#include <string>
+
+class LightTextureProgram : public Program,
+                            public ObjectProgram<TriangleMeshObject> {
 public:
-    explicit LightTextureProgram();
+    explicit LightTextureProgram(const std::string& vertexShaderPrefix = "./shaders/prefix.vsh",
+                                 const std::string& fragmentShaderPrefix = "./shaders/prefix.fsh");
+
+    virtual void activate() override;
+    virtual void configure(TriangleMeshObject& object) override;
+    virtual void cleanup() override;
+
+private:
+    static const std::string vertexShaderFile;
+    static const std::string fragmentShaderFile;
 
     GLuint am_vertexPositionId;
     GLuint am_vertexNormalId;
@@ -22,10 +36,6 @@ public:
     GLuint u_textureSamplerId;
     GLuint u_materialAmbientFactorId;
     GLuint u_materialSpecularFactorId;
-
-private:
-    static const std::string vertexShaderFile;
-    static const std::string fragmentShaderFile;
 };
 
 #endif

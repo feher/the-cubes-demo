@@ -8,8 +8,10 @@
 class GlBuffer {
 public:
     enum Type {
+        VAO,
+        BUFFER,
         TEXTURE,
-        BUFFER
+        FRAME
     };
 
     inline explicit GlBuffer();
@@ -20,23 +22,34 @@ public:
 
 private:
     GLuint m_id;
+    int m_type;
 };
 
-GlBuffer::GlBuffer() : m_id(0) {
+GlBuffer::GlBuffer() : m_id(0), m_type(BUFFER) {
 }
 
 GlBuffer::~GlBuffer() {
-    if (m_id) {
-        glDeleteBuffers(1, &m_id);
+    if (!m_id) {
+        return;
+    }
+    switch (m_type) {
+    case VAO : glDeleteVertexArrays(1, &m_id); break;
+    case BUFFER : glDeleteBuffers(1, &m_id); break;
+    case TEXTURE : glDeleteTextures(1, &m_id); break;
+    case FRAME : glDeleteFramebuffers(1, &m_id); break;
+    default : throw std::runtime_error("Unsupported buffer type"); break;
     }
 }
 
 void GlBuffer::generate(Type type) {
     switch (type) {
+    case VAO : glGenVertexArrays(1, &m_id); break;
     case BUFFER : glGenBuffers(1, &m_id); break;
     case TEXTURE : glGenTextures(1, &m_id); break;
+    case FRAME : glGenFramebuffers(1, &m_id); break;
     default : throw std::runtime_error("Unsupported buffer type"); break;
     }    
+    m_type = type;
 }
 
 GLuint GlBuffer::id() const {

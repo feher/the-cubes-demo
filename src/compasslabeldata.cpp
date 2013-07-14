@@ -6,7 +6,7 @@
 using namespace std;
 using namespace glm;
 
-const string CompassLabelData::textureFile  = "./data/xyz.tga";
+const string CompassLabelData::m_textureFile  = "./data/xyz.tga";
 
 //    0------2
 //    |      |
@@ -22,39 +22,37 @@ const string CompassLabelData::textureFile  = "./data/xyz.tga";
 #define X3 (384.0f/384.0f)
 #define Y0 (0.0f  /128.0f)
 #define Y1 (128.0f/128.0f)
-const GLfloat CompassLabelData::uvs[] = {
+const GLfloat CompassLabelData::m_uvs[] = {
     X0, Y1,  X0, Y0,  X1, Y1,  X1, Y0, // X label
     X1, Y1,  X1, Y0,  X2, Y1,  X2, Y0, // Y label
     X2, Y1,  X2, Y0,  X3, Y1,  X3, Y0  // Z label
 };
 
-const GLfloat CompassLabelData::vertices[] = {
+const GLfloat CompassLabelData::m_vertices[] = {
     -1, +1, 0,  -1, -1, 0,  +1, +1, 0,  +1, -1, 0 // front 0-3
 };
 
-const GLubyte CompassLabelData::elements[] = {
+const GLubyte CompassLabelData::m_elements[] = {
     0, 1, 2, 3
 };
 
 CompassLabelData::CompassLabelData() {
+    m_vertexBufferId.generate(GlBuffer::BUFFER);
+    glBindBuffer(GL_ARRAY_BUFFER, m_vertexBufferId.id());
+    glBufferData(GL_ARRAY_BUFFER, sizeof(m_vertices), m_vertices, GL_STATIC_DRAW);
 
-    glGenBuffers(1, &vertexBufferId);
-    glBindBuffer(GL_ARRAY_BUFFER, vertexBufferId);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+    m_uvBufferId.generate(GlBuffer::BUFFER);
+    glBindBuffer(GL_ARRAY_BUFFER, m_uvBufferId.id());
+    glBufferData(GL_ARRAY_BUFFER, sizeof(m_uvs), m_uvs, GL_STATIC_DRAW);
 
-    glGenBuffers(1, &uvBufferId);
-    glBindBuffer(GL_ARRAY_BUFFER, uvBufferId);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(uvs), uvs, GL_STATIC_DRAW);
+    m_elementBufferId.generate(GlBuffer::BUFFER);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_elementBufferId.id());
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(m_elements), m_elements, GL_STATIC_DRAW);
 
-    glGenBuffers(1, &elementBufferId);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, elementBufferId);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(elements), elements, GL_STATIC_DRAW);
-
-    glGenTextures(1, &textureId);
-    glBindTexture(GL_TEXTURE_2D, textureId);
-    if (glfwLoadTexture2D(textureFile.c_str(), 0) == GL_FALSE) {
-        cleanup();
-        throw runtime_error("Cannot load texture from " + textureFile);
+    m_textureId.generate(GlBuffer::TEXTURE);
+    glBindTexture(GL_TEXTURE_2D, m_textureId.id());
+    if (glfwLoadTexture2D(m_textureFile.c_str(), 0) == GL_FALSE) {
+        throw runtime_error("Cannot load texture from " + m_textureFile);
     }
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
@@ -62,27 +60,3 @@ CompassLabelData::CompassLabelData() {
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
     glGenerateMipmap(GL_TEXTURE_2D);
  }
-
-CompassLabelData::~CompassLabelData() {
-    cleanup();
-}
-
-void CompassLabelData::cleanup() {
-    if (vertexBufferId) {
-        glDeleteBuffers(1, &vertexBufferId);
-        vertexBufferId = 0;
-    }
-    if (uvBufferId) {
-        glDeleteBuffers(1, &uvBufferId);
-        uvBufferId = 0;
-    }
-    if (elementBufferId) {
-        glDeleteBuffers(1, &elementBufferId);
-        elementBufferId = 0;
-    }
-    if (textureId) {
-        glDeleteTextures(1, &textureId);
-        textureId = 0;
-    }
-}
-

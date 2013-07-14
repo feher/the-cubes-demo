@@ -120,7 +120,9 @@ Class hierarchy
    - CubeData :       Data used by cube objects.
    - SphereData :     Data used by sphere objects.
 
-- ObjectProgram : Base class for shader programs used by object instances.
+- Program : Base class for shader programs used by object instances.
+- ObjectProgram : Template base class for shader programs used by object instances.
+                  Tells whether a program can be used with a specific Object.
  - CompassLabelProgram : Shader program used by CompassLabel objects.
  - CompassProgram :      Shader program used by Compass objects.
  - LightTextureProgram : Shader program that does texturing and lighting.

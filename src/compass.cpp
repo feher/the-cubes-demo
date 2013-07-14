@@ -14,7 +14,7 @@ Compass::Compass(shared_ptr<Camera> modelingCamera)
 void Compass::setData(shared_ptr<CompassData> data) {
     m_data = data;
 }
-void Compass::setProgram(shared_ptr<CompassProgram> program) {
+void Compass::setProgram(shared_ptr<ObjectProgram<Compass>> program) {
     m_program = program;
 }
 
@@ -29,12 +29,7 @@ mat4 Compass::modelMatrix() {
 
 void Compass::render() {
     m_program->activate();
-
-    const auto& M = modelMatrix();
-    const auto& V = camera()->viewMatrix();
-    const auto& P = *projectionMatrix();
-    const auto& MVP = P * V * M;
-    glUniformMatrix4fv(m_program->u_mvpId, 1, GL_FALSE, &MVP[0][0]);
+    m_program->configure(*this);
 
     viewport()->activate();
     // Make sure that we render on top of everything.
@@ -43,26 +38,9 @@ void Compass::render() {
     glEnable(GL_SCISSOR_TEST);
     glClear(GL_DEPTH_BUFFER_BIT);
     glDisable(GL_SCISSOR_TEST);
-
     glLineWidth(m_data->lineWidth);
-
-    glBindBuffer(GL_ARRAY_BUFFER, m_data->vertexBufferId);
-
-    glEnableVertexAttribArray(m_program->am_vertexPositionId);
-    glVertexAttribPointer(m_program->am_vertexPositionId, 3, GL_FLOAT, GL_FALSE,
-                          sizeof(CompassData::VertexData),
-                          reinterpret_cast<void*>(offsetof(CompassData::VertexData, position)));
-
-    glEnableVertexAttribArray(m_program->a_vertexColorId);
-    glVertexAttribPointer(m_program->a_vertexColorId, 3, GL_FLOAT, GL_FALSE,
-                          sizeof(CompassData::VertexData),
-                          reinterpret_cast<void*>(offsetof(CompassData::VertexData, color)));
-
     glDrawArrays(GL_LINES, 0, 6);
-
-    // Done
-    glDisableVertexAttribArray(m_program->am_vertexPositionId);
-    glDisableVertexAttribArray(m_program->a_vertexColorId);
-
     glLineWidth(1.0f);
+
+    m_program->cleanup();
 }

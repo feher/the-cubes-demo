@@ -33,9 +33,9 @@ public:
     const glm::vec3& materialAmbientFactor() const;
     const glm::vec3& materialSpecularFactor() const;
 
-    virtual GLuint vertexBufferId() = 0;
-    virtual GLuint elementBufferId() = 0;
-    virtual GLuint elementCount() = 0;
+    virtual GLuint vertexBufferId() const = 0;
+    virtual GLuint elementBufferId() const = 0;
+    virtual GLuint elementCount() const = 0;
     virtual Geom::Sphere boundingSphere(const glm::vec3& position,
                                         GLfloat scale) const = 0;
 

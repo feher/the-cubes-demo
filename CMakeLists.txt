@@ -50,15 +50,13 @@ add_executable(thecubes
  src/main.cpp
  src/modelobject.cpp
  src/object.cpp
- src/objectprogram.cpp
  src/pointlight.cpp
+ src/program.cpp
  src/rglfw.cpp
  src/shader.cpp
  src/shaderprogram.cpp
- src/shaders
  src/spheredata.cpp
  src/thecubes.cpp
- src/thecubes.exe
  src/trianglemeshdata.cpp
  src/trianglemeshobject.cpp
  src/viewport.cpp
