@@ -172,7 +172,7 @@ TheCubes::TheCubes(unsigned int screenWidth, unsigned int screenHeight)
     {
         auto viewport = make_shared<Viewport>(
             m_screenWidth - (m_screenWidth / 6), 0,
-            m_screenWidth / 6, m_screenHeight / 6);
+            m_screenHeight / 6, m_screenHeight / 6);
         auto projection = make_shared<mat4>(ortho(-2.0, 2.0, -2.0, 2.0, -2.0, 2.0));
         auto camera = make_shared<Camera>(vec3(0, 0, 0), vec3(180, 0, 0));
         auto light = make_shared<PointLight>(camera->position(), vec3(1, 1, 1), 0.0f);
