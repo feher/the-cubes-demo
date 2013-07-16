@@ -18,9 +18,9 @@ private:
     static const std::string vertexShaderFile;
     static const std::string fragmentShaderFile;
 
-    GLuint am_vertexPositionId;
-    GLuint a_vertexColorId;
-    GLuint u_mvpId;
+    GLint am_vertexPositionId;
+    GLint a_vertexColorId;
+    GLint u_mvpId;
 };
 
 #endif

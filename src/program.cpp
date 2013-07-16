@@ -24,3 +24,19 @@ void Program::load(const vector<string>& vertexShaderFiles,
         throw runtime_error("Cannot link shader program");
     }
 }
+
+GLint Program::getAttribLocation(const GLchar *name) {
+    auto id = glGetAttribLocation(m_program.id(), name);
+    if (id < 0) {
+        throw runtime_error("Cannot get attribute location: " + string(name));
+    }
+    return id;
+}
+
+GLint Program::getUniformLocation(const GLchar *name) {
+    auto id = glGetUniformLocation(m_program.id(), name);
+    if (id < 0) {
+        throw runtime_error("Cannot get uniform location: " + string(name));
+    }
+    return id;
+}

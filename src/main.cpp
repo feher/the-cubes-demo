@@ -6,7 +6,15 @@
 
 #include "thecubes.h"
 
+#include <iostream>
+
+using namespace std;
+
 int main(void) {
-    TheCubes(1024, 768).run();
+    try {
+        TheCubes(1024, 768).run();
+    } catch (const runtime_error& e) {
+        cerr << "Error: " << e.what() << endl;
+    }
     return 0;
 }

@@ -1,4 +1,3 @@
-uniform vec4 u_color; // For debugging purposes.
 uniform sampler2D u_textureSampler;
 
 varying vec2 v_vertexUv;

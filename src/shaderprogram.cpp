@@ -58,3 +58,4 @@ void ShaderProgram::activate() const {
         m_activeShaderProgram = this;
     }
 }
+

@@ -17,10 +17,9 @@ GridProgram::GridProgram() {
     fshFiles.push_back(fragmentShaderFile);
     load(vshFiles, fshFiles);
 
-    const auto p = programId();
-    am_vertexPositionId = glGetAttribLocation(p, "am_vertexPosition");
-    u_colorId = glGetUniformLocation(p, "u_color");
-    u_mvpId = glGetUniformLocation(p, "u_mvp");
+    am_vertexPositionId = getAttribLocation("am_vertexPosition");
+    u_colorId = getUniformLocation("u_color");
+    u_mvpId = getUniformLocation("u_mvp");
 }
 
 void GridProgram::activate() {

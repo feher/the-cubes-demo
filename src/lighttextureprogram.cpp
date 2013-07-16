@@ -19,22 +19,20 @@ LightTextureProgram::LightTextureProgram(const string& vertexShaderPrefix,
     fshFiles.push_back(fragmentShaderFile);
     load(vshFiles, fshFiles);
 
-    const auto p = programId();
-    am_vertexPositionId = glGetAttribLocation(p, "am_vertexPosition");
-    am_vertexNormalId = glGetAttribLocation(p, "am_vertexNormal");
-    a_vertexUvId = glGetAttribLocation(p, "a_vertexUv");
-    u_colorId = glGetUniformLocation(p, "u_color");
-    u_mvpId = glGetUniformLocation(p, "u_mvp");
-    u_mId = glGetUniformLocation(p, "u_m");
-    u_vId = glGetUniformLocation(p, "u_v");
-    u_mnsId = glGetUniformLocation(p, "u_mns");
-    uw_lightPositionId = glGetUniformLocation(p, "uw_lightPosition");
-    u_lightColorId = glGetUniformLocation(p, "u_lightColor");
-    u_lightPowerId = glGetUniformLocation(p, "u_lightPower");
-    u_highlightFactorId = glGetUniformLocation(p, "u_highlightFactor");
-    u_textureSamplerId = glGetUniformLocation(p, "u_textureSampler");
-    u_materialAmbientFactorId = glGetUniformLocation(p, "u_materialAmbientFactor");
-    u_materialSpecularFactorId = glGetUniformLocation(p, "u_materialSpecularFactor");
+    am_vertexPositionId = getAttribLocation("am_vertexPosition");
+    am_vertexNormalId = getAttribLocation("am_vertexNormal");
+    a_vertexUvId = getAttribLocation("a_vertexUv");
+    u_mvpId = getUniformLocation("u_mvp");
+    u_mId = getUniformLocation("u_m");
+    u_vId = getUniformLocation("u_v");
+    u_mnsId = getUniformLocation("u_mns");
+    uw_lightPositionId = getUniformLocation("uw_lightPosition");
+    u_lightColorId = getUniformLocation("u_lightColor");
+    u_lightPowerId = getUniformLocation("u_lightPower");
+    u_highlightFactorId = getUniformLocation("u_highlightFactor");
+    u_textureSamplerId = getUniformLocation("u_textureSampler");
+    u_materialAmbientFactorId = getUniformLocation("u_materialAmbientFactor");
+    u_materialSpecularFactorId = getUniformLocation("u_materialSpecularFactor");
 }
 
 void LightTextureProgram::activate() {

@@ -17,10 +17,9 @@ CompassProgram::CompassProgram() {
     fshFiles.push_back(fragmentShaderFile);
     load(vshFiles, fshFiles);
 
-    const auto p = programId();
-    am_vertexPositionId = glGetAttribLocation(p, "am_vertexPosition");
-    a_vertexColorId = glGetAttribLocation(p, "a_vertexColor");
-    u_mvpId = glGetUniformLocation(p, "u_mvp");
+    am_vertexPositionId = getAttribLocation("am_vertexPosition");
+    a_vertexColorId = getAttribLocation("a_vertexColor");
+    u_mvpId = getUniformLocation("u_mvp");
 }
 
 void CompassProgram::activate() {

@@ -6,7 +6,6 @@
 // c: camera space
 // w: world space
 
-uniform vec4 u_color; // For debugging.
 uniform mat4 u_mvp;
 
 attribute vec3 am_vertexPosition;

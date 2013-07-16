@@ -13,8 +13,10 @@ public:
     void load(const std::vector<std::string>& vertexShaderFiles,
               const std::vector<std::string>& fragmentShaderFiles);
 
+    GLint getAttribLocation(const GLchar *name);
+    GLint getUniformLocation(const GLchar *name);
+
     inline void activate();
-    inline GLuint programId() const;
 
 private:
     ShaderProgram m_program;
@@ -22,10 +24,6 @@ private:
 
 void Program::activate() {
     m_program.activate();
-}
-
-GLuint Program::programId() const {
-    return m_program.id();
 }
 
 #endif

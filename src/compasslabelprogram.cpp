@@ -17,12 +17,10 @@ CompassLabelProgram::CompassLabelProgram() {
     fshFiles.push_back(fragmentShaderFile);
     load(vshFiles, fshFiles);
 
-    const auto p = programId();
-    am_vertexPositionId = glGetAttribLocation(p, "am_vertexPosition");
-    a_vertexUvId = glGetAttribLocation(p, "a_vertexUv");
-    u_colorId = glGetUniformLocation(p, "u_color");
-    u_mvpId = glGetUniformLocation(p, "u_mvp");
-    u_textureSamplerId = glGetUniformLocation(p, "u_textureSampler");
+    am_vertexPositionId = getAttribLocation("am_vertexPosition");
+    a_vertexUvId = getAttribLocation("a_vertexUv");
+    u_mvpId = getUniformLocation("u_mvp");
+    u_textureSamplerId = getUniformLocation("u_textureSampler");
 }
 
 void CompassLabelProgram::activate() {

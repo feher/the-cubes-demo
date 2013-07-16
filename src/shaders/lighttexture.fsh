@@ -1,4 +1,3 @@
-uniform vec4 u_color;
 uniform vec3 uw_lightPosition;
 uniform vec3 u_lightColor;
 uniform float u_lightPower;
