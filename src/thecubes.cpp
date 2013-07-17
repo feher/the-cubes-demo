@@ -13,6 +13,9 @@
 #include "compasslabeldata.h"
 #include "compasslabelprogram.h"
 #include "lighttextureprogram.h"
+#include "lighttextureshadowprogram.h"
+#include "shadowmapprogram.h"
+#include "shadowmapviewprogram.h"
 #include "cubedata.h"
 #include "spheredata.h"
 
@@ -32,6 +35,8 @@ TheCubes::TheCubes(unsigned int screenWidth, unsigned int screenHeight)
       m_screenHeight(screenHeight),
       m_lastTime(0),
       m_exitting(false),
+      m_isShadowMapEnabled(false),
+      m_isShadowMapViewEnabled(false),
       m_isMouseButtonPressed(false),
       m_isMouseMoved(false),
       m_lastMousePos(0, 0),
@@ -60,6 +65,7 @@ TheCubes::TheCubes(unsigned int screenWidth, unsigned int screenHeight)
     glFrontFace(GL_CCW);
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_CULL_FACE);
+    glDepthFunc(GL_LESS);
 
     m_vaoId.generate(GlBuffer::VAO);
     glBindVertexArray(m_vaoId.id());
@@ -67,7 +73,8 @@ TheCubes::TheCubes(unsigned int screenWidth, unsigned int screenHeight)
     std::random_device rd;
     m_randEngine.seed(rd());
 
-    m_modelProgram = make_shared<LightTextureProgram>();
+    m_lightTextureShadowProgram = make_shared<LightTextureShadowProgram>();
+    m_lightTextureProgram = make_shared<LightTextureProgram>();
     auto gridProgram = make_shared<GridProgram>();
 
     m_modelCubeData = make_shared<CubeData>(CubeData::modelTextureFile);
@@ -115,7 +122,7 @@ TheCubes::TheCubes(unsigned int screenWidth, unsigned int screenHeight)
         auto light = make_shared<PointLight>(vec3(0, 1, 10), vec3(1, 1, 1), 100.0f);
         auto cube = make_shared<ActionObject>(1.0f);
         cube->setData(make_shared<CubeData>(CubeData::actionTextureFile));
-        cube->setProgram(m_modelProgram);
+        cube->setProgram(m_lightTextureProgram);
         cube->setViewport(viewport);
         cube->setProjection(projection);
         cube->setCamera(camera);
@@ -146,7 +153,7 @@ TheCubes::TheCubes(unsigned int screenWidth, unsigned int screenHeight)
         auto light = make_shared<PointLight>(vec3(0, 1, 9), vec3(1, 1, 1), 80.0f);
         auto sphere = make_shared<ActionObject>(1.0f);
         sphere->setData(make_shared<SphereData>(SphereData::actionTextureFile));
-        sphere->setProgram(m_modelProgram);
+        sphere->setProgram(m_lightTextureProgram);
         sphere->setViewport(viewport);
         sphere->setProjection(projection);
         sphere->setCamera(camera);
@@ -212,26 +219,59 @@ TheCubes::TheCubes(unsigned int screenWidth, unsigned int screenHeight)
         m_hudObjects.push_back(label);
     }
 
+    m_shadowMap = make_shared<ShadowMap>(vec3(+5.0f, +5.0f, +5.0f));
+    m_shadowMap->setScreenViewport(m_modelingViewport);
+    m_shadowMapProgram = make_shared<ShadowMapProgram>();
+    m_shadowMapView = make_shared<ShadowMapView>();
+    m_shadowMapView->setProgram(make_shared<ShadowMapViewProgram>());
+    m_shadowMapView->setShadowMap(m_shadowMap);
+    m_shadowMapView->setViewport(
+        make_shared<Viewport>(m_screenWidth - 256, m_screenHeight - 256, 256, 256));
+
     // Add a few initial models.
-    createNewObject(m_actionCube, vec3(+2, 1.5, 10));
-    createNewObject(m_actionSphere, vec3(-2, 2, 10));
-    createNewObject(m_actionSphere, vec3(+1.2, -2.0, 10));
-    createNewObject(m_actionCube, vec3(-2.3, -1.5, 10));
+    createNewObject(m_actionCube, vec3(+2, -1.5, 15));
+    createNewObject(m_actionSphere, vec3(1.0, 2.3, 12));
+    createNewObject(m_actionSphere, vec3(-2, -2, 10));
+    createNewObject(m_actionCube, vec3(-2.3, +1.5, 10));
 }
 
 void TheCubes::updateAndRender() {
     const double currentTime = glfwGetTime();
     const float deltaTime = float(currentTime - m_lastTime);
     m_lastTime = currentTime;
+
+    for (auto& object : m_modelObjects) {
+        object->update(deltaTime);
+    }
+
+    if (m_isShadowMapEnabled) {
+        // Render to shadow map
+        m_shadowMap->activate();
+        for (auto& object : m_modelObjects) {
+            const auto originalProgram = object->modelProgram();
+            const auto originalViewport = object->viewport();
+            object->setViewport(m_shadowMap->viewport());
+            object->setProgram(m_shadowMapProgram);
+            object->render();
+            object->setViewport(originalViewport);
+            object->setProgram(originalProgram);
+        }
+        m_shadowMap->cleanup();
+    }
+
+    // Render to screen
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     for (auto& object : m_modelingObjects) {
-        object->update(deltaTime);
         object->render();
     }
     for (auto& object : m_hudObjects) {
         object->update(deltaTime);
         object->render();
     }
+    if (m_isShadowMapViewEnabled) {
+        m_shadowMapView->render();
+    }
+
     glfwSwapBuffers();
 }
 
@@ -240,18 +280,25 @@ void TheCubes::createNewObject(const shared_ptr<const Object>& actionObject,
     bool isCube = (actionObject == m_actionCube);
 
     auto object = make_shared<ModelObject>(1.0f);
+
     if (isCube) {
         object->setData(m_modelCubeData);
     } else {
         object->setData(m_modelSphereData);
     }
 
+    if (m_isShadowMapEnabled) {
+        object->setProgram(m_lightTextureShadowProgram);
+    } else {
+        object->setProgram(m_lightTextureProgram);
+    }
+
     object->setId(m_modelingObjects.size());
-    object->setProgram(m_modelProgram);
     object->setViewport(m_modelingViewport);
     object->setProjection(m_modelingProjection);
     object->setCamera(m_modelingCamera);
     object->setLight(m_modelingLight);
+    object->setShadowMap(m_shadowMap);
     object->setRotation(positionInCamera * 40.0f);
     object->setScale(1.0f);
 
@@ -268,6 +315,17 @@ void TheCubes::createNewObject(const shared_ptr<const Object>& actionObject,
     m_interactiveObjects.push_back(object);
 
     m_exitting = false;
+}
+
+void TheCubes::setShadowMapEnabled(bool isEnabled) {
+    m_isShadowMapEnabled = isEnabled;
+    for (auto& object : m_modelObjects) {
+        if (m_isShadowMapEnabled) {
+            object->setProgram(m_lightTextureShadowProgram);
+        } else {
+            object->setProgram(m_lightTextureProgram);
+        }
+    }
 }
 
 bool TheCubes::isActionObject(const shared_ptr<const Object>& object) const {
@@ -348,16 +406,34 @@ void TheCubes::clearHoveredState() {
 
 void TheCubes::handleInput() {
     // Determine mouse and keyboard status.
+    static auto wasSDown = false;
+    static auto wasDDown = false;
 
-    bool isShiftPressed = (glfwGetKey(GLFW_KEY_LSHIFT) == GLFW_PRESS);
-    bool isControlPressed = (glfwGetKey(GLFW_KEY_LCTRL) == GLFW_PRESS);
-    bool isAltPressed = (glfwGetKey(GLFW_KEY_LALT) == GLFW_PRESS);
+    auto isShiftPressed = (glfwGetKey(GLFW_KEY_LSHIFT) == GLFW_PRESS);
+    auto isControlPressed = (glfwGetKey(GLFW_KEY_LCTRL) == GLFW_PRESS);
+    auto isAltPressed = (glfwGetKey(GLFW_KEY_LALT) == GLFW_PRESS);
+    auto isSDown = (glfwGetKey('S') == GLFW_PRESS);
+    auto isDDown = (glfwGetKey('D') == GLFW_PRESS);
+    auto isSPressed = false;
+    auto isDPressed = false;
     auto isMouseButtonPressStarted = false;
     auto isMouseClicked = false;
-    bool isMouseMoved = false;
-    bool isMousePosValid = false;
+    auto isMouseMoved = false;
+    auto isMousePosValid = false;
     auto mousePos = vec2(-1, -1);
     auto delta = vec2(0, 0);
+
+    if (wasSDown && !isSDown) {
+        wasSDown = false;
+        isSPressed = true;
+    }
+    wasSDown = isSDown;
+
+    if (wasDDown && !isDDown) {
+        wasDDown = false;
+        isDPressed = true;
+    }
+    wasDDown = isDDown;
 
     int mx, my;
     glfwGetMousePos(&mx, &my);
@@ -435,6 +511,10 @@ void TheCubes::handleInput() {
                     // Move camera along Z axis
                     m_modelingCamera->updatePosition(vec3(0, 0, -delta.y * f));
                 }
+            } else if (isSPressed) {
+                setShadowMapEnabled(!m_isShadowMapEnabled);
+            } else if (isDPressed) {
+                m_isShadowMapViewEnabled = !m_isShadowMapViewEnabled;
             }
         }
         break;

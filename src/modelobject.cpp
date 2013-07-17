@@ -94,3 +94,22 @@ void ModelObject::update(double deltaTime) {
             break;
     }
 }
+
+void ModelObject::initRender() {
+    if (m_modelProgram) {
+        m_modelProgram->activate();
+        m_modelProgram->configure(*this);
+    } else {
+        program()->activate();
+        program()->configure(*this);
+    }
+    viewport()->activate();
+}
+
+void ModelObject::finishRender() {
+    if (m_modelProgram) {
+        m_modelProgram->cleanup();
+    } else {
+        program()->cleanup();
+    }
+}

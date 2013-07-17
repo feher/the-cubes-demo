@@ -8,7 +8,8 @@
 #include "modelobject.h"
 #include "pointlight.h"
 #include "viewport.h"
-#include "lighttextureprogram.h"
+#include "shadowmap.h"
+#include "shadowmapview.h"
 #include "cubedata.h"
 #include "spheredata.h"
 #include "glbuffer.h"
@@ -32,6 +33,7 @@ private:
 
     void createNewObject(const std::shared_ptr<const Object>& actionObject,
                          const glm::vec3& positionInCamera);
+    void setShadowMapEnabled(bool isEnabled);
     bool isActionObject(const std::shared_ptr<const Object>& object) const;
     std::shared_ptr<Object> selectedObject(const glm::vec2& mousePos) const;
     void clearHoveredState();
@@ -45,6 +47,8 @@ private:
     RGlfw m_glfw;
     double m_lastTime;
     bool m_exitting;
+    bool m_isShadowMapEnabled;
+    bool m_isShadowMapViewEnabled;
     bool m_isMouseButtonPressed;
     bool m_isMouseMoved;
     glm::vec2 m_lastMousePos;
@@ -52,6 +56,7 @@ private:
     GlBuffer m_vaoId;
     std::default_random_engine m_randEngine;
     std::uniform_int_distribution<int> m_uniformDist;
+    std::shared_ptr<ShadowMap> m_shadowMap;
     std::shared_ptr<Viewport> m_modelingViewport;
     std::shared_ptr<glm::mat4> m_modelingProjection;
     std::shared_ptr<Camera> m_modelingCamera;
@@ -59,7 +64,10 @@ private:
     std::shared_ptr<Object> m_actionCube;
     std::shared_ptr<Object> m_actionSphere;
     std::shared_ptr<Object> m_movingObject;
-    std::shared_ptr<ObjectProgram<TriangleMeshObject>> m_modelProgram;
+    std::shared_ptr<ShadowMapView> m_shadowMapView;
+    std::shared_ptr<ObjectProgram<TriangleMeshObject>> m_lightTextureProgram;
+    std::shared_ptr<ObjectProgram<ModelObject>> m_lightTextureShadowProgram;
+    std::shared_ptr<ObjectProgram<ModelObject>> m_shadowMapProgram;
     std::shared_ptr<CubeData> m_modelCubeData;
     std::shared_ptr<SphereData> m_modelSphereData;
     std::vector<std::shared_ptr<Viewport>> m_viewports;

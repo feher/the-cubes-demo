@@ -47,6 +47,7 @@ add_executable(thecubes
  src/griddata.cpp
  src/gridprogram.cpp
  src/lighttextureprogram.cpp
+ src/lighttextureshadowprogram.cpp
  src/main.cpp
  src/modelobject.cpp
  src/object.cpp
@@ -55,6 +56,10 @@ add_executable(thecubes
  src/rglfw.cpp
  src/shader.cpp
  src/shaderprogram.cpp
+ src/shadowmap.cpp
+ src/shadowmapprogram.cpp
+ src/shadowmapview.cpp
+ src/shadowmapviewprogram.cpp
  src/spheredata.cpp
  src/thecubes.cpp
  src/trianglemeshdata.cpp

@@ -27,6 +27,13 @@ varying vec2 v_vertexUv;
 
 const float ZERO = 0.0;
 
+#ifdef USE_SHADOW_MAP
+uniform mat4 u_shadowMvp;
+uniform vec3 uw_directionalLightDirection;
+varying vec3 vw_vertexNormal;
+varying vec4 v_vertexShadowMapUv;
+#endif
+
 void light() {
   vw_vertexPosition = (u_m * vec4(am_vertexPosition, 1)).xyz;
 
@@ -43,6 +50,11 @@ void main() {
   if (u_lightPower >= ZERO) {
     light();
   }
+
+#ifdef USE_SHADOW_MAP
+  v_vertexShadowMapUv = u_shadowMvp * vec4(am_vertexPosition, 1);
+  vw_vertexNormal = (u_mns * vec4(am_vertexNormal, 0)).xyz;
+#endif
   
   v_vertexUv = a_vertexUv;
   gl_Position = u_mvp * vec4(am_vertexPosition, 1);

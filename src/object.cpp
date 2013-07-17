@@ -29,7 +29,7 @@ void Object::setId(int id) {
     m_id = id;
 }
 
-void Object::setViewport(std::shared_ptr<Viewport> viewport) {
+void Object::setViewport(std::shared_ptr<const Viewport> viewport) {
     m_viewport = viewport;
 }
 

@@ -28,7 +28,7 @@ public:
     virtual ~Object();
 
     void setId(int id);
-    void setViewport(std::shared_ptr<Viewport> viewPort);
+    void setViewport(std::shared_ptr<const Viewport> viewPort);
     void setProjection(std::shared_ptr<glm::mat4> projectionMatrix);
     void setCamera(std::shared_ptr<Camera> camera);
     void setLight(std::shared_ptr<PointLight> light);
@@ -65,7 +65,7 @@ private:
     virtual glm::mat4 calculateModelMatrix(bool withScaling) const;
 
     int m_id;
-    std::shared_ptr<Viewport> m_viewport;
+    std::shared_ptr<const Viewport> m_viewport;
     std::shared_ptr<glm::mat4> m_projectionMatrix;
     std::shared_ptr<Camera> m_camera;
     std::shared_ptr<PointLight> m_light;

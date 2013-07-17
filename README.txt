@@ -31,6 +31,8 @@ Controls:
 - Pitch/yaw camera               : Hold left shift + move mouse
 - Roll camera                    : Hold left alt + move mouse
 - Move object                    : Hold left mouse button + drag on marble object
+- Enable/disable shadow mapping  : Press the S key.
+- Enable/disable shadow map view : Press the D key.
 - Exit                           : Escape key or close the window.
 
 There is an exit animation (all marbles disappear) and the window closes only when the
@@ -104,18 +106,21 @@ Class hierarchy
 
 - PointLight : Class representing a point light.
 
+- ShadowMap : Manages the generation of the shadow map texture.
+
 - Object :              Base class for any kind of visible on-screen object.
  - Compass :            The small orientation indicator in the lower right corner.
  - CompassLabel:        Represents the labes (Y, Y and Z) of the axes on the compass.
+ - Grid :               Object representing the modeling grid.
+ - ShadowMapView :      Displays the generated shadow map texture.
  - TriangleMeshObject : Base class for triangle mesh objects.
   - ActionObject :      The pressable action objects at the lower/upper left corner that create marbles.
   - ModelObject :       Represents the marble objects that can be created/deleted/moved.
- - Grid :               Object representing the modeling grid.
 
 - ObjectData :        Base class for data used by object instances.
  - CompassData :      Data used by Compass objects.
  - CompassLabelData : Data used by the axes labels of the compass.
- - GridData :       Data used by Grid objects.
+ - GridData :         Data used by Grid objects.
  - TriangleMeshData : Data that describes triangle based meshes.
    - CubeData :       Data used by cube objects.
    - SphereData :     Data used by sphere objects.
@@ -123,16 +128,17 @@ Class hierarchy
 - Program : Base class for shader programs used by object instances.
 - ObjectProgram : Template base class for shader programs used by object instances.
                   Tells whether a program can be used with a specific Object.
- - CompassLabelProgram : Shader program used by CompassLabel objects.
- - CompassProgram :      Shader program used by Compass objects.
- - LightTextureProgram : Shader program that does texturing and lighting.
- - GridProgram :         Shader program used by Grid objects.
+ - CompassLabelProgram :       Shader program used by CompassLabel objects.
+ - CompassProgram :            Shader program used by Compass objects.
+ - GridProgram :               Shader program used by Grid objects.
+ - LightTextureProgram :       Shader program that does texturing and lighting.
+ - LightTextureShadowProgram : Shader program that does texturing, lighting and shadow mapping.
+ - ShadowMapProgram :          Shader program for generating the shadow map texture.
+ - ShadowMapViewProgram :      Shader program used by the ShadowMapView.
 
 - Shader : Loads and compiles a vertex or fragment shader.
 
 - ShaderProgram : Represents a shader program.
 
-
 END OF README
 ####################
-
