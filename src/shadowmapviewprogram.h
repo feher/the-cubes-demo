@@ -6,7 +6,7 @@
 #include "shadowmapview.h"
 
 class ShadowMapViewProgram : public Program,
-                         public ObjectProgram<ShadowMapView> {
+                             public ObjectProgram<ShadowMapView> {
 public:
     explicit ShadowMapViewProgram();
 

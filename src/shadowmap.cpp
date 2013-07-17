@@ -45,17 +45,12 @@ ShadowMap::ShadowMap(vec3 lightDirection)
 void ShadowMap::activate() {
     glBindFramebuffer(GL_FRAMEBUFFER, m_frameBufferId.id());
     m_viewport->activate();
-    glViewport(0, 0, m_frameBufferWidth, m_frameBufferHeight);
-    glEnable(GL_CULL_FACE);
-    glCullFace(GL_BACK);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
 void ShadowMap::cleanup() {
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
     m_screenViewport->activate();
-    glEnable(GL_CULL_FACE);
-    glCullFace(GL_BACK);
 }
 
 mat4 ShadowMap::vp() const {

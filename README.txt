@@ -99,8 +99,7 @@ Class hierarchy
 
 - Geom : Geometry functions used for object picking. E.g. line-sphere intersection.
 
-- Viewport : Represents an OpenGL viewport. Used to draw the ActionCube and the Compass
-             in their own viewports.
+- Viewport : Represents an OpenGL viewport.
 
 - Camera : The camera representing the user's point of view.
 

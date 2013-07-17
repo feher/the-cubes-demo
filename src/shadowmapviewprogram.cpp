@@ -32,7 +32,7 @@ void ShadowMapViewProgram::configure(ShadowMapView& object) {
 
     glEnableVertexAttribArray(am_vertexPositionId);
     glBindBuffer(GL_ARRAY_BUFFER, object.programVertexBufferId());
-	glVertexAttribPointer(am_vertexPositionId, 3, GL_FLOAT, GL_FALSE, 0, nullptr);
+    glVertexAttribPointer(am_vertexPositionId, 3, GL_FLOAT, GL_FALSE, 0, nullptr);
 }
 
 void ShadowMapViewProgram::cleanup() {
