@@ -37,19 +37,29 @@ vec4 light(vec4 color) {
   float shadowFactor = 1.0;
   
 #ifdef USE_SHADOW_MAP
+  // We want 0 bias when the light is full frontal.
+  // x is in [-1, 1]. It is 1 when the light is full frontal.
+  // We map x into [0, 1] and flip it around to get our bias.
   vec3 w_vertexNormal = normalize(vw_vertexNormal);
   float x = dot(w_vertexNormal, uw_directionalLightDirection);
-  float bias = (1.0 - (x + 1.0) / 2.0) * 0.005;
+  const float fullBias = 0.005;
+  float bias = (1.0 - (x + 1.0) / 2.0) * fullBias;
+
+  // Take the average of the visibility information around our pixel.
+  // This manages to get rid of most of the acne and other artefacts.
+  // NOTE: the choice of the AREA * AREA * AREA value is arbitrary.
+  const int AREA = 3;
+  const float SHADOW_MAP_SIZE = 1024.0;
   vec3 uv = vec3(v_vertexShadowMapUv.xy / v_vertexShadowMapUv.w,
                  (v_vertexShadowMapUv.z - bias) / v_vertexShadowMapUv.w);
   if (v_vertexShadowMapUv.w > 0.0) {
-    const float d = 1.0 / 1024.0;
+    const float d = 1.0 / SHADOW_MAP_SIZE;
     float f = 0.0;
     float s, t, z;
     int i, j, k;
-    for (i = 0, t = uv.t - d; i < 3; ++i, t += d) {
-      for (j = 0, s = uv.s - d; j < 3; ++j, s += d) {
-        for (k = 0, z = uv.z - d; k < 3; ++k, z += d) {
+    for (i = 0, t = uv.t - d; i < AREA; ++i, t += d) {
+      for (j = 0, s = uv.s - d; j < AREA; ++j, s += d) {
+        for (k = 0, z = uv.z - d; k < AREA; ++k, z += d) {
           f += shadow2D(u_shadowTextureSampler, vec3(s, t, z)).r;
         }
       }
