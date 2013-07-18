@@ -9,9 +9,6 @@ using namespace glm;
 const string CubeData::modelTextureFile = "./data/marble512.tga";
 const string CubeData::actionTextureFile = "./data/actioncube.tga";
 
-GlBuffer CubeData::m_vertexBufferId;
-GlBuffer CubeData::m_elementBufferId;
-
 //        4------6       10------14        16------18
 //      / |    / |      / |    / |        / |    / |
 //    0------2   |    8------12  |      17-----19  |
@@ -59,14 +56,12 @@ const CubeData::TriangleElement CubeData::m_triangles[] = {
 
 CubeData::CubeData(const string& textureFile)
     : TriangleMeshData(2.0f, vec3(0.1f, 0.1f, 0.1f), vec3(0.3f, 0.3f, 0.3f), textureFile) {
-    if (m_vertexBufferId.id() == 0) {
-        m_vertexBufferId.generate(GlBuffer::BUFFER);
-        glBindBuffer(GL_ARRAY_BUFFER, m_vertexBufferId.id());
-        glBufferData(GL_ARRAY_BUFFER, sizeof(m_vertexData), m_vertexData, GL_STATIC_DRAW);
-        m_elementBufferId.generate(GlBuffer::BUFFER);
-        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_elementBufferId.id());
-        glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(m_triangles), m_triangles, GL_STATIC_DRAW);
-    }
+    m_vertexBufferId.generate(GlBuffer::BUFFER);
+    glBindBuffer(GL_ARRAY_BUFFER, m_vertexBufferId.id());
+    glBufferData(GL_ARRAY_BUFFER, sizeof(m_vertexData), m_vertexData, GL_STATIC_DRAW);
+    m_elementBufferId.generate(GlBuffer::BUFFER);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_elementBufferId.id());
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(m_triangles), m_triangles, GL_STATIC_DRAW);
 }
 
 GLuint CubeData::vertexBufferId() const {

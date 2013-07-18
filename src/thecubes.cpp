@@ -37,6 +37,8 @@ TheCubes::TheCubes(unsigned int screenWidth, unsigned int screenHeight)
       m_exitting(false),
       m_isShadowMapEnabled(false),
       m_isShadowMapViewEnabled(false),
+      m_wasSDown(false),
+      m_wasDDown(false),
       m_isMouseButtonPressed(false),
       m_isMouseMoved(false),
       m_lastMousePos(0, 0),
@@ -407,9 +409,6 @@ void TheCubes::clearHoveredState() {
 
 void TheCubes::handleInput() {
     // Determine mouse and keyboard status.
-    static auto wasSDown = false;
-    static auto wasDDown = false;
-
     auto isShiftPressed = (glfwGetKey(GLFW_KEY_LSHIFT) == GLFW_PRESS);
     auto isControlPressed = (glfwGetKey(GLFW_KEY_LCTRL) == GLFW_PRESS);
     auto isAltPressed = (glfwGetKey(GLFW_KEY_LALT) == GLFW_PRESS);
@@ -424,17 +423,17 @@ void TheCubes::handleInput() {
     auto mousePos = vec2(-1, -1);
     auto delta = vec2(0, 0);
 
-    if (wasSDown && !isSDown) {
-        wasSDown = false;
+    if (m_wasSDown && !isSDown) {
+        m_wasSDown = false;
         isSPressed = true;
     }
-    wasSDown = isSDown;
+    m_wasSDown = isSDown;
 
-    if (wasDDown && !isDDown) {
-        wasDDown = false;
+    if (m_wasDDown && !isDDown) {
+        m_wasDDown = false;
         isDPressed = true;
     }
-    wasDDown = isDDown;
+    m_wasDDown = isDDown;
 
     int mx, my;
     glfwGetMousePos(&mx, &my);

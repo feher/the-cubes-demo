@@ -49,6 +49,8 @@ private:
     bool m_exitting;
     bool m_isShadowMapEnabled;
     bool m_isShadowMapViewEnabled;
+    bool m_wasSDown;
+    bool m_wasDDown;
     bool m_isMouseButtonPressed;
     bool m_isMouseMoved;
     glm::vec2 m_lastMousePos;

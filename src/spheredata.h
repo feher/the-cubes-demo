@@ -24,13 +24,13 @@ public:
     static const std::string actionTextureFile;
 
 private:
-    static GlBuffer m_vertexBufferId;
-    static GlBuffer m_elementBufferId;
-
     static const unsigned int m_segments;
     static const unsigned int m_rings;
-    static std::vector<VertexData> m_vertexData;
-    static std::vector<TriangleElement> m_triangles;
+
+    GlBuffer m_vertexBufferId;
+    GlBuffer m_elementBufferId;
+    std::vector<VertexData> m_vertexData;
+    std::vector<TriangleElement> m_triangles;
 };
 
 #endif

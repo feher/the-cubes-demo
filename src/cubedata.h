@@ -27,8 +27,8 @@ private:
     static const VertexData m_vertexData[6 * 4];
     static const TriangleElement m_triangles[6 * 4];
 
-    static GlBuffer m_vertexBufferId;
-    static GlBuffer m_elementBufferId;
+    GlBuffer m_vertexBufferId;
+    GlBuffer m_elementBufferId;
 };
 
 #endif
