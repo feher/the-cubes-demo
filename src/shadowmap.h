@@ -22,7 +22,7 @@ public:
     inline std::shared_ptr<const Viewport> viewport() const;
     glm::mat4 vp() const;
     inline GLuint shadowTextureId() const;
-    inline const glm::vec3& lightDirection() const;
+    inline glm::vec3 lightDirection() const;
 
 private:
     static const unsigned int m_frameBufferWidth;
@@ -52,7 +52,7 @@ GLuint ShadowMap::shadowTextureId() const {
     return m_shadowTextureId.id();
 }
 
-const glm::vec3& ShadowMap::lightDirection() const {
+glm::vec3 ShadowMap::lightDirection() const {
     if (m_camera) {
         // Get the light direction from camera space to world space.
         return m_camera->base() * m_lightDirection;
