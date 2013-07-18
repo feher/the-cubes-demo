@@ -1,11 +1,9 @@
 Hi,
 
-Here you can find my solution of the assignment for the SW Engineer position
-at Rightware.
+Here you can find my solution of the assignment for the SW Engineer position.
 
 This assignment was a lot of fun to work on. I could go on adding features
-forever :)
-I hope you will like it as much as I liked working on it.
+forever :) I hope you will like it as much as I liked working on it.
 
 As requested, this is a small demo according to the following description:
 
@@ -34,7 +32,7 @@ You can find more detailed information in the README.txt file.
 
 I am looking forward to hearing from you!
 
-Thank you,
+Best regards,
 Gabor Fekete
 
 
