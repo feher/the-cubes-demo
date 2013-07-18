@@ -11,7 +11,7 @@ class CompassLabel : public Object {
 public:
     explicit CompassLabel(std::shared_ptr<Object> compass);
 
-    void setData(std::shared_ptr<CompassLabelData> data);
+    void setData(std::shared_ptr<const CompassLabelData> data);
     void setProgram(std::shared_ptr<ObjectProgram<CompassLabel>> program);
 
     virtual void render() override;
@@ -29,7 +29,7 @@ private:
         Z_LABEL
     };
 
-    std::shared_ptr<CompassLabelData> m_data;
+    std::shared_ptr<const CompassLabelData> m_data;
     std::shared_ptr<ObjectProgram<CompassLabel>> m_program;
     std::shared_ptr<Object> m_compass;
     int m_drawState;

@@ -10,7 +10,7 @@ CompassLabel::CompassLabel(std::shared_ptr<Object> compass)
     : m_compass(compass), m_drawState(X_LABEL) {
 }
 
-void CompassLabel::setData(shared_ptr<CompassLabelData> data) {
+void CompassLabel::setData(shared_ptr<const CompassLabelData> data) {
     m_data = data;
 }
 

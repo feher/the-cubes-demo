@@ -7,11 +7,11 @@
 using namespace std;
 using namespace glm;
 
-Compass::Compass(shared_ptr<Camera> modelingCamera)
+Compass::Compass(shared_ptr<const Camera> modelingCamera)
     : m_modelingCamera(modelingCamera) {
 }
 
-void Compass::setData(shared_ptr<CompassData> data) {
+void Compass::setData(shared_ptr<const CompassData> data) {
     m_data = data;
 }
 void Compass::setProgram(shared_ptr<ObjectProgram<Compass>> program) {

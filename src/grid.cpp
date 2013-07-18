@@ -2,7 +2,7 @@
 
 using namespace std;
 
-void Grid::setData(shared_ptr<GridData> data) {
+void Grid::setData(shared_ptr<const GridData> data) {
     m_data = data;
 }
 void Grid::setProgram(shared_ptr<ObjectProgram<Grid>> program) {

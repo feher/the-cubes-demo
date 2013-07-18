@@ -12,9 +12,9 @@
 
 class Compass : public Object {
 public:
-    Compass(std::shared_ptr<Camera> modelingCamera);
+    Compass(std::shared_ptr<const Camera> modelingCamera);
 
-    void setData(std::shared_ptr<CompassData> data);
+    void setData(std::shared_ptr<const CompassData> data);
     void setProgram(std::shared_ptr<ObjectProgram<Compass>> program);
 
     virtual glm::mat4 modelMatrix() override;
@@ -24,8 +24,8 @@ public:
     inline GLuint programVertexBufferId() const;
 
 private:
-    std::shared_ptr<Camera> m_modelingCamera;
-    std::shared_ptr<CompassData> m_data;
+    std::shared_ptr<const Camera> m_modelingCamera;
+    std::shared_ptr<const CompassData> m_data;
     std::shared_ptr<ObjectProgram<Compass>> m_program;
 };
 

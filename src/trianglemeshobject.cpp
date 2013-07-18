@@ -6,7 +6,7 @@
 using namespace std;
 using namespace glm;
 
-void TriangleMeshObject::setData(shared_ptr<TriangleMeshData> data) {
+void TriangleMeshObject::setData(shared_ptr<const TriangleMeshData> data) {
     m_data = data;
 }
 

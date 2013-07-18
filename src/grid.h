@@ -7,7 +7,7 @@
 
 class Grid : public Object {
 public:
-    void setData(std::shared_ptr<GridData> data);
+    void setData(std::shared_ptr<const GridData> data);
     void setProgram(std::shared_ptr<ObjectProgram<Grid>> program);
 
     virtual void render() override;
@@ -17,7 +17,7 @@ public:
     inline GLuint programVertexBufferId() const;
 
 private:
-    std::shared_ptr<GridData> m_data;
+    std::shared_ptr<const GridData> m_data;
     std::shared_ptr<ObjectProgram<Grid>> m_program;
 };
 

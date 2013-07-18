@@ -12,7 +12,7 @@ public:
 
     inline void setProgram(std::shared_ptr<ObjectProgram<ModelObject>> program);
     inline void setProgram(std::shared_ptr<ObjectProgram<TriangleMeshObject>> program);
-    inline void setShadowMap(std::shared_ptr<ShadowMap> shadowMap);
+    inline void setShadowMap(std::shared_ptr<const ShadowMap> shadowMap);
 
     inline std::shared_ptr<ObjectProgram<ModelObject>> modelProgram();
 
@@ -29,7 +29,7 @@ private:
     GLfloat m_pulse;
     GLfloat m_originalScale;
     GLfloat m_rotationSpeedOffset;
-    std::shared_ptr<ShadowMap> m_shadowMap;
+    std::shared_ptr<const ShadowMap> m_shadowMap;
     std::shared_ptr<ObjectProgram<ModelObject>> m_modelProgram;
 };
 
@@ -42,7 +42,7 @@ void ModelObject::setProgram(std::shared_ptr<ObjectProgram<TriangleMeshObject>> 
     TriangleMeshObject::setProgram(program);
 }
 
-void ModelObject::setShadowMap(std::shared_ptr<ShadowMap> shadowMap) {
+void ModelObject::setShadowMap(std::shared_ptr<const ShadowMap> shadowMap) {
     m_shadowMap = shadowMap;
 }
 

@@ -9,7 +9,7 @@
 
 class TriangleMeshObject : public Object {
 public:
-    void setData(std::shared_ptr<TriangleMeshData> data);
+    void setData(std::shared_ptr<const TriangleMeshData> data);
     void setProgram(std::shared_ptr<ObjectProgram<TriangleMeshObject>> program);
 
     std::shared_ptr<ObjectProgram<TriangleMeshObject>> program() const;
@@ -35,7 +35,7 @@ private:
     virtual void initRender();
     virtual void finishRender();
 
-    std::shared_ptr<TriangleMeshData> m_data;
+    std::shared_ptr<const TriangleMeshData> m_data;
     std::shared_ptr<ObjectProgram<TriangleMeshObject>> m_program;
 };
 
