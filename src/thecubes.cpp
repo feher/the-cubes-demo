@@ -219,8 +219,9 @@ TheCubes::TheCubes(unsigned int screenWidth, unsigned int screenHeight)
         m_hudObjects.push_back(label);
     }
 
-    m_shadowMap = make_shared<ShadowMap>(vec3(+5.0f, +5.0f, +5.0f));
+    m_shadowMap = make_shared<ShadowMap>(vec3(0.0f, 0.0f, -1.0f));
     m_shadowMap->setScreenViewport(m_modelingViewport);
+    m_shadowMap->linkToCamera(m_modelingCamera);
     m_shadowMapProgram = make_shared<ShadowMapProgram>();
     m_shadowMapView = make_shared<ShadowMapView>();
     m_shadowMapView->setProgram(make_shared<ShadowMapViewProgram>());

@@ -58,7 +58,16 @@ mat4 ShadowMap::vp() const {
     // We use orthographic projection because the light is only directional.
     // The model matrix will be provided by the model.
     const auto dim = 10.0f;
-    const auto& P = ortho(-dim, dim, -dim, dim, -dim, dim);
+    const auto near = 2.0f;
+    const auto& P = ortho(-dim, dim, -dim, dim, near, near + 2.0f * dim);
+    if (m_camera) {
+        // Up is the camera's Y axis.
+        const auto& up = m_camera->base()[1];
+        const auto& V =
+            lookAt(m_camera->position() + m_camera->base() * m_lightDirection,
+                   m_camera->position(), up);
+        return P * V;
+    }
     const auto& V = lookAt(m_lightDirection, vec3(0, 0, 0), vec3(0, 1, 0));
     return P * V;
 }

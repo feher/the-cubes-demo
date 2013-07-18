@@ -3,6 +3,7 @@
 
 #include "glbuffer.h"
 #include "viewport.h"
+#include "camera.h"
 
 #include <glm/glm.hpp> // vec*, mat*
 
@@ -12,7 +13,8 @@ class ShadowMap {
 public:
     explicit ShadowMap(glm::vec3 lightDirection);
 
-    inline void setScreenViewport(std::shared_ptr<Viewport> screenViewport);
+    inline void linkToCamera(std::shared_ptr<const Camera> camera);
+    inline void setScreenViewport(std::shared_ptr<const Viewport> screenViewport);
 
     void activate();
     void cleanup();
@@ -29,11 +31,16 @@ private:
     glm::vec3 m_lightDirection;
     GlBuffer m_frameBufferId;
     GlBuffer m_shadowTextureId;
-    std::shared_ptr<Viewport> m_viewport;
-    std::shared_ptr<Viewport> m_screenViewport;
+    std::shared_ptr<const Viewport> m_viewport;
+    std::shared_ptr<const Viewport> m_screenViewport;
+    std::shared_ptr<const Camera> m_camera;
 };
 
-void ShadowMap::setScreenViewport(std::shared_ptr<Viewport> screenViewport) {
+void ShadowMap::linkToCamera(std::shared_ptr<const Camera> camera) {
+    m_camera = camera;
+}
+
+void ShadowMap::setScreenViewport(std::shared_ptr<const Viewport> screenViewport) {
     m_screenViewport = screenViewport;
 }
 
@@ -46,6 +53,11 @@ GLuint ShadowMap::shadowTextureId() const {
 }
 
 const glm::vec3& ShadowMap::lightDirection() const {
+    if (m_camera) {
+        // Get the light direction from camera space to world space.
+        return m_camera->base() * m_lightDirection;
+    }
+    // Already in world space.
     return m_lightDirection;
 }
 
