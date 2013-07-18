@@ -64,8 +64,10 @@ vec4 light(vec4 color) {
         }
       }
     }
-    f /= 27.0;
-    shadowFactor = f;
+    f /= (AREA * AREA * AREA);
+    // Fix up the brightness we lost due to the averaging.
+    const float FIX = 1.6;
+    shadowFactor = clamp(f * FIX, 0.0, 1.0);
   }
 #endif
 
