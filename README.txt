@@ -68,7 +68,7 @@ Build environment
 - Visual Studio 2012 Express
 
 For building in Linux, see the README-linux.txt file
-at https://bitbucket.org/feheren-fekete/the-cubes-demo/src!
+at https://bitbucket.org/feheren-fekete/the-cubes-demo/src
 
 Compilation
 ---------------------
