@@ -42,8 +42,7 @@ TheCubes::TheCubes(unsigned int screenWidth, unsigned int screenHeight)
       m_isMouseButtonPressed(false),
       m_isMouseMoved(false),
       m_lastMousePos(0, 0),
-      m_inputState(NONE),
-      m_uniformDist(0, 2000) {
+      m_inputState(NONE) {
     glfwOpenWindowHint(GLFW_OPENGL_VERSION_MAJOR, 2);
     glfwOpenWindowHint(GLFW_OPENGL_VERSION_MINOR, 1);
     glfwOpenWindowHint(GLFW_WINDOW_NO_RESIZE, GL_TRUE);
@@ -71,9 +70,6 @@ TheCubes::TheCubes(unsigned int screenWidth, unsigned int screenHeight)
 
     m_vaoId.generate(GlBuffer::VAO);
     glBindVertexArray(m_vaoId.id());
-
-    std::random_device rd;
-    m_randEngine.seed(rd());
 
     m_lightTextureShadowProgram = make_shared<LightTextureShadowProgram>();
     m_lightTextureProgram = make_shared<LightTextureProgram>();
@@ -221,6 +217,7 @@ TheCubes::TheCubes(unsigned int screenWidth, unsigned int screenHeight)
         m_hudObjects.push_back(label);
     }
 
+    // Initialize shadow mapping related objects.
     m_shadowMap = make_shared<ShadowMap>(vec3(0.0f, 0.0f, -1.0f));
     m_shadowMap->setScreenViewport(m_modelingViewport);
     m_shadowMap->linkToCamera(m_modelingCamera);

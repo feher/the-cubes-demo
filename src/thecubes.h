@@ -18,7 +18,6 @@
 
 #include <memory>    // shared_ptr, unique_ptr
 #include <vector>
-#include <random> // mt19937, uniform_int_distribution
 
 class TheCubes {
 public:
@@ -56,8 +55,6 @@ private:
     glm::vec2 m_lastMousePos;
     unsigned int m_inputState;
     GlBuffer m_vaoId;
-    std::default_random_engine m_randEngine;
-    std::uniform_int_distribution<int> m_uniformDist;
     std::shared_ptr<ShadowMap> m_shadowMap;
     std::shared_ptr<Viewport> m_modelingViewport;
     std::shared_ptr<glm::mat4> m_modelingProjection;
