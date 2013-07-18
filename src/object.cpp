@@ -33,15 +33,15 @@ void Object::setViewport(std::shared_ptr<const Viewport> viewport) {
     m_viewport = viewport;
 }
 
-void Object::setProjection(std::shared_ptr<glm::mat4> projectionMatrix) {
+void Object::setProjection(std::shared_ptr<const glm::mat4> projectionMatrix) {
     m_projectionMatrix = projectionMatrix;
 }
 
-void Object::setCamera(std::shared_ptr<Camera> camera) {
+void Object::setCamera(std::shared_ptr<const Camera> camera) {
     m_camera = camera;
 }
 
-void Object::setLight(std::shared_ptr<PointLight> light) {
+void Object::setLight(std::shared_ptr<const PointLight> light) {
     m_light = light;
 }
 

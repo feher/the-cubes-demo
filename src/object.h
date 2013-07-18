@@ -29,9 +29,9 @@ public:
 
     void setId(int id);
     void setViewport(std::shared_ptr<const Viewport> viewPort);
-    void setProjection(std::shared_ptr<glm::mat4> projectionMatrix);
-    void setCamera(std::shared_ptr<Camera> camera);
-    void setLight(std::shared_ptr<PointLight> light);
+    void setProjection(std::shared_ptr<const glm::mat4> projectionMatrix);
+    void setCamera(std::shared_ptr<const Camera> camera);
+    void setLight(std::shared_ptr<const PointLight> light);
     void setRotation(glm::vec3 angle);
     void setScale(GLfloat scale);
     void setPosition(glm::vec3 position);
@@ -66,9 +66,9 @@ private:
 
     int m_id;
     std::shared_ptr<const Viewport> m_viewport;
-    std::shared_ptr<glm::mat4> m_projectionMatrix;
-    std::shared_ptr<Camera> m_camera;
-    std::shared_ptr<PointLight> m_light;
+    std::shared_ptr<const glm::mat4> m_projectionMatrix;
+    std::shared_ptr<const Camera> m_camera;
+    std::shared_ptr<const PointLight> m_light;
     bool m_isModelMatrixValid;
     bool m_isUnscaledModelMatrixValid;
     bool m_isInteractive;
