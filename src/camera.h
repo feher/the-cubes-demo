@@ -3,7 +3,8 @@
 
 #include <glm/glm.hpp> // vec*, mat*
 
-// The camera is looking towards its own Z axis.
+// The camera is looking towards its own positive Z axis.
+// The Y axis points up and the X axis points right.
 class Camera {
 public:
     explicit Camera(glm::vec3 position, glm::vec3 angles);
