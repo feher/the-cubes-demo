@@ -10,6 +10,10 @@ list(APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/3rdparty/rpavlik-cmake-module
 include(CreateLaunchers)
 include(MSVCMultipleProcessCompile)
 
+if (CMAKE_COMPILER_IS_GNUCXX)
+ set(CMAKE_CXX_FLAGS "-std=c++11")
+endif (CMAKE_COMPILER_IS_GNUCXX)
+
 include_directories(
  3rdparty/glfw-2.7.6/include/
  3rdparty/glm-0.9.4.0/
