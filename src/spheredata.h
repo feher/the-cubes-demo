@@ -12,7 +12,8 @@
 
 class SphereData : public TriangleMeshData {
 public:
-    explicit SphereData(const std::string& textureFile);
+    explicit SphereData(const std::string& textureFile,
+                        const std::string& normalMapFile);
 
     virtual GLuint vertexBufferId() const override;
     virtual GLuint elementBufferId() const override;
@@ -21,7 +22,9 @@ public:
                                         GLfloat scale) const override;
 
     static const std::string modelTextureFile;
+    static const std::string modelNormalFile;
     static const std::string actionTextureFile;
+    static const std::string actionNormalFile;
 
 private:
     static const unsigned int m_segments;

@@ -23,6 +23,8 @@ private:
 
     GLint am_vertexPositionId;
     GLint am_vertexNormalId;
+    GLint am_vertexTangentId;
+    GLint am_vertexBitangentId;
     GLint a_vertexUvId;
     GLint u_mvpId;
     GLint u_mId;
@@ -33,6 +35,7 @@ private:
     GLint u_lightPowerId;
     GLint u_highlightFactorId;
     GLint u_textureSamplerId;
+    GLint u_normalSamplerId;
     GLint u_materialAmbientFactorId;
     GLint u_materialSpecularFactorId;
 };

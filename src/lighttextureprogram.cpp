@@ -21,6 +21,8 @@ LightTextureProgram::LightTextureProgram(const string& vertexShaderPrefix,
 
     am_vertexPositionId = getAttribLocation("am_vertexPosition");
     am_vertexNormalId = getAttribLocation("am_vertexNormal");
+    am_vertexTangentId = getAttribLocation("am_vertexTangent");
+    am_vertexBitangentId = getAttribLocation("am_vertexBitangent");
     a_vertexUvId = getAttribLocation("a_vertexUv");
     u_mvpId = getUniformLocation("u_mvp");
     u_mId = getUniformLocation("u_m");
@@ -31,6 +33,7 @@ LightTextureProgram::LightTextureProgram(const string& vertexShaderPrefix,
     u_lightPowerId = getUniformLocation("u_lightPower");
     u_highlightFactorId = getUniformLocation("u_highlightFactor");
     u_textureSamplerId = getUniformLocation("u_textureSampler");
+    u_normalSamplerId = getUniformLocation("u_normalSampler");
     u_materialAmbientFactorId = getUniformLocation("u_materialAmbientFactor");
     u_materialSpecularFactorId = getUniformLocation("u_materialSpecularFactor");
 }
@@ -55,6 +58,10 @@ void LightTextureProgram::configure(TriangleMeshObject& object) {
     glBindTexture(GL_TEXTURE_2D, object.programTextureId());
     glUniform1i(u_textureSamplerId, 0);
 
+    glActiveTexture(GL_TEXTURE1);
+    glBindTexture(GL_TEXTURE_2D, object.programNormalMapId());
+    glUniform1i(u_normalSamplerId, 1);
+
     glBindBuffer(GL_ARRAY_BUFFER, object.programVertexBufferId());
     glEnableVertexAttribArray(am_vertexPositionId);
     glVertexAttribPointer(am_vertexPositionId, 3, GL_FLOAT, GL_FALSE,
@@ -64,6 +71,14 @@ void LightTextureProgram::configure(TriangleMeshObject& object) {
     glVertexAttribPointer(am_vertexNormalId, 3, GL_FLOAT, GL_FALSE,
                           sizeof(TriangleMeshData::VertexData),
                           reinterpret_cast<void*>(offsetof(TriangleMeshData::VertexData, normal)));
+    glEnableVertexAttribArray(am_vertexTangentId);
+    glVertexAttribPointer(am_vertexTangentId, 3, GL_FLOAT, GL_FALSE,
+                          sizeof(TriangleMeshData::VertexData),
+                          reinterpret_cast<void*>(offsetof(TriangleMeshData::VertexData, tangent)));
+    glEnableVertexAttribArray(am_vertexBitangentId);
+    glVertexAttribPointer(am_vertexBitangentId, 3, GL_FLOAT, GL_FALSE,
+                          sizeof(TriangleMeshData::VertexData),
+                          reinterpret_cast<void*>(offsetof(TriangleMeshData::VertexData, bitangent)));
     glEnableVertexAttribArray(a_vertexUvId);
     glVertexAttribPointer(a_vertexUvId, 2, GL_FLOAT, GL_FALSE,
                           sizeof(TriangleMeshData::VertexData),

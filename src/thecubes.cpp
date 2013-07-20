@@ -94,8 +94,10 @@ TheCubes::TheCubes(unsigned int screenWidth, unsigned int screenHeight)
     m_lightTextureProgram = make_shared<LightTextureProgram>();
     auto gridProgram = make_shared<GridProgram>();
 
-    m_modelCubeData = make_shared<CubeData>(CubeData::modelTextureFile);
-    m_modelSphereData = make_shared<SphereData>(SphereData::modelTextureFile);
+    m_modelCubeData = make_shared<CubeData>(CubeData::modelTextureFile,
+                                            CubeData::modelNormalFile);
+    m_modelSphereData = make_shared<SphereData>(SphereData::modelTextureFile,
+                                                SphereData::modelNormalFile);
 
     // Set up the modeling scene
     {
@@ -138,7 +140,8 @@ TheCubes::TheCubes(unsigned int screenWidth, unsigned int screenHeight)
         auto camera = make_shared<Camera>(vec3(0, 2, 5), vec3(180, -30, -5));
         auto light = make_shared<PointLight>(vec3(0, 1, 10), vec3(1, 1, 1), 100.0f);
         auto cube = make_shared<ActionObject>(1.0f);
-        cube->setData(make_shared<CubeData>(CubeData::actionTextureFile));
+        cube->setData(
+            make_shared<CubeData>(CubeData::actionTextureFile, CubeData::actionNormalFile));
         cube->setProgram(m_lightTextureProgram);
         cube->setViewport(viewport);
         cube->setProjection(projection);
@@ -169,7 +172,8 @@ TheCubes::TheCubes(unsigned int screenWidth, unsigned int screenHeight)
         auto camera = make_shared<Camera>(vec3(0.2f, 1.7, 3.5), vec3(180, -25, -5));
         auto light = make_shared<PointLight>(vec3(0, 1, 9), vec3(1, 1, 1), 80.0f);
         auto sphere = make_shared<ActionObject>(1.0f);
-        sphere->setData(make_shared<SphereData>(SphereData::actionTextureFile));
+        sphere->setData(
+            make_shared<SphereData>(SphereData::actionTextureFile, SphereData::actionNormalFile));
         sphere->setProgram(m_lightTextureProgram);
         sphere->setViewport(viewport);
         sphere->setProjection(projection);

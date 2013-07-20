@@ -29,6 +29,7 @@ public:
     inline const glm::vec3& programMaterialAmbientFactor() const;
     inline const glm::vec3& programMaterialSpecularFactor() const;
     inline GLuint programTextureId() const;
+    inline GLuint programNormalMapId() const;
     inline GLuint programVertexBufferId() const;
 
 private:
@@ -87,6 +88,10 @@ const glm::vec3& TriangleMeshObject::programMaterialSpecularFactor() const {
 
 GLuint TriangleMeshObject::programTextureId() const {
     return m_data->textureId();
+}
+
+GLuint TriangleMeshObject::programNormalMapId() const {
+    return m_data->normalMapId();
 }
 
 GLuint TriangleMeshObject::programVertexBufferId() const {

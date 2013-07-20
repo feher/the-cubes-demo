@@ -1,4 +1,4 @@
-NOTE: Bitbucket may display the wrong "Size" for the repository (next to the "(download)" link)!
+﻿NOTE: Bitbucket may display the wrong "Size" for the repository (next to the "(download)" link)!
       Just start the download and hopefully your web browser will show the correct
       size (should be less than 5 MiB).
 
@@ -23,9 +23,9 @@ In case it does not start up, try one of these:
 The scene can be controlled with the mouse and keyboard.
 
 Controls:
-- Create marble cube             : Left mouse button on "Try me" cube
-- Create marble sphere           : Left mouse button on "Try me" sphere
-- Remove marble object           : Left mouse button on marble object
+- Create model cube              : Left mouse button on "Try me" cube
+- Create model sphere            : Left mouse button on "Try me" sphere
+- Remove model object            : Left mouse button on model object
 - Move camera up/down/left/right : Hold left mouse button + drag on empty area
 - Move camera forward/back       : Hold left control + move mouse up/down
 - Pitch/yaw camera               : Hold left shift + move mouse
@@ -37,7 +37,7 @@ Controls:
 - Enable/disable shadow map view : Press the D key.
 - Exit                           : Escape key or close the window.
 
-There is an exit animation (all marbles disappear) and the window closes only when the
+There is an exit animation (all models disappear) and the window closes only when the
 animation has finished.
 
 Directory structure
@@ -120,7 +120,7 @@ Class hierarchy
  - Grid :               Object representing the modeling grid.
  - ShadowMapView :      Displays the generated shadow map texture.
  - TriangleMeshObject : Base class for triangle mesh objects.
-  - ActionObject :      The pressable action objects at the lower/upper left corner that create marbles.
+  - ActionObject :      The pressable action objects at the lower/upper left corner that create models.
   - ModelObject :       Represents the marble objects that can be created/deleted/moved.
 
 - ObjectData :        Base class for data used by object instances.

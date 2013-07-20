@@ -4,6 +4,7 @@
 
 #include <GL/glfw.h> // glfw*
 #include <glm/glm.hpp> // vec*, mat*
+#include <glm/gtc/matrix_transform.hpp> // rotate
 
 #include <cmath> // sin, cos
 
@@ -11,13 +12,16 @@ using namespace std;
 using namespace glm;
 
 const string SphereData::modelTextureFile = "./data/modelsphere.tga";
+const string SphereData::modelNormalFile = "./data/modelsphere_normal.tga";
 const string SphereData::actionTextureFile = "./data/actionsphere.tga";
+const string SphereData::actionNormalFile = "./data/actionsphere_normal.tga";
 
 const unsigned int SphereData::m_segments = 12;
 const unsigned int SphereData::m_rings = 12;
 
-SphereData::SphereData(const string& textureFile)
-    : TriangleMeshData(2.0f, vec3(0.1f, 0.1f, 0.1f), vec3(0.3f, 0.3f, 0.3f), textureFile) {
+SphereData::SphereData(const string& textureFile, const string& normalMapFile)
+    : TriangleMeshData(2.0f, vec3(0.1f, 0.1f, 0.1f), vec3(0.3f, 0.3f, 0.3f),
+                       textureFile, normalMapFile) {
 
     // Generate geometry.
 
@@ -27,20 +31,26 @@ SphereData::SphereData(const string& textureFile)
     for (auto i = 0u; i < m_rings + 2; ++i) {
         for (auto j = 0u; j < m_segments + 1; ++j) {
             // Calculate the vertex position and normal.
-            const auto phi = j * 2 * Geom::PI / m_segments; // phi [0, 360]
+            const auto phi = j * 360.0f / m_segments; // phi [0, 360]
             // N rings divide the sphere to N+1 parts.
-            const auto theta = (Geom::PI / 2.0f) - (i * Geom::PI / (m_rings + 1)); // theta [90, -90]
-            const auto& p = vec3(cos(theta) * cos(phi),
-                                    cos(theta) * sin(phi),
-                                    sin(theta));
+            const auto theta = 90.0f - (i * 180.0f / (m_rings + 1)); // theta [90, -90]
             const auto k = i * (m_segments + 1) + j;
-            m_vertexData[k].position[0] = p.x;
-            m_vertexData[k].position[1] = p.z;
-            m_vertexData[k].position[2] = -p.y;
-            // The normal exactly points to the point.
-            m_vertexData[k].normal[0] = p.x;
-            m_vertexData[k].normal[1] = p.z;
-            m_vertexData[k].normal[2] = -p.y;
+            const auto& tangents =
+                glm::rotate(
+                    glm::rotate(mat4(1.0f), phi, vec3(0.0f, 0.0f, 1.0f)),
+                    theta, vec3(0.0f, 1.0f, 0.0f));
+            m_vertexData[k].position[0] = tangents[0].x;
+            m_vertexData[k].position[1] = -tangents[0].z;
+            m_vertexData[k].position[2] = -tangents[0].y;
+            m_vertexData[k].normal[0] = tangents[0].x;
+            m_vertexData[k].normal[1] = -tangents[0].z;
+            m_vertexData[k].normal[2] = -tangents[0].y;
+            m_vertexData[k].tangent[0] = tangents[1].x;
+            m_vertexData[k].tangent[1] = -tangents[1].z;
+            m_vertexData[k].tangent[2] = -tangents[1].y;
+            m_vertexData[k].bitangent[0] = tangents[2].x;
+            m_vertexData[k].bitangent[1] = -tangents[2].z;
+            m_vertexData[k].bitangent[2] = -tangents[2].y;
             // Calculate the UV coordinates.
             auto uv = vec2(j / float(m_segments), i / float(m_rings + 1.0));
             // Things are different at the poles.

@@ -29,9 +29,9 @@ void LightTextureShadowProgram::configure(ModelObject& object) {
 
     glUniform3fv(uw_directionalLightDirectionId, 1, &object.programDirectionalLightDirection()[0]);
 
-    glActiveTexture(GL_TEXTURE1);
+    glActiveTexture(GL_TEXTURE2);
     glBindTexture(GL_TEXTURE_2D, object.programShadowTextureId());
-    glUniform1i(u_shadowTextureSamplerId, 1);
+    glUniform1i(u_shadowTextureSamplerId, 2);
 
 }
 
