@@ -46,6 +46,7 @@ add_executable(thecubes
  src/compassprogram.cpp
  src/cubedata.cpp
  src/file.cpp
+ src/frametimer.cpp
  src/geom.cpp
  src/grid.cpp
  src/griddata.cpp

@@ -18,6 +18,7 @@
 #include "shadowmapviewprogram.h"
 #include "cubedata.h"
 #include "spheredata.h"
+#include "frametimer.h"
 
 #include <glm/glm.hpp> // vec*, mat*
 #include <glm/gtc/matrix_transform.hpp>
@@ -26,6 +27,7 @@
 #include <GL/glfw.h> // glfw*
 
 #include <limits> // numeric_limits
+#include <iostream>
 
 using namespace std;
 using namespace glm;
@@ -560,7 +562,8 @@ void TheCubes::cleanupDeadModelObjects() {
 void TheCubes::run() {
     m_exitting = false;
     m_lastTime = glfwGetTime();
-    do {        
+    auto frameTimer = FrameTimer();
+    do {
         updateAndRender();
         handleInput();
         cleanupDeadModelObjects();
@@ -568,6 +571,7 @@ void TheCubes::run() {
              || (!glfwGetWindowParam(GLFW_OPENED))) {
             killModelObjects();
             m_exitting = true;
-        } 
+        }
+        frameTimer.tickAndPrint(cout);
     } while (!m_exitting || !m_modelObjects.empty());
 }

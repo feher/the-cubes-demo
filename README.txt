@@ -100,6 +100,8 @@ Class hierarchy
 
 - File : Basic utility functions for file handling.
 
+- FrameTimer : A simple FPS counter.
+
 - Geom : Geometry functions used for object picking. E.g. line-sphere intersection.
 
 - Viewport : Represents an OpenGL viewport.
