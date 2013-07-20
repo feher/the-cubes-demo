@@ -32,6 +32,24 @@
 using namespace std;
 using namespace glm;
 
+enum {
+    NO_INPUT = 0,
+    SHIFT_PRESSED = 1 << 0,
+    CTRL_PRESSED = 1 << 1,
+    ALT_PRESSED = 1 << 2,
+    S_PRESSED = 1 << 3,
+    D_PRESSED = 1 << 4,
+    MOUSE_PRESS_STARTED = 1 << 5,
+    MOUSE_CLICKED = 1 << 6,
+    MOUSE_MOVED = 1 << 7,
+    MOUSE_POS_VALID = 1 << 8,
+    MOUSE_PRESSED = 1 << 9,
+};
+
+enum {
+    MOVING_OBJECT, MOVING_CAMERA, NO_STATE
+};
+
 TheCubes::TheCubes(unsigned int screenWidth, unsigned int screenHeight)
     : m_screenWidth(screenWidth),
       m_screenHeight(screenHeight),
@@ -42,9 +60,8 @@ TheCubes::TheCubes(unsigned int screenWidth, unsigned int screenHeight)
       m_wasSDown(false),
       m_wasDDown(false),
       m_isMouseButtonPressed(false),
-      m_isMouseMoved(false),
       m_lastMousePos(0, 0),
-      m_inputState(NONE) {
+      m_inputState(NO_STATE) {
     glfwOpenWindowHint(GLFW_OPENGL_VERSION_MAJOR, 2);
     glfwOpenWindowHint(GLFW_OPENGL_VERSION_MINOR, 1);
     glfwOpenWindowHint(GLFW_WINDOW_NO_RESIZE, GL_TRUE);
@@ -406,31 +423,27 @@ void TheCubes::clearHoveredState() {
     }
 }
 
-void TheCubes::handleInput() {
-    // Determine mouse and keyboard status.
-    auto isShiftPressed = (glfwGetKey(GLFW_KEY_LSHIFT) == GLFW_PRESS);
-    auto isControlPressed = (glfwGetKey(GLFW_KEY_LCTRL) == GLFW_PRESS);
-    auto isAltPressed = (glfwGetKey(GLFW_KEY_LALT) == GLFW_PRESS);
+int TheCubes::inputFlags(vec2& mousePosDelta) {
+    int flags = NO_INPUT;
+
     auto isSDown = (glfwGetKey('S') == GLFW_PRESS);
     auto isDDown = (glfwGetKey('D') == GLFW_PRESS);
-    auto isSPressed = false;
-    auto isDPressed = false;
-    auto isMouseButtonPressStarted = false;
-    auto isMouseClicked = false;
-    auto isMouseMoved = false;
-    auto isMousePosValid = false;
     auto mousePos = vec2(-1, -1);
     auto delta = vec2(0, 0);
 
+    flags |= SHIFT_PRESSED * (glfwGetKey(GLFW_KEY_LSHIFT) == GLFW_PRESS);
+    flags |= CTRL_PRESSED * (glfwGetKey(GLFW_KEY_LCTRL) == GLFW_PRESS);
+    flags |= ALT_PRESSED * (glfwGetKey(GLFW_KEY_LALT) == GLFW_PRESS);
+
     if (m_wasSDown && !isSDown) {
         m_wasSDown = false;
-        isSPressed = true;
+        flags |= S_PRESSED;
     }
     m_wasSDown = isSDown;
 
     if (m_wasDDown && !isDDown) {
         m_wasDDown = false;
-        isDPressed = true;
+        flags |= D_PRESSED;
     }
     m_wasDDown = isDDown;
 
@@ -440,102 +453,142 @@ void TheCubes::handleInput() {
     delta = mousePos - m_lastMousePos;
     if (0 <= mx && mx < int(m_screenWidth)
         && 0 <= my && my < int(m_screenHeight)) {
-        isMousePosValid = true;
+        flags |= MOUSE_POS_VALID;
         if (m_lastMousePos != mousePos) {
-            isMouseMoved = true;
+            flags |= MOUSE_MOVED;
             m_lastMousePos = mousePos;
         }
     }
 
     auto mouseButtonState = glfwGetMouseButton(GLFW_MOUSE_BUTTON_LEFT);
     if (mouseButtonState == GLFW_PRESS) {
+        flags |= MOUSE_PRESSED;
         if (!m_isMouseButtonPressed) {
             m_isMouseButtonPressed = true;
-            isMouseButtonPressStarted = true;
+            flags |= MOUSE_PRESS_STARTED;
         }
     }
     if (mouseButtonState == GLFW_RELEASE && m_isMouseButtonPressed) {
         // Mouse button was pressed and then released.
         m_isMouseButtonPressed = false;
-        isMouseClicked = true;
+        flags |= MOUSE_CLICKED;
     }
 
-    // Act on input.
+    mousePosDelta = delta;
+    return flags;
+}
+
+void TheCubes::handleInput() {
+    auto delta = vec2(0.0f);
+    auto flags = inputFlags(delta);
 
     switch (m_inputState) {
-    case NONE:
-        {
-            if (!isShiftPressed && !isControlPressed && isMouseClicked && isMousePosValid) {
+    case NO_STATE:
+        switch (flags) {
+        case (MOUSE_POS_VALID | MOUSE_CLICKED) : {
                 // Clicked on object (press + release, not just press)
                 auto object = selectedObject(m_lastMousePos);
                 if (object && !isActionObject(object)
                     && (object->state() == Object::HOVERED || object->state() == Object::NONE)) {
                     object->setState(Object::DISAPPEARING);
                 }
-            } else if (!isShiftPressed && !isControlPressed && !isAltPressed && isMouseMoved) {
-                if (m_isMouseButtonPressed) {
-                    auto object = selectedObject(m_lastMousePos);
-                    if (object && !isActionObject(object)) {
-                        // Move object
-                        m_movingObject = object;
-                        m_inputState = MOVING_OBJECT;
-                    } else {
-                        // Move camera on (X, Y) plane
-                        m_inputState = MOVING_CAMERA;
-                    }
-                } else if (isMousePosValid) {
-                    // Hovering over objects
-                    clearHoveredState();
-                    auto object = selectedObject(m_lastMousePos);
-                    if (object && object->state() == Object::NONE) {
-                        object->setState(Object::HOVERED);
-                    }
+            } break;
+        case (MOUSE_POS_VALID | MOUSE_MOVED | MOUSE_PRESSED) : {
+                auto object = selectedObject(m_lastMousePos);
+                if (object && !isActionObject(object)) {
+                    // Move object along Camera's (X, Y) plane.
+                    m_movingObject = object;
+                    m_inputState = MOVING_OBJECT;
+                } else {
+                    // Move camera on (X, Y) plane.
+                    m_inputState = MOVING_CAMERA;
                 }
-            } else if (!isShiftPressed && !isControlPressed && !isAltPressed && isMouseButtonPressStarted) {
+            } break;
+        case (MOUSE_POS_VALID | MOUSE_MOVED | MOUSE_PRESSED | CTRL_PRESSED) : {
+                auto object = selectedObject(m_lastMousePos);
+                if (object && !isActionObject(object)) {
+                    // Move object along Camera's Z axis.
+                    m_movingObject = object;
+                    m_inputState = MOVING_OBJECT;
+                }
+            } break;
+        case (MOUSE_POS_VALID | MOUSE_MOVED) : {
+                // Hovering over objects.
+                clearHoveredState();
+                auto object = selectedObject(m_lastMousePos);
+                if (object && object->state() == Object::NONE) {
+                    object->setState(Object::HOVERED);
+                }
+            }
+            break;
+        case (MOUSE_POS_VALID | MOUSE_PRESSED | MOUSE_PRESS_STARTED) : {
+                // Create new object.
                 auto object = selectedObject(m_lastMousePos);
                 if (isActionObject(object)
                     && (object->state() == Object::NONE || object->state() == Object::HOVERED)) {
                     object->setState(Object::PRESSED);
                     createNewObject(object, vec3(0, 0, 10));
                 }
-            } else if (isMouseMoved) {
+            } break;
+        case (MOUSE_POS_VALID | MOUSE_MOVED | SHIFT_PRESSED) : {
+                // Pitch / Yaw camera
                 const auto f = 0.1f;
-                if (isShiftPressed) {
-                    // Pitch / Yaw camera
-                    m_modelingCamera->updateAngles(vec3(delta.x * f, -delta.y * f, 0));
-                } else if (isAltPressed) {
-                    // Roll camera
-                    m_modelingCamera->updateAngles(vec3(0, 0, -delta.y * f));
-                } else if (isControlPressed) {
-                    // Move camera along Z axis
-                    m_modelingCamera->updatePosition(vec3(0, 0, -delta.y * f));
-                }
-            } else if (isSPressed) {
-                setShadowMapEnabled(!m_isShadowMapEnabled);
-            } else if (isDPressed) {
-                m_isShadowMapViewEnabled = !m_isShadowMapViewEnabled;
-            }
-        }
+                m_modelingCamera->updateAngles(vec3(delta.x * f, -delta.y * f, 0));
+            } break;
+        case (MOUSE_POS_VALID | MOUSE_MOVED | ALT_PRESSED) : {
+                // Roll camera
+                const auto f = 0.1f;
+                m_modelingCamera->updateAngles(vec3(0, 0, -delta.y * f));
+            } break;
+        case (MOUSE_POS_VALID | MOUSE_MOVED | CTRL_PRESSED) : {
+                // Move camera along Z axis
+                const auto f = 0.1f;
+                m_modelingCamera->updatePosition(vec3(0, 0, -delta.y * f));
+            } break;
+        case (MOUSE_POS_VALID | S_PRESSED) :
+            setShadowMapEnabled(!m_isShadowMapEnabled);
+            break;
+        case (MOUSE_POS_VALID | D_PRESSED) :
+            m_isShadowMapViewEnabled = !m_isShadowMapViewEnabled;
+            break;
+        default:
+            break;
+        } // switch inputFlags
         break;
     case MOVING_OBJECT:
-        {
-            if (m_isMouseButtonPressed) {
+        switch (flags) {
+        case (MOUSE_POS_VALID | MOUSE_MOVED | MOUSE_PRESSED) : {
+                // Move object along Camera's (X, Y) plane.
                 const auto f = 0.01f;
                 m_movingObject->updatePosition(vec3(delta.x * f, -delta.y * f, 0.0f));
-            } else {
-                m_movingObject = nullptr;
-                m_inputState = NONE;
-            }
+            } break;
+        case (MOUSE_POS_VALID | MOUSE_MOVED | MOUSE_PRESSED | CTRL_PRESSED) : {
+                // Move object along Camera's Z axis.
+                const auto f = 0.05f;
+                m_movingObject->updatePosition(vec3(0.0f, 0.0f, delta.y * f));
+            } break;
+        case (MOUSE_POS_VALID | MOUSE_MOVED) :
+            // Stop moving object.
+            m_movingObject = nullptr;
+            m_inputState = NO_STATE;
+            break;
+        default:
+            break;
         }
         break;
     case MOVING_CAMERA:
-        {
-            if (m_isMouseButtonPressed) {
+        switch (flags) {
+        case (MOUSE_POS_VALID | MOUSE_MOVED | MOUSE_PRESSED) : {
+                // Move camera along (X, Y) plane.
                 const auto f = 0.01f;
                 m_modelingCamera->updatePosition(vec3(delta.x * f, delta.y * f, 0));
-            } else {
-                m_inputState = NONE;
-            }
+            } break;
+        case (MOUSE_POS_VALID | MOUSE_MOVED) :
+            // Stop moving camera.
+            m_inputState = NO_STATE;
+            break;
+        default:
+            break;
         }
         break;
     default:

@@ -30,7 +30,9 @@ Controls:
 - Move camera forward/back       : Hold left control + move mouse up/down
 - Pitch/yaw camera               : Hold left shift + move mouse
 - Roll camera                    : Hold left alt + move mouse
-- Move object                    : Hold left mouse button + drag on marble object
+- Move object                    : Hold left mouse button + drag on model object
+- Move object in/out             : Hold left Control + left mouse button + move mouse up/down
+                                   on model object. :)
 - Enable/disable shadow mapping  : Press the S key.
 - Enable/disable shadow map view : Press the D key.
 - Exit                           : Escape key or close the window.

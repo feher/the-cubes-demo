@@ -26,16 +26,13 @@ public:
     void run();
 
 private:
-    enum {
-        MOVING_OBJECT, MOVING_CAMERA, NONE
-    };
-
     void createNewObject(const std::shared_ptr<const Object>& actionObject,
                          const glm::vec3& positionInCamera);
     void setShadowMapEnabled(bool isEnabled);
     bool isActionObject(const std::shared_ptr<const Object>& object) const;
     std::shared_ptr<Object> selectedObject(const glm::vec2& mousePos) const;
     void clearHoveredState();
+    int inputFlags(glm::vec2& mousePosDelta);
     void handleInput();
     void updateAndRender();
     void killModelObjects();
@@ -51,7 +48,6 @@ private:
     bool m_wasSDown;
     bool m_wasDDown;
     bool m_isMouseButtonPressed;
-    bool m_isMouseMoved;
     glm::vec2 m_lastMousePos;
     unsigned int m_inputState;
     GlBuffer m_vaoId;
