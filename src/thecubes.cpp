@@ -572,6 +572,7 @@ void TheCubes::handleInput() {
                 m_movingObject->updatePosition(vec3(0.0f, 0.0f, delta.y * f));
             } break;
         case (MOUSE_POS_VALID | MOUSE_MOVED) :
+        case (MOUSE_POS_VALID) :
             // Stop moving object.
             m_movingObject = nullptr;
             m_inputState = NO_STATE;
@@ -588,6 +589,7 @@ void TheCubes::handleInput() {
                 m_modelingCamera->updatePosition(vec3(delta.x * f, delta.y * f, 0));
             } break;
         case (MOUSE_POS_VALID | MOUSE_MOVED) :
+        case (MOUSE_POS_VALID) :
             // Stop moving camera.
             m_inputState = NO_STATE;
             break;
