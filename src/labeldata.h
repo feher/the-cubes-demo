@@ -1,5 +1,5 @@
-#ifndef COMPASS_LABEL_DATA_H
-#define COMPASS_LABEL_DATA_H
+#ifndef LABEL_DATA_H
+#define LABEL_DATA_H
 
 #include "objectdata.h"
 #include "glbuffer.h"
@@ -7,41 +7,45 @@
 #include <GL/glew.h> // GLuint, GLfloat, GLubyte
 
 #include <string>
+#include <vector>
 
-class CompassLabelData : public ObjectData {
+class LabelData : public ObjectData {
 public:
-    CompassLabelData();
+    explicit LabelData(const std::string& textureFile,
+                       int uvWidthSplit, int uvHeightSplit);
 
     inline GLuint vertexBufferId() const;
     inline GLuint uvBufferId() const;
     inline GLuint elementBufferId() const;
     inline GLuint textureId() const;
 
+    static const std::string compassLabelTextureFile;
+    static const std::string cursorTextureFile;
+
 private:
-    static const std::string m_textureFile;
     static const GLfloat m_vertices[4 * 3];
-    static const GLfloat m_uvs[4 * 2 * 3];
     static const GLubyte m_elements[6];
 
+    std::vector<GLfloat> m_uvs;
     GlBuffer m_vertexBufferId;
     GlBuffer m_uvBufferId;
     GlBuffer m_elementBufferId;
     GlBuffer m_textureId;
 };
 
-GLuint CompassLabelData::vertexBufferId() const {
+GLuint LabelData::vertexBufferId() const {
     return m_vertexBufferId.id();
 }
 
-GLuint CompassLabelData::uvBufferId() const {
+GLuint LabelData::uvBufferId() const {
     return m_uvBufferId.id();
 }
 
-GLuint CompassLabelData::elementBufferId() const {
+GLuint LabelData::elementBufferId() const {
     return m_elementBufferId.id();
 }
 
-GLuint CompassLabelData::textureId() const {
+GLuint LabelData::textureId() const {
     return m_textureId.id();
 }
 

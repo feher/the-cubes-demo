@@ -41,16 +41,17 @@ add_executable(thecubes
  src/compass.cpp
  src/compassdata.cpp
  src/compasslabel.cpp
- src/compasslabeldata.cpp
- src/compasslabelprogram.cpp
  src/compassprogram.cpp
  src/cubedata.cpp
+ src/cursor.cpp
  src/file.cpp
  src/frametimer.cpp
  src/geom.cpp
  src/grid.cpp
  src/griddata.cpp
  src/gridprogram.cpp
+ src/labeldata.cpp
+ src/labelprogram.cpp
  src/lighttextureprogram.cpp
  src/lighttextureshadowprogram.cpp
  src/main.cpp

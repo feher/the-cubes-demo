@@ -10,8 +10,8 @@
 #include "gridprogram.h"
 #include "compassdata.h"
 #include "compassprogram.h"
-#include "compasslabeldata.h"
-#include "compasslabelprogram.h"
+#include "labeldata.h"
+#include "labelprogram.h"
 #include "lighttextureprogram.h"
 #include "lighttextureshadowprogram.h"
 #include "shadowmapprogram.h"
@@ -39,11 +39,12 @@ enum {
     ALT_PRESSED = 1 << 2,
     S_PRESSED = 1 << 3,
     D_PRESSED = 1 << 4,
-    MOUSE_PRESS_STARTED = 1 << 5,
-    MOUSE_CLICKED = 1 << 6,
-    MOUSE_MOVED = 1 << 7,
-    MOUSE_POS_VALID = 1 << 8,
-    MOUSE_PRESSED = 1 << 9,
+    M_PRESSED = 1 << 5,
+    MOUSE_PRESS_STARTED = 1 << 6,
+    MOUSE_CLICKED = 1 << 7,
+    MOUSE_MOVED = 1 << 8,
+    MOUSE_POS_VALID = 1 << 9,
+    MOUSE_PRESSED = 1 << 10,
 };
 
 enum {
@@ -59,7 +60,9 @@ TheCubes::TheCubes(unsigned int screenWidth, unsigned int screenHeight)
       m_isShadowMapViewEnabled(false),
       m_wasSDown(false),
       m_wasDDown(false),
+      m_wasMDown(false),
       m_isMouseButtonPressed(false),
+      m_isSystemCursorEnabled(false),
       m_lastMousePos(0, 0),
       m_inputState(NO_STATE) {
     glfwOpenWindowHint(GLFW_OPENGL_VERSION_MAJOR, 2);
@@ -77,7 +80,7 @@ TheCubes::TheCubes(unsigned int screenWidth, unsigned int screenHeight)
 
     glfwSetWindowTitle("The Cubes");
     glfwSetMousePos(m_screenWidth / 2, m_screenHeight / 2);
-    glfwEnable(GLFW_MOUSE_CURSOR);
+    glfwDisable(GLFW_MOUSE_CURSOR);
     glfwEnable(GLFW_STICKY_KEYS);
 
     const float bgColor = 0.3f;
@@ -93,6 +96,7 @@ TheCubes::TheCubes(unsigned int screenWidth, unsigned int screenHeight)
     m_lightTextureShadowProgram = make_shared<LightTextureShadowProgram>();
     m_lightTextureProgram = make_shared<LightTextureProgram>();
     auto gridProgram = make_shared<GridProgram>();
+    auto labelProgram = make_shared<LabelProgram>();
 
     m_modelCubeData = make_shared<CubeData>(CubeData::modelTextureFile,
                                             CubeData::modelNormalFile);
@@ -219,8 +223,9 @@ TheCubes::TheCubes(unsigned int screenWidth, unsigned int screenHeight)
         compass->setInteractive(false);
 
         auto label = make_shared<CompassLabel>(compass);
-        label->setData(make_shared<CompassLabelData>());
-        label->setProgram(make_shared<CompassLabelProgram>());
+        label->setData(
+            make_shared<LabelData>(LabelData::compassLabelTextureFile, 3, 1));
+        label->setProgram(labelProgram);
         label->setViewport(viewport);
         label->setProjection(projection);
         label->setCamera(camera);
@@ -238,6 +243,22 @@ TheCubes::TheCubes(unsigned int screenWidth, unsigned int screenHeight)
         m_lights.push_back(light);
         m_hudObjects.push_back(compass);
         m_hudObjects.push_back(label);
+    }
+
+    // Set up the cursor.
+    {
+        m_cursor = make_shared<Cursor>();
+        m_cursor->setData(
+            make_shared<LabelData>(LabelData::cursorTextureFile, 1, 1));
+        m_cursor->setProgram(labelProgram);
+        m_cursor->setViewport(m_modelingViewport);
+        m_cursor->setRotation(vec3(0, 0, 0));
+        m_cursor->setScale(0.03f);
+        m_cursor->setPosition(vec3(0, 0, 0));
+        m_cursor->setState(Object::NONE);
+        m_cursor->setInteractive(false);
+
+        m_hudObjects.push_back(m_cursor);
     }
 
     // Initialize shadow mapping related objects.
@@ -372,15 +393,9 @@ shared_ptr<Object> TheCubes::selectedObject(const vec2& mousePos) const {
             || camera != object->camera().get()
             || projectionMatrix != object->projectionMatrix().get()) {
             // Calculate the ray coordinates only if necessary.
-            auto vpx = object->viewport()->x;
-            auto vpy = object->viewport()->y;
-            auto vpw = object->viewport()->width;
-            auto vph = object->viewport()->height;
-            // The mouse position is in physical screen dimensions.
-            // The mouse position's Y axis points down, but the viewport's Y axis
-            // points up. So we must invert it.
-            // vpp = mouse poistion in the viewport coordinate system.
-            const auto& vpp = vec2(mousePos.x - vpx, m_screenHeight - mousePos.y - vpy);
+            const auto vpw = object->viewport()->width;
+            const auto vph = object->viewport()->height;
+            const auto& vpp = object->viewport()->positionFromScreen(mousePos, m_screenHeight);
             if (vpp.x < 0 || vpp.x >= vpw || vpp.y < 0 || vpp.y >= vph) {
                 // The vpp (viewport position) falls outside of the viewport.
                 continue;
@@ -432,6 +447,7 @@ int TheCubes::inputFlags(vec2& mousePosDelta) {
 
     auto isSDown = (glfwGetKey('S') == GLFW_PRESS);
     auto isDDown = (glfwGetKey('D') == GLFW_PRESS);
+    auto isMDown = (glfwGetKey('M') == GLFW_PRESS);
     auto mousePos = vec2(-1, -1);
     auto delta = vec2(0, 0);
 
@@ -450,6 +466,12 @@ int TheCubes::inputFlags(vec2& mousePosDelta) {
         flags |= D_PRESSED;
     }
     m_wasDDown = isDDown;
+
+    if (m_wasMDown && !isMDown) {
+        m_wasMDown = false;
+        flags |= M_PRESSED;
+    }
+    m_wasMDown = isMDown;
 
     int mx, my;
     glfwGetMousePos(&mx, &my);
@@ -485,6 +507,15 @@ int TheCubes::inputFlags(vec2& mousePosDelta) {
 void TheCubes::handleInput() {
     auto delta = vec2(0.0f);
     auto flags = inputFlags(delta);
+
+    if ((flags & MOUSE_MOVED)) {
+        // Move the cursor.
+        auto vpp = m_cursor->viewport()->positionFromScreen(m_lastMousePos, m_screenHeight);
+        vpp.x /= m_cursor->viewport()->width;
+        vpp.y /= m_cursor->viewport()->height;
+        vpp = vpp * 2.0f - 1.0f;
+        m_cursor->setPosition(vec3(vpp.x, vpp.y, 0));
+    }
 
     switch (m_inputState) {
     case NO_STATE:
@@ -555,6 +586,13 @@ void TheCubes::handleInput() {
         case (MOUSE_POS_VALID | D_PRESSED) :
             m_isShadowMapViewEnabled = !m_isShadowMapViewEnabled;
             break;
+        case (MOUSE_POS_VALID | M_PRESSED) :
+            m_isSystemCursorEnabled = !m_isSystemCursorEnabled;
+            if (m_isSystemCursorEnabled) {
+                glfwEnable(GLFW_MOUSE_CURSOR);
+            } else {
+                glfwDisable(GLFW_MOUSE_CURSOR);
+            }
         default:
             break;
         } // switch inputFlags

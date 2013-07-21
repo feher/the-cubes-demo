@@ -35,6 +35,7 @@ Controls:
                                    on model object. :)
 - Enable/disable shadow mapping  : Press the S key.
 - Enable/disable shadow map view : Press the D key.
+- Show/hide system mouse cursor  : Press the M key.
 - Exit                           : Escape key or close the window.
 
 There is an exit animation (all models disappear) and the window closes only when the
@@ -117,6 +118,7 @@ Class hierarchy
 - Object :              Base class for any kind of visible on-screen object.
  - Compass :            The small orientation indicator in the lower right corner.
  - CompassLabel:        Represents the labes (Y, Y and Z) of the axes on the compass.
+ - Cursor :             The mouse cursor on the screen.
  - Grid :               Object representing the modeling grid.
  - ShadowMapView :      Displays the generated shadow map texture.
  - TriangleMeshObject : Base class for triangle mesh objects.
@@ -125,8 +127,8 @@ Class hierarchy
 
 - ObjectData :        Base class for data used by object instances.
  - CompassData :      Data used by Compass objects.
- - CompassLabelData : Data used by the axes labels of the compass.
  - GridData :         Data used by Grid objects.
+ - LabelData :        Data used by 2D "labels" (e.g. on the compass, the cursor).
  - TriangleMeshData : Data that describes triangle based meshes.
    - CubeData :       Data used by cube objects.
    - SphereData :     Data used by sphere objects.
@@ -134,9 +136,9 @@ Class hierarchy
 - Program : Base class for shader programs used by object instances.
 - ObjectProgram : Template base class for shader programs used by object instances.
                   Tells whether a program can be used with a specific Object.
- - CompassLabelProgram :       Shader program used by CompassLabel objects.
  - CompassProgram :            Shader program used by Compass objects.
  - GridProgram :               Shader program used by Grid objects.
+ - LabelProgram :              Shader program used by CompassLabel objects.
  - LightTextureProgram :       Shader program that does texturing and lighting.
  - LightTextureShadowProgram : Shader program that does texturing, lighting and shadow mapping.
  - ShadowMapProgram :          Shader program for generating the shadow map texture.

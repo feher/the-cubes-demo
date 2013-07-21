@@ -2,6 +2,7 @@
 #define THE_CUBES_H
 
 #include "rglfw.h"
+#include "cursor.h"
 #include "camera.h"
 #include "object.h"
 #include "trianglemeshobject.h"
@@ -47,13 +48,16 @@ private:
     bool m_isShadowMapViewEnabled;
     bool m_wasSDown;
     bool m_wasDDown;
+    bool m_wasMDown;
     bool m_isMouseButtonPressed;
+    bool m_isSystemCursorEnabled;
     glm::vec2 m_lastMousePos;
     unsigned int m_inputState;
     GlBuffer m_vaoId;
     std::shared_ptr<ShadowMap> m_shadowMap;
     std::shared_ptr<Viewport> m_modelingViewport;
     std::shared_ptr<glm::mat4> m_modelingProjection;
+    std::shared_ptr<Cursor> m_cursor;
     std::shared_ptr<Camera> m_modelingCamera;
     std::shared_ptr<PointLight> m_modelingLight;
     std::shared_ptr<Object> m_actionCube;

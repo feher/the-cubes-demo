@@ -1,9 +1,5 @@
 #include "viewport.h"
 
-#include "geom.h"
-
-#include <GL/glew.h> // GL*
-
 const Viewport* Viewport::m_activeViewport = nullptr;
 
 Viewport::Viewport(int lx, int ly, int w, int h)
@@ -17,6 +13,3 @@ void Viewport::activate() const {
     }
 }
 
-void Viewport::scissor() const {
-    glScissor(x, y, width, width);
-}

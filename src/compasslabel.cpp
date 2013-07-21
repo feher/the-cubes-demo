@@ -10,7 +10,7 @@ CompassLabel::CompassLabel(std::shared_ptr<Object> compass)
     : m_compass(compass), m_drawState(X_LABEL) {
 }
 
-void CompassLabel::setData(shared_ptr<const CompassLabelData> data) {
+void CompassLabel::setData(shared_ptr<const LabelData> data) {
     m_data = data;
 }
 
@@ -29,6 +29,7 @@ void CompassLabel::render() {
     const auto& cV = m_compass->camera()->viewMatrix();
     const auto& cP = (*m_compass->projectionMatrix());
     const auto& cMVP = cP * cV * cM;
+    // We put the labels a bit further out from the tip, thus the 1.3 factor.
     const auto& xd = cMVP * vec4(1.3f,0,   0,   1);
     const auto& yd = cMVP * vec4(0,   1.3f,0,   1);
     const auto& zd = cMVP * vec4(0,   0,   1.3f,1);
