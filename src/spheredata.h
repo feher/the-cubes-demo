@@ -4,8 +4,8 @@
 #include "trianglemeshdata.h"
 #include "glbuffer.h"
 
-#include <glm/glm.hpp> // vec*, mat*
 #include <GL/glew.h> // GLuint, GLfloat, GLubyte
+#include <glm/glm.hpp> // vec*, mat*
 
 #include <vector>
 #include <string>

@@ -4,8 +4,8 @@
 #include "objectdata.h"
 #include "glbuffer.h"
 
-#include <glm/glm.hpp> // vec*, mat*
 #include <GL/glew.h> // GL*
+#include <glm/glm.hpp> // vec*, mat*
 
 class CompassData : public ObjectData {
 public:

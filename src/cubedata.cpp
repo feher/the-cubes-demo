@@ -1,6 +1,6 @@
 #include "cubedata.h"
 
-#include <GL/glfw.h> // glfw*
+#include <GLFW/glfw3.h> // glfw*
 #include <glm/glm.hpp> // vec*, mat*
 
 using namespace std;

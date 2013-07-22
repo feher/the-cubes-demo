@@ -1,8 +1,9 @@
 #include "trianglemeshdata.h"
 
-#include <GL/glfw.h> // glfw*
-#include <glm/glm.hpp> // vec*, mat*
+#include "filetga.h"
 
+#include <GLFW/glfw3.h> // glfw*
+#include <glm/glm.hpp> // vec*, mat*
 
 using namespace std;
 using namespace glm;
@@ -18,7 +19,7 @@ TriangleMeshData::TriangleMeshData(
       m_materialSpecularFactor(materialSpecularFactor) {
     m_textureId.generate(GlBuffer::TEXTURE);
     glBindTexture(GL_TEXTURE_2D, m_textureId.id());
-    if (glfwLoadTexture2D(textureFile.c_str(), 0) == GL_FALSE) {
+    if (!File::Tga::texImage2d(textureFile.c_str())) {
         throw runtime_error("Cannot load texture from " + textureFile);
     }
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
@@ -29,7 +30,7 @@ TriangleMeshData::TriangleMeshData(
 
     m_normalMapId.generate(GlBuffer::TEXTURE);
     glBindTexture(GL_TEXTURE_2D, m_normalMapId.id());
-    if (glfwLoadTexture2D(normalMapFile.c_str(), 0) == GL_FALSE) {
+    if (!File::Tga::texImage2d(normalMapFile.c_str())) {
         throw runtime_error("Cannot load normal map from " + normalMapFile);
     }
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);

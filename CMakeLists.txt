@@ -15,16 +15,16 @@ if (CMAKE_COMPILER_IS_GNUCXX)
 endif (CMAKE_COMPILER_IS_GNUCXX)
 
 include_directories(
- 3rdparty/glfw-2.7.6/include/
- 3rdparty/glm-0.9.4.0/
+ 3rdparty/glfw-3.0.1/include/
+ 3rdparty/glm-0.9.4.4/
  3rdparty/glew-1.9.0/include/
  .
 )
 
 set(ALL_LIBS
  ${OPENGL_LIBRARY}
- GLFW_276
- GLEW_190
+ glfw
+ glew_190
 )
 
 add_definitions(
@@ -45,6 +45,7 @@ add_executable(thecubes
  src/cubedata.cpp
  src/cursor.cpp
  src/file.cpp
+ src/filetga.cpp
  src/frametimer.cpp
  src/geom.cpp
  src/grid.cpp
@@ -59,7 +60,6 @@ add_executable(thecubes
  src/object.cpp
  src/pointlight.cpp
  src/program.cpp
- src/rglfw.cpp
  src/shader.cpp
  src/shaderprogram.cpp
  src/shadowmap.cpp

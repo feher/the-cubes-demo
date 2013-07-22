@@ -2,7 +2,7 @@
 
 #include "geom.h" // PI
 
-#include <GL/glfw.h> // glfw*
+#include <GLFW/glfw3.h> // glfw*
 #include <glm/glm.hpp> // vec*, mat*
 #include <glm/gtc/matrix_transform.hpp> // rotate
 

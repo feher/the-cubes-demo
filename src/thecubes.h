@@ -1,7 +1,10 @@
 #ifndef THE_CUBES_H
 #define THE_CUBES_H
 
+#include <GL/glew.h>  // This must be the first.
+
 #include "rglfw.h"
+#include "rglfwwindow.h"
 #include "cursor.h"
 #include "camera.h"
 #include "object.h"
@@ -42,6 +45,7 @@ private:
     unsigned int m_screenWidth;
     unsigned int m_screenHeight;
     RGlfw m_glfw;
+    RGlfwWindow m_window;
     double m_lastTime;
     bool m_exitting;
     bool m_isShadowMapEnabled;

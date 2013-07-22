@@ -1,7 +1,7 @@
 #include "shaderprogram.h"
 
 #include <GL/glew.h> // GL*
-#include <GL/glfw.h> // glfw*
+#include <GLFW/glfw3.h> // glfw*
 
 #include <iostream> // cerr, endl
 #include <vector>

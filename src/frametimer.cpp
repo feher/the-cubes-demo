@@ -1,6 +1,6 @@
 #include "frametimer.h"
 
-#include <GL/glfw.h> // glfw*
+#include <GLFW/glfw3.h> // glfw*
 
 #include <iomanip>
 

@@ -5,8 +5,8 @@
 #include "glbuffer.h"
 #include "geom.h"
 
-#include <glm/glm.hpp> // vec*, mat*
 #include <GL/glew.h> // GLuint, GLfloat, GLubyte
+#include <glm/glm.hpp> // vec*, mat*
 
 #include <string>
 

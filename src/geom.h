@@ -1,9 +1,8 @@
 #ifndef GEOM_H
 #define GEOM_H
 
-#include <glm/glm.hpp> // vec2, mat4
-
 #include <GL/glew.h> // GL*
+#include <glm/glm.hpp> // vec2, mat4
 
 #include <vector>
 

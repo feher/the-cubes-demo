@@ -1,6 +1,8 @@
 #include "labeldata.h"
 
-#include <GL/glfw.h> // glfw*
+#include "filetga.h"
+
+#include <GLFW/glfw3.h> // glfw*
 #include <glm/glm.hpp> // vec*, mat*
 
 using namespace std;
@@ -61,7 +63,7 @@ LabelData::LabelData(const string& textureFile,
 
     m_textureId.generate(GlBuffer::TEXTURE);
     glBindTexture(GL_TEXTURE_2D, m_textureId.id());
-    if (glfwLoadTexture2D(textureFile.c_str(), 0) == GL_FALSE) {
+    if (!File::Tga::texImage2d(textureFile.c_str())) {
         throw runtime_error("Cannot load texture from " + textureFile);
     }
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);

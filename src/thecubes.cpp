@@ -1,4 +1,3 @@
-
 #include "thecubes.h"
 
 #include "actionobject.h"
@@ -20,11 +19,11 @@
 #include "spheredata.h"
 #include "frametimer.h"
 
+#include <GL/glew.h> // GL*
+#include <GLFW/glfw3.h> // glfw*
+
 #include <glm/glm.hpp> // vec*, mat*
 #include <glm/gtc/matrix_transform.hpp>
-
-#include <GL/glew.h> // GL*
-#include <GL/glfw.h> // glfw*
 
 #include <limits> // numeric_limits
 #include <iostream>
@@ -65,23 +64,22 @@ TheCubes::TheCubes(unsigned int screenWidth, unsigned int screenHeight)
       m_isSystemCursorEnabled(false),
       m_lastMousePos(0, 0),
       m_inputState(NO_STATE) {
-    glfwOpenWindowHint(GLFW_OPENGL_VERSION_MAJOR, 2);
-    glfwOpenWindowHint(GLFW_OPENGL_VERSION_MINOR, 1);
-    glfwOpenWindowHint(GLFW_WINDOW_NO_RESIZE, GL_TRUE);
-    glfwOpenWindowHint(GLFW_FSAA_SAMPLES, 4);
 
-    if (!glfwOpenWindow(screenWidth, screenHeight, 0, 0, 0, 0, 32, 0, GLFW_WINDOW)) {
-        throw runtime_error("Cannot create window");
-    }
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 2);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 1);
+    glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
+    glfwWindowHint(GLFW_SAMPLES, 4);
+
+    m_window.create(screenWidth, screenHeight, "The Cubes", false);
+    glfwMakeContextCurrent(m_window.handle());
 
     if (glewInit() != GLEW_OK) {
         throw runtime_error("Cannot init GLEW");
     }
 
-    glfwSetWindowTitle("The Cubes");
-    glfwSetMousePos(m_screenWidth / 2, m_screenHeight / 2);
-    glfwDisable(GLFW_MOUSE_CURSOR);
-    glfwEnable(GLFW_STICKY_KEYS);
+    glfwSetCursorPos(m_window.handle(), m_screenWidth / 2, m_screenHeight / 2);
+    glfwSetInputMode(m_window.handle(), GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
+    glfwSetInputMode(m_window.handle(), GLFW_STICKY_KEYS, GL_TRUE);
 
     const float bgColor = 0.3f;
     glClearColor(bgColor, bgColor, bgColor, 0.0f);
@@ -92,6 +90,10 @@ TheCubes::TheCubes(unsigned int screenWidth, unsigned int screenHeight)
 
     m_vaoId.generate(GlBuffer::VAO);
     glBindVertexArray(m_vaoId.id());
+
+    // Avoid having a white "startup" screen.
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    glfwSwapBuffers(m_window.handle());
 
     m_lightTextureShadowProgram = make_shared<LightTextureShadowProgram>();
     m_lightTextureProgram = make_shared<LightTextureProgram>();
@@ -316,7 +318,7 @@ void TheCubes::updateAndRender() {
         m_shadowMapView->render();
     }
 
-    glfwSwapBuffers();
+    glfwSwapBuffers(m_window.handle());
 }
 
 void TheCubes::createNewObject(const shared_ptr<const Object>& actionObject,
@@ -445,15 +447,17 @@ void TheCubes::clearHoveredState() {
 int TheCubes::inputFlags(vec2& mousePosDelta) {
     int flags = NO_INPUT;
 
-    auto isSDown = (glfwGetKey('S') == GLFW_PRESS);
-    auto isDDown = (glfwGetKey('D') == GLFW_PRESS);
-    auto isMDown = (glfwGetKey('M') == GLFW_PRESS);
+    glfwPollEvents();
+
+    auto isSDown = (glfwGetKey(m_window.handle(), 'S') == GLFW_PRESS);
+    auto isDDown = (glfwGetKey(m_window.handle(), 'D') == GLFW_PRESS);
+    auto isMDown = (glfwGetKey(m_window.handle(), 'M') == GLFW_PRESS);
     auto mousePos = vec2(-1, -1);
     auto delta = vec2(0, 0);
 
-    flags |= SHIFT_PRESSED * (glfwGetKey(GLFW_KEY_LSHIFT) == GLFW_PRESS);
-    flags |= CTRL_PRESSED * (glfwGetKey(GLFW_KEY_LCTRL) == GLFW_PRESS);
-    flags |= ALT_PRESSED * (glfwGetKey(GLFW_KEY_LALT) == GLFW_PRESS);
+    flags |= SHIFT_PRESSED * (glfwGetKey(m_window.handle(), GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS);
+    flags |= CTRL_PRESSED * (glfwGetKey(m_window.handle(), GLFW_KEY_LEFT_CONTROL) == GLFW_PRESS);
+    flags |= ALT_PRESSED * (glfwGetKey(m_window.handle(), GLFW_KEY_LEFT_ALT) == GLFW_PRESS);
 
     if (m_wasSDown && !isSDown) {
         m_wasSDown = false;
@@ -473,8 +477,8 @@ int TheCubes::inputFlags(vec2& mousePosDelta) {
     }
     m_wasMDown = isMDown;
 
-    int mx, my;
-    glfwGetMousePos(&mx, &my);
+    double mx, my;
+    glfwGetCursorPos(m_window.handle(), &mx, &my);
     mousePos = vec2(mx, my);
     delta = mousePos - m_lastMousePos;
     if (0 <= mx && mx < int(m_screenWidth)
@@ -486,7 +490,7 @@ int TheCubes::inputFlags(vec2& mousePosDelta) {
         }
     }
 
-    auto mouseButtonState = glfwGetMouseButton(GLFW_MOUSE_BUTTON_LEFT);
+    auto mouseButtonState = glfwGetMouseButton(m_window.handle(), GLFW_MOUSE_BUTTON_LEFT);
     if (mouseButtonState == GLFW_PRESS) {
         flags |= MOUSE_PRESSED;
         if (!m_isMouseButtonPressed) {
@@ -589,9 +593,9 @@ void TheCubes::handleInput() {
         case (MOUSE_POS_VALID | M_PRESSED) :
             m_isSystemCursorEnabled = !m_isSystemCursorEnabled;
             if (m_isSystemCursorEnabled) {
-                glfwEnable(GLFW_MOUSE_CURSOR);
+                glfwSetInputMode(m_window.handle(), GLFW_CURSOR, GLFW_CURSOR_NORMAL);
             } else {
-                glfwDisable(GLFW_MOUSE_CURSOR);
+                glfwSetInputMode(m_window.handle(), GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
             }
         default:
             break;
@@ -664,8 +668,8 @@ void TheCubes::run() {
         updateAndRender();
         handleInput();
         cleanupDeadModelObjects();
-        if (glfwGetKey(GLFW_KEY_ESC) == GLFW_PRESS
-             || (!glfwGetWindowParam(GLFW_OPENED))) {
+        if (glfwGetKey(m_window.handle(), GLFW_KEY_ESCAPE) == GLFW_PRESS
+             || glfwWindowShouldClose(m_window.handle())) {
             killModelObjects();
             m_exitting = true;
         }

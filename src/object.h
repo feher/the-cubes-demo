@@ -7,8 +7,8 @@
 #include "pointlight.h"
 #include "viewport.h"
 
-#include <glm/glm.hpp> // vec*, mat*
 #include <GL/glew.h> // GLfloat
+#include <glm/glm.hpp> // vec*, mat*
 
 #include <memory> // shared_ptr
 
