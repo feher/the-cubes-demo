@@ -1,6 +1,6 @@
 ﻿NOTE: Bitbucket may display the wrong "Size" for the repository (next to the "(download)" link)!
       Just start the download and hopefully your web browser will show the correct
-      size (should be less than 5 MiB).
+      size (should be less than 10 MiB).
 
 What's this?
 ---------------------
