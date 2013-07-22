@@ -10,10 +10,6 @@ list(APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/3rdparty/rpavlik-cmake-module
 include(CreateLaunchers)
 include(MSVCMultipleProcessCompile)
 
-if (CMAKE_COMPILER_IS_GNUCXX)
- set(CMAKE_CXX_FLAGS "-std=c++11")
-endif (CMAKE_COMPILER_IS_GNUCXX)
-
 include_directories(
  3rdparty/glfw-3.0.1/include/
  3rdparty/glm-0.9.4.4/
@@ -76,6 +72,11 @@ add_executable(thecubes
 target_link_libraries(thecubes
  ${ALL_LIBS}
 )
+
+if (CMAKE_COMPILER_IS_GNUCXX)
+ set(CMAKE_CXX_FLAGS "-std=c++11")
+ target_link_libraries(thecubes ${GLFW_LIBRARIES})
+endif (CMAKE_COMPILER_IS_GNUCXX)
 
 # Xcode and Visual Studio working directories
 set_target_properties(thecubes PROPERTIES XCODE_ATTRIBUTE_CONFIGURATION_BUILD_DIR "${CMAKE_CURRENT_SOURCE_DIR}/src/")
