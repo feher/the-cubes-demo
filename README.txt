@@ -103,7 +103,7 @@ Class hierarchy
 
 - GlBuffer : Resource class wrapping around OpenGL buffer objects.
 
-- File : Basic utility functions for file handling.
+- File::Text : Basic functions for text file handling.
 
 - File::Tga : Basic TGA image file loader.
 

@@ -40,7 +40,7 @@ add_executable(thecubes
  src/compassprogram.cpp
  src/cubedata.cpp
  src/cursor.cpp
- src/file.cpp
+ src/filetext.cpp
  src/filetga.cpp
  src/frametimer.cpp
  src/geom.cpp
@@ -88,3 +88,4 @@ if (NOT ${CMAKE_GENERATOR} MATCHES "Xcode")
   COMMAND ${CMAKE_COMMAND} -E copy "${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_CFG_INTDIR}/thecubes${CMAKE_EXECUTABLE_SUFFIX}" "${CMAKE_CURRENT_SOURCE_DIR}/src/"
  )
 endif (NOT ${CMAKE_GENERATOR} MATCHES "Xcode")
+

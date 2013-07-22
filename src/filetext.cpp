@@ -1,11 +1,11 @@
-#include "file.h"
+#include "filetext.h"
 
 #include <fstream>
 #include <iostream>
 
 using namespace std;
 
-string File::loadTextFile(const string& fileName) {
+string File::Text::load(const string& fileName) {
     string contents;
     ifstream ifs(fileName, ios::in);
     if (ifs.is_open()) {

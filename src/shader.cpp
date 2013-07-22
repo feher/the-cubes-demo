@@ -1,6 +1,6 @@
 #include "shader.h"
 
-#include "file.h"
+#include "filetext.h"
 
 #include <iostream> // cerr, endl
 #include <vector>
@@ -28,7 +28,7 @@ void Shader::compile(const vector<string>& fileNames) {
     // Load from files.
     string source;
     for (const auto& f : fileNames) {
-        const string& src = File::loadTextFile(f);
+        const string& src = File::Text::load(f);
         if (!src.empty()) {
             source += src + "\n";
         }
