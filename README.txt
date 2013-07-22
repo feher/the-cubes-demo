@@ -29,7 +29,7 @@ Controls:
 - Move camera up/down/left/right : Hold left mouse button + drag on empty area
 - Move camera forward/back       : Hold left control + move mouse up/down
 - Pitch/yaw camera               : Hold left shift + move mouse
-- Roll camera                    : Hold left alt + move mouse
+- Roll camera                    : Hold left alt + move mouse up/down
 - Move object                    : Hold left mouse button + drag on model object
 - Move object in/out             : Hold left Control + left mouse button + move mouse up/down
                                    on model object. :)
@@ -99,9 +99,13 @@ Class hierarchy
 - RGlfw : Resource class wrapping around glfw in order to provide automatic cleanup
           when going out of scope or when exceptions occur.
 
+- RGlfwWindow : Resource class wrapping around a glfw window.
+
 - GlBuffer : Resource class wrapping around OpenGL buffer objects.
 
 - File : Basic utility functions for file handling.
+
+- File::Tga : Basic TGA image file loader.
 
 - FrameTimer : A simple FPS counter.
 
@@ -117,18 +121,18 @@ Class hierarchy
 
 - Object :              Base class for any kind of visible on-screen object.
  - Compass :            The small orientation indicator in the lower right corner.
- - CompassLabel:        Represents the labes (Y, Y and Z) of the axes on the compass.
+ - CompassLabel:        Represents the labels (Y, Y and Z) of the axes on the compass.
  - Cursor :             The mouse cursor on the screen.
  - Grid :               Object representing the modeling grid.
  - ShadowMapView :      Displays the generated shadow map texture.
  - TriangleMeshObject : Base class for triangle mesh objects.
   - ActionObject :      The pressable action objects at the lower/upper left corner that create models.
-  - ModelObject :       Represents the marble objects that can be created/deleted/moved.
+  - ModelObject :       Represents the model objects that can be created/deleted/moved.
 
 - ObjectData :        Base class for data used by object instances.
  - CompassData :      Data used by Compass objects.
  - GridData :         Data used by Grid objects.
- - LabelData :        Data used by 2D "labels" (e.g. on the compass, the cursor).
+ - LabelData :        Data used by 2D "labels" (e.g. on the compass and the mouse cursor).
  - TriangleMeshData : Data that describes triangle based meshes.
    - CubeData :       Data used by cube objects.
    - SphereData :     Data used by sphere objects.
@@ -138,7 +142,7 @@ Class hierarchy
                   Tells whether a program can be used with a specific Object.
  - CompassProgram :            Shader program used by Compass objects.
  - GridProgram :               Shader program used by Grid objects.
- - LabelProgram :              Shader program used by CompassLabel objects.
+ - LabelProgram :              Shader program used by "label" objects.
  - LightTextureProgram :       Shader program that does texturing and lighting.
  - LightTextureShadowProgram : Shader program that does texturing, lighting and shadow mapping.
  - ShadowMapProgram :          Shader program for generating the shadow map texture.
