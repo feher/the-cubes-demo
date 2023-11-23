@@ -77,19 +77,11 @@ Compilation
 ---------------------
 
 - Install CMake for Windows.
-- Run the CMake GUI.
- - Where is the source code: "...\thecubes" (the top directory with the CMakeLists.txt file)
- - Where to build binaries: "...\thecubes.build" (any empty/non-existent directory)
- - Press "Configure"
-  - Select Generator: Visual Studio 11
-  - Specify native compilers
- - Keep pressing "Configure" until the red lines disappear from the "Name/Value" list.
- - Press "Generate"
- - Close CMake GUI
-- Run Visual Studio
- - Open the solution file "...\thecubes.build\TheCubes.sln"
- - Build the "thecubes" project
- - Run "...\thecubes\src\thecubes.exe"
+- Open cmd.exe
+  - cd ...\thecubes
+  - cmake -S . -B .\build
+  - cmake --build .\build
+  - .\src\thecubes.exe
 
 Class hierarchy
 ---------------------
